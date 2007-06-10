@@ -35,6 +35,7 @@ Patch15: mkinitrd-4.2.17-resumemd.patch
 Patch16: mkinitrd-4.2.17-usb-1394.patch
 Patch17: mkinitrd-4.2.17-new_raid.patch
 Patch18: mkinitrd-4.2.17-switchroot.patch
+Patch19: mkinitrd-4.2.17-fstabauto.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
 BuildRequires: /usr/bin/perl
 %if %{use_dietlibc}
