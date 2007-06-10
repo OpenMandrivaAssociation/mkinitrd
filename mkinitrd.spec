@@ -87,6 +87,7 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch16 -p1 -b .usb-1394
 %patch17 -p1 -b .new_raid
 %patch18 -p1 -b .switchroot
+%patch19 -p1 -b .fstab-auto
 
 %build
 %if %{use_dietlibc}
