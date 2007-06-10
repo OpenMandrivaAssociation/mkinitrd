@@ -15,6 +15,7 @@ License: GPL
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
 Source: ftp://ftp.redhat.com/mkinitrd-%{version}.tar.bz2
+Source1: mkinitrd-sysconfig
 Patch0: mkinitrd-%{version}-mdk.patch
 Patch1: mkinitrd-4.2.17-label.patch
 Patch2:	mkinitrd-4.2.17-cdrom.patch
@@ -97,12 +98,15 @@ make
 %install
 rm -rf $RPM_BUILD_ROOT
 make BUILDROOT=$RPM_BUILD_ROOT mandir=%{_mandir} install
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}
+install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/mkinitrd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
+%config(noreplace) %{_sysconfdir}/mkinitrd
 /sbin/*
 %{_mandir}/*/*
 
