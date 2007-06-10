@@ -15,7 +15,6 @@ License: GPL
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
 Source: ftp://ftp.redhat.com/mkinitrd-%{version}.tar.bz2
-Source1: mkinitrd-insmod-3.5.24.tar.bz2
 Patch0: mkinitrd-%{version}-mdk.patch
 Patch1: mkinitrd-4.2.17-label.patch
 Patch2:	mkinitrd-4.2.17-cdrom.patch
@@ -42,7 +41,6 @@ BuildRequires: /usr/bin/perl
 BuildRequires: dietlibc-devel >= 0.24-2mdk
 %else
 BuildRequires: glibc-static-devel
-Requires: /sbin/insmod.static
 %endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 #mkinitrd can work without those, but lesser versions are broken
@@ -68,7 +66,7 @@ mount the root filesystem.  The mkinitrd program creates such a
 ramdisk using information found in the /etc/modules.conf file.
 
 %prep
-%setup -q -a 1
+%setup -q
 %patch0 -p1 -b .mdk
 %patch1 -p1 -b .label
 %patch2 -p1 -b .cdrom
@@ -99,9 +97,6 @@ make
 %install
 rm -rf $RPM_BUILD_ROOT
 make BUILDROOT=$RPM_BUILD_ROOT mandir=%{_mandir} install
-%if %{use_dietlibc}
-cp insmod/insmod $RPM_BUILD_ROOT/sbin/insmod-DIET
-%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
