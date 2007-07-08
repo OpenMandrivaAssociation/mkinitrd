@@ -37,6 +37,7 @@ Patch17: mkinitrd-4.2.17-new_raid.patch
 Patch18: mkinitrd-4.2.17-switchroot.patch
 Patch19: mkinitrd-4.2.17-fstabauto.patch
 Patch20: mkinitrd-4.2.17-getKernelArg.patch
+Patch21: mkinitrd-4.2.17-strnlen.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
 BuildRequires: /usr/bin/perl
 %if %{use_dietlibc}
@@ -90,6 +91,7 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch18 -p1 -b .switchroot
 %patch19 -p1 -b .fstab-auto
 %patch20 -p1 -b .getKernelArg
+%patch21 -p1 -b .strnlen
 
 %build
 %if %{use_dietlibc}
