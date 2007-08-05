@@ -1,6 +1,6 @@
 %define name mkinitrd
 %define version 4.2.17
-%define release %mkrel 36
+%define release %mkrel 37
 
 %define use_dietlibc 0
 %ifarch %{ix86} x86_64 ppc ppc64
@@ -103,15 +103,15 @@ make
 %install
 rm -rf $RPM_BUILD_ROOT
 make BUILDROOT=$RPM_BUILD_ROOT mandir=%{_mandir} install
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}
-install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/mkinitrd
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
+install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
-%config(noreplace) %{_sysconfdir}/mkinitrd
+%config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
 /sbin/*
 %{_mandir}/*/*
 
