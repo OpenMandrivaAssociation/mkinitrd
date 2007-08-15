@@ -1,6 +1,6 @@
 %define name mkinitrd
 %define version 4.2.17
-%define release %mkrel 39
+%define release %mkrel 40
 
 %define use_dietlibc 0
 %ifarch %{ix86} x86_64 ppc ppc64
@@ -40,6 +40,7 @@ Patch21: mkinitrd-4.2.17-strnlen.patch
 Patch22: mkinitrd-4.2.17-uuid.patch
 Patch23: mkinitrd-4.2.17-relatime.patch
 Patch24: mkinitrd-4.2.17-scsi-wait-scan.patch
+Patch25: mkinitrd-4.2.17-omit_ide.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
 BuildRequires: /usr/bin/perl
 %if %{use_dietlibc}
@@ -96,6 +97,7 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch22 -p1 -b .uuid
 %patch23 -p1 -b .relatime
 %patch24 -p1 -b .relatime
+%patch25 -p1 -b .omit_ide
 
 %build
 %if %{use_dietlibc}
