@@ -42,7 +42,7 @@ Patch23: mkinitrd-4.2.17-relatime.patch
 Patch24: mkinitrd-4.2.17-scsi-wait-scan.patch
 Patch25: mkinitrd-4.2.17-omit_ide.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
-BuildRequires: /usr/bin/perl
+BuildRequires: perl-base
 %if %{use_dietlibc}
 BuildRequires: dietlibc-devel >= 0.30-2mdk
 %else
