@@ -1,6 +1,6 @@
 %define name mkinitrd
 %define version 4.2.17
-%define release %mkrel 42
+%define release %mkrel 43
 
 %define use_dietlibc 0
 %ifarch %{ix86} x86_64 ppc ppc64
@@ -36,7 +36,6 @@ Patch16: mkinitrd-4.2.17-usb-1394.patch
 Patch17: mkinitrd-4.2.17-new_raid.patch
 Patch18: mkinitrd-4.2.17-switchroot.patch
 Patch19: mkinitrd-4.2.17-fstabauto.patch
-Patch21: mkinitrd-4.2.17-strnlen.patch
 Patch22: mkinitrd-4.2.17-uuid.patch
 Patch23: mkinitrd-4.2.17-relatime.patch
 Patch24: mkinitrd-4.2.17-scsi-wait-scan.patch
@@ -44,6 +43,7 @@ Patch25: mkinitrd-4.2.17-omit_ide.patch
 Patch26: mkinitrd-4.2.17-rtc.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
 BuildRequires: perl-base
+BuildRequires: volume_id-devel
 %if %{use_dietlibc}
 BuildRequires: dietlibc-devel >= 0.30-2mdk
 %else
@@ -94,7 +94,6 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch17 -p1 -b .new_raid
 %patch18 -p1 -b .switchroot
 %patch19 -p1 -b .fstab-auto
-%patch21 -p1 -b .strnlen
 %patch22 -p1 -b .uuid
 %patch23 -p1 -b .relatime
 %patch24 -p1 -b .relatime
@@ -103,7 +102,7 @@ ramdisk using information found in the /etc/modules.conf file.
 
 %build
 %if %{use_dietlibc}
-make DIET=1
+make DIET=1 DIETLIBC_LIB=%{_prefix}/lib/dietlibc/lib-%{_arch}
 %else
 make
 %endif
