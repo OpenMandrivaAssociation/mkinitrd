@@ -96,7 +96,7 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch19 -p1 -b .fstab-auto
 %patch22 -p1 -b .uuid
 %patch23 -p1 -b .relatime
-%patch24 -p1 -b .relatime
+%patch24 -p1 -b .scsi_wait_scan
 %patch25 -p1 -b .omit_ide
 %patch26 -p1 -b .rtc
 
