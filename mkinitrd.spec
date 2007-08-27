@@ -41,6 +41,7 @@ Patch23: mkinitrd-4.2.17-relatime.patch
 Patch24: mkinitrd-4.2.17-scsi-wait-scan.patch
 Patch25: mkinitrd-4.2.17-omit_ide.patch
 Patch26: mkinitrd-4.2.17-rtc.patch
+Patch27: mkinitrd-4.2.17-modinfo_kver.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
 BuildRequires: perl-base
 BuildRequires: volume_id-devel
@@ -99,6 +100,7 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch24 -p1 -b .scsi_wait_scan
 %patch25 -p1 -b .omit_ide
 %patch26 -p1 -b .rtc
+%patch27 -p1 -b .modinfo_kver
 
 %build
 %if %{use_dietlibc}
