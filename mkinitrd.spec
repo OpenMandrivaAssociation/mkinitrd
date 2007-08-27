@@ -1,6 +1,6 @@
 %define name mkinitrd
 %define version 4.2.17
-%define release %mkrel 43
+%define release %mkrel 44
 
 %define use_dietlibc 0
 %ifarch %{ix86} x86_64 ppc ppc64
@@ -43,6 +43,7 @@ Patch25: mkinitrd-4.2.17-omit_ide.patch
 Patch26: mkinitrd-4.2.17-rtc.patch
 Patch27: mkinitrd-4.2.17-modinfo_kver.patch
 Patch28: mkinitrd-4.2.17-ide_pata.patch
+Patch29: mkinitrd-4.2.17-modfilename.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
 BuildRequires: perl-base
 BuildRequires: volume_id-devel
@@ -103,6 +104,7 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch26 -p1 -b .rtc
 %patch27 -p1 -b .modinfo_kver
 %patch28 -p1 -b .ide_pata
+%patch29 -p1 -b .modfilename
 
 %build
 %if %{use_dietlibc}
