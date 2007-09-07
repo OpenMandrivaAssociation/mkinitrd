@@ -1,6 +1,6 @@
 %define name mkinitrd
 %define version 4.2.17
-%define release %mkrel 47
+%define release %mkrel 48
 
 %define use_dietlibc 0
 %ifarch %{ix86} x86_64 ppc ppc64
@@ -38,7 +38,7 @@ Patch18: mkinitrd-4.2.17-switchroot.patch
 Patch19: mkinitrd-4.2.17-fstabauto.patch
 Patch22: mkinitrd-4.2.17-uuid.patch
 Patch23: mkinitrd-4.2.17-relatime.patch
-Patch24: mkinitrd-4.2.17-scsi-wait-scan.patch
+Patch24: mkinitrd-4.2.17-scsi_wait_scan.patch
 Patch25: mkinitrd-4.2.17-omit_ide.patch
 Patch26: mkinitrd-4.2.17-rtc.patch
 Patch27: mkinitrd-4.2.17-modinfo_kver.patch
