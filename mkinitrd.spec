@@ -1,6 +1,6 @@
 %define name mkinitrd
 %define version 4.2.17
-%define release %mkrel 49
+%define release %mkrel 50
 
 %define use_dietlibc 0
 %ifarch %{ix86} x86_64 ppc ppc64
