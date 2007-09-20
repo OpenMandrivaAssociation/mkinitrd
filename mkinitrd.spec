@@ -1,6 +1,6 @@
 %define name mkinitrd
 %define version 4.2.17
-%define release %mkrel 51
+%define release %mkrel 52
 
 %define use_dietlibc 0
 %ifarch %{ix86} x86_64 ppc ppc64
@@ -44,6 +44,7 @@ Patch26: mkinitrd-4.2.17-rtc.patch
 Patch27: mkinitrd-4.2.17-modinfo_kver.patch
 Patch28: mkinitrd-4.2.17-ide_pata.patch
 Patch29: mkinitrd-4.2.17-modfilename.patch
+Patch30: mkinitrd-4.2.17-tuxonice.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
 BuildRequires: perl-base
 BuildRequires: volume_id-devel
@@ -105,6 +106,7 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch27 -p1 -b .modinfo_kver
 %patch28 -p1 -b .ide_pata
 %patch29 -p1 -b .modfilename
+%patch30 -p1 -b .tuxonice
 
 %build
 %if %{use_dietlibc}
