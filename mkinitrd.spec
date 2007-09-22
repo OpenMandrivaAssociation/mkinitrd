@@ -1,6 +1,6 @@
 %define name mkinitrd
 %define version 4.2.17
-%define release %mkrel 52
+%define release %mkrel 53
 
 %define use_dietlibc 0
 %ifarch %{ix86} x86_64 ppc ppc64
@@ -46,6 +46,7 @@ Patch28: mkinitrd-4.2.17-ide_pata.patch
 Patch29: mkinitrd-4.2.17-modfilename.patch
 Patch30: mkinitrd-4.2.17-tuxonice.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
+Requires: module-init-tools >= 3.3-pre11
 BuildRequires: perl-base
 BuildRequires: volume_id-devel
 %if %{use_dietlibc}
