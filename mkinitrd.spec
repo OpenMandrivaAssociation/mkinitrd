@@ -54,6 +54,7 @@ BuildRequires: dietlibc-devel >= 0.30-2mdk
 %else
 BuildRequires: glibc-static-devel
 %endif
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 #mkinitrd can work without those, but lesser versions are broken
 #Conflicts: udev <= 0.51-1mdk
 Conflicts: lvm1 < 1.0.8-2mdk
