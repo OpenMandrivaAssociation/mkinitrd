@@ -1,6 +1,6 @@
 %define name mkinitrd
 %define version 4.2.17
-%define release %mkrel 54
+%define release %mkrel 55
 
 %define use_dietlibc 0
 %ifarch %{ix86} x86_64 ppc ppc64
@@ -45,6 +45,12 @@ Patch27: mkinitrd-4.2.17-modinfo_kver.patch
 Patch28: mkinitrd-4.2.17-ide_pata.patch
 Patch29: mkinitrd-4.2.17-modfilename.patch
 Patch30: mkinitrd-4.2.17-tuxonice.patch
+# 31 and 32 for bug #36457
+Patch31: nash-mount-by-uuid.patch
+# lvm tools don't take UUID in place of a real device
+# and they don't like device names outside of their namespace either,
+# like /dev/dm-5
+Patch32: mkinitrd-4.2.17-uuid_lvm.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
 Requires: module-init-tools >= 3.3-pre11
 BuildRequires: perl-base
@@ -108,6 +114,8 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch28 -p1 -b .ide_pata
 %patch29 -p1 -b .modfilename
 %patch30 -p1 -b .tuxonice
+%patch31 -p0 -b .mount-by-uuid
+%patch32 -p1 -b .uuid_lvm
 
 %build
 %if %{use_dietlibc}
@@ -130,5 +138,4 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
 /sbin/*
 %{_mandir}/*/*
-
 
