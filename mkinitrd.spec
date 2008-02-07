@@ -6,11 +6,12 @@ License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
 Source: mkinitrd-%{version}.tar.bz2
-# Mandriva
+# Mandriva sources
 Source100: mkinitrd-sysconfig
+# RH patches
 Patch0: mkinitrd-no-more-lvm-static.patch
 Patch1: mkinitrd-no-more-rtc.patch
-# Mandriva
+# Mandriva patches
 Patch100: mkinitrd-4.2.17-mdk.patch
 Patch102: mkinitrd-4.2.17-cdrom.patch
 Patch104: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
