@@ -16,6 +16,9 @@ Patch100: mkinitrd-6.0.28-noselinux.patch
 # no proper dhcp lib package yet
 Patch101: mkinitrd-6.0.28-nonetwork.patch
 Patch102: mkinitrd-6.0.28-etc-blkid.patch
+# fix regexp match with bash-3.2, notably to fix RAID with mdadm
+# (similar to initscripts bug: Mdv #32501, RH #220087)
+Patch103: mkinitrd-6.0.28-rmatch.patch
 Patch104: mkinitrd-6.0.28-use-both-ahci-ata_piix.patch
 Patch106: mkinitrd-6.0.28-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
@@ -93,6 +96,7 @@ nash shell used by initrd
 %patch100 -p1 -b .noselinux
 %patch101 -p1 -b .nonetwork
 %patch102 -p1 -b .etc-blkid
+%patch103 -p1 -b .rmatch
 %patch104 -p1 -b .use-both-ahci-ata_piix
 %patch106 -p1 -b .resume
 %patch107 -p1 -b .closedir
