@@ -13,6 +13,8 @@ Group: System/Kernel and hardware
 Source: mkinitrd-%{version}.tar.bz2
 # Mandriva
 Source100: mkinitrd-sysconfig
+Patch0: mkinitrd-no-more-lvm-static.patch
+Patch1: mkinitrd-no-more-rtc.patch
 # Mandriva
 Patch100: mkinitrd-4.2.17-mdk.patch
 Patch101: mkinitrd-4.2.17-label.patch
@@ -83,6 +85,8 @@ ramdisk using information found in the /etc/modules.conf file.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 # Mandriva
 %patch100 -p1 -b .mdk
 %patch101 -p1 -b .label
