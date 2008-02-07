@@ -1,20 +1,16 @@
-%define name mkinitrd
-%define version 4.2.17
-%define release %mkrel 57
-
 %define use_dietlibc 0
 %ifarch %{ix86} x86_64 ppc ppc64
 %define use_dietlibc 1
 %endif
 
-Name: %{name}
 Summary: Creates an initial ramdisk image for preloading modules
-Version: %{version}
-Release: %{release}
+Name: mkinitrd
+Version: 4.2.17
+Release: %mkrel 57
 License: GPL
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
-Source: ftp://ftp.redhat.com/mkinitrd-%{version}.tar.bz2
+Source: mkinitrd-%{version}.tar.bz2
 # Mandriva
 Source100: mkinitrd-sysconfig
 # Mandriva
