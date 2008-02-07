@@ -97,12 +97,10 @@ nash shell used by initrd
 %patch107 -p1 -b .closedir
 %patch111 -p1 -b .dsdt
 %patch113 -p1 -b .kbd
-%patch114 -p1 -b .resume2
 %patch115 -p1 -b .resumemd
 %patch119 -p1 -b .fstab-auto
 %patch123 -p1 -b .relatime
 %patch125 -p1 -b .omit_ide
-%patch130 -p1 -b .tuxonice
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
