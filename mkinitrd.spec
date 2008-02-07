@@ -15,42 +15,44 @@ License: GPL
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
 Source: ftp://ftp.redhat.com/mkinitrd-%{version}.tar.bz2
-Source1: mkinitrd-sysconfig
-Patch0: mkinitrd-%{version}-mdk.patch
-Patch1: mkinitrd-4.2.17-label.patch
-Patch2:	mkinitrd-4.2.17-cdrom.patch
-Patch3: mkinitrd-4.2.17-migrate-mptscsih.patch
-Patch4: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
-Patch5: mkinitrd-4.2.17-initramfs.patch
-Patch6: mkinitrd-4.2.17-resume.patch
-Patch7: mkinitrd-4.2.17-closedir.patch
-Patch8: mkinitrd-4.2.17-dmraid.patch
-Patch9: mkinitrd-4.2.17-evms.patch
-Patch10: mkinitrd-4.2.17-scsidriver.patch
-Patch11: mkinitrd-4.2.17-initramfs-dsdt.patch
-Patch12: mkinitrd-4.2.17-ide.patch
-Patch13: mkinitrd-4.2.17-atkbd.patch
-Patch14: mkinitrd-4.2.17-suspend2.patch
-Patch15: mkinitrd-4.2.17-resumemd.patch
-Patch16: mkinitrd-4.2.17-usb-1394.patch
-Patch17: mkinitrd-4.2.17-new_raid.patch
-Patch18: mkinitrd-4.2.17-switchroot.patch
-Patch19: mkinitrd-4.2.17-fstabauto.patch
-Patch22: mkinitrd-4.2.17-uuid.patch
-Patch23: mkinitrd-4.2.17-relatime.patch
-Patch24: mkinitrd-4.2.17-scsi_wait_scan.patch
-Patch25: mkinitrd-4.2.17-omit_ide.patch
-Patch26: mkinitrd-4.2.17-rtc.patch
-Patch27: mkinitrd-4.2.17-modinfo_kver.patch
-Patch28: mkinitrd-4.2.17-ide_pata.patch
-Patch29: mkinitrd-4.2.17-modfilename.patch
-Patch30: mkinitrd-4.2.17-tuxonice.patch
+# Mandriva
+Source100: mkinitrd-sysconfig
+# Mandriva
+Patch100: mkinitrd-4.2.17-mdk.patch
+Patch101: mkinitrd-4.2.17-label.patch
+Patch102: mkinitrd-4.2.17-cdrom.patch
+Patch103: mkinitrd-4.2.17-migrate-mptscsih.patch
+Patch104: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
+Patch105: mkinitrd-4.2.17-initramfs.patch
+Patch106: mkinitrd-4.2.17-resume.patch
+Patch107: mkinitrd-4.2.17-closedir.patch
+Patch108: mkinitrd-4.2.17-dmraid.patch
+Patch109: mkinitrd-4.2.17-evms.patch
+Patch110: mkinitrd-4.2.17-scsidriver.patch
+Patch111: mkinitrd-4.2.17-initramfs-dsdt.patch
+Patch112: mkinitrd-4.2.17-ide.patch
+Patch113: mkinitrd-4.2.17-atkbd.patch
+Patch114: mkinitrd-4.2.17-suspend2.patch
+Patch115: mkinitrd-4.2.17-resumemd.patch
+Patch116: mkinitrd-4.2.17-usb-1394.patch
+Patch117: mkinitrd-4.2.17-new_raid.patch
+Patch118: mkinitrd-4.2.17-switchroot.patch
+Patch119: mkinitrd-4.2.17-fstabauto.patch
+Patch122: mkinitrd-4.2.17-uuid.patch
+Patch123: mkinitrd-4.2.17-relatime.patch
+Patch124: mkinitrd-4.2.17-scsi_wait_scan.patch
+Patch125: mkinitrd-4.2.17-omit_ide.patch
+Patch126: mkinitrd-4.2.17-rtc.patch
+Patch127: mkinitrd-4.2.17-modinfo_kver.patch
+Patch128: mkinitrd-4.2.17-ide_pata.patch
+Patch129: mkinitrd-4.2.17-modfilename.patch
+Patch130: mkinitrd-4.2.17-tuxonice.patch
 # 31 and 32 for bug #36457
-Patch31: nash-mount-by-uuid.patch
+Patch131: nash-mount-by-uuid.patch
 # lvm tools don't take UUID in place of a real device
 # and they don't like device names outside of their namespace either,
 # like /dev/dm-5
-Patch32: mkinitrd-4.2.17-uuid_lvm.patch
+Patch132: mkinitrd-4.2.17-uuid_lvm.patch
 Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
 Requires: module-init-tools >= 3.3-pre11
 BuildRequires: perl-base
@@ -85,37 +87,38 @@ ramdisk using information found in the /etc/modules.conf file.
 
 %prep
 %setup -q
-%patch0 -p1 -b .mdk
-%patch1 -p1 -b .label
-%patch2 -p1 -b .cdrom
-%patch3 -p1 -b .migrate-mptscsih
-%patch4 -p1 -b .use-both-ahci-ata_piix
-%patch5 -p1 -b .initramfs
-%patch6 -p1 -b .resume
-%patch7 -p1 -b .closedir
-%patch8 -p1 -b .dmraid
-%patch9 -p1 -b .evms
-%patch10 -p1 -b .scsidriver
-%patch11 -p1 -b .initramfs-dsdt
-%patch12 -p1 -b .ide
-%patch13 -p1 -b .atkbd
-%patch14 -p1 -b .resume2
-%patch15 -p1 -b .resumemd
-%patch16 -p1 -b .usb-1394
-%patch17 -p1 -b .new_raid
-%patch18 -p1 -b .switchroot
-%patch19 -p1 -b .fstab-auto
-%patch22 -p1 -b .uuid
-%patch23 -p1 -b .relatime
-%patch24 -p1 -b .scsi_wait_scan
-%patch25 -p1 -b .omit_ide
-%patch26 -p1 -b .rtc
-%patch27 -p1 -b .modinfo_kver
-%patch28 -p1 -b .ide_pata
-%patch29 -p1 -b .modfilename
-%patch30 -p1 -b .tuxonice
-%patch31 -p0 -b .mount-by-uuid
-%patch32 -p1 -b .uuid_lvm
+# Mandriva
+%patch100 -p1 -b .mdk
+%patch101 -p1 -b .label
+%patch102 -p1 -b .cdrom
+%patch103 -p1 -b .migrate-mptscsih
+%patch104 -p1 -b .use-both-ahci-ata_piix
+%patch105 -p1 -b .initramfs
+%patch106 -p1 -b .resume
+%patch107 -p1 -b .closedir
+%patch108 -p1 -b .dmraid
+%patch109 -p1 -b .evms
+%patch110 -p1 -b .scsidriver
+%patch111 -p1 -b .initramfs-dsdt
+%patch112 -p1 -b .ide
+%patch113 -p1 -b .atkbd
+%patch114 -p1 -b .resume2
+%patch115 -p1 -b .resumemd
+%patch116 -p1 -b .usb-1394
+%patch117 -p1 -b .new_raid
+%patch118 -p1 -b .switchroot
+%patch119 -p1 -b .fstab-auto
+%patch122 -p1 -b .uuid
+%patch123 -p1 -b .relatime
+%patch124 -p1 -b .scsi_wait_scan
+%patch125 -p1 -b .omit_ide
+%patch126 -p1 -b .rtc
+%patch127 -p1 -b .modinfo_kver
+%patch128 -p1 -b .ide_pata
+%patch129 -p1 -b .modfilename
+%patch130 -p1 -b .tuxonice
+%patch131 -p0 -b .mount-by-uuid
+%patch132 -p1 -b .uuid_lvm
 
 %build
 %if %{use_dietlibc}
@@ -127,6 +130,8 @@ make
 %install
 rm -rf $RPM_BUILD_ROOT
 make BUILDROOT=$RPM_BUILD_ROOT mandir=%{_mandir} install
+
+# Mandriva
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 
