@@ -1,8 +1,3 @@
-%define use_dietlibc 0
-%ifarch %{ix86} x86_64 ppc ppc64
-%define use_dietlibc 1
-%endif
-
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.28
@@ -55,11 +50,6 @@ Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar fin
 Requires: module-init-tools >= 3.3-pre11
 BuildRequires: perl-base
 BuildRequires: volume_id-devel
-%if %{use_dietlibc}
-BuildRequires: dietlibc-devel >= 0.30-2mdk
-%else
-BuildRequires: glibc-static-devel
-%endif
 #mkinitrd can work without those, but lesser versions are broken
 #Conflicts: udev <= 0.51-1mdk
 Conflicts: lvm1 < 1.0.8-2mdk
@@ -121,11 +111,7 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch132 -p1 -b .uuid_lvm
 
 %build
-%if %{use_dietlibc}
-make DIET=1 DIETLIBC_LIB=%{_prefix}/lib/dietlibc/lib-%{_arch}
-%else
 make
-%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
