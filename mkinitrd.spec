@@ -17,7 +17,7 @@ Patch104: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
 Patch106: mkinitrd-4.2.17-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch111: mkinitrd-6.0.28-dsdt.patch
-Patch113: mkinitrd-4.2.17-atkbd.patch
+Patch113: mkinitrd-6.0.28-kbd.patch
 Patch114: mkinitrd-4.2.17-suspend2.patch
 Patch115: mkinitrd-4.2.17-resumemd.patch
 Patch119: mkinitrd-4.2.17-fstabauto.patch
@@ -91,7 +91,7 @@ nash shell used by initrd
 %patch106 -p1 -b .resume
 %patch107 -p1 -b .closedir
 %patch111 -p1 -b .dsdt
-%patch113 -p1 -b .atkbd
+%patch113 -p1 -b .kbd
 %patch114 -p1 -b .resume2
 %patch115 -p1 -b .resumemd
 %patch119 -p1 -b .fstab-auto
