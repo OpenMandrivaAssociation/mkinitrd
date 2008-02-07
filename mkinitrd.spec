@@ -13,7 +13,6 @@ Patch1: mkinitrd-no-more-rtc.patch
 # Mandriva
 Patch100: mkinitrd-4.2.17-mdk.patch
 Patch102: mkinitrd-4.2.17-cdrom.patch
-Patch103: mkinitrd-4.2.17-migrate-mptscsih.patch
 Patch104: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
 Patch105: mkinitrd-4.2.17-initramfs.patch
 Patch106: mkinitrd-4.2.17-resume.patch
@@ -109,7 +108,6 @@ nash shell used by initrd
 # Mandriva
 %patch100 -p1 -b .mdk
 %patch102 -p1 -b .cdrom
-%patch103 -p1 -b .migrate-mptscsih
 %patch104 -p1 -b .use-both-ahci-ata_piix
 %patch105 -p1 -b .initramfs
 %patch106 -p1 -b .resume
