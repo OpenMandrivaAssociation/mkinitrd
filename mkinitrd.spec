@@ -12,7 +12,6 @@ Patch0: mkinitrd-no-more-lvm-static.patch
 Patch1: mkinitrd-no-more-rtc.patch
 # Mandriva
 Patch100: mkinitrd-4.2.17-mdk.patch
-Patch101: mkinitrd-4.2.17-label.patch
 Patch102: mkinitrd-4.2.17-cdrom.patch
 Patch103: mkinitrd-4.2.17-migrate-mptscsih.patch
 Patch104: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
@@ -109,7 +108,6 @@ nash shell used by initrd
 %patch1 -p1
 # Mandriva
 %patch100 -p1 -b .mdk
-%patch101 -p1 -b .label
 %patch102 -p1 -b .cdrom
 %patch103 -p1 -b .migrate-mptscsih
 %patch104 -p1 -b .use-both-ahci-ata_piix
