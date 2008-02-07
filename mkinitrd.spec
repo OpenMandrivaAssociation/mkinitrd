@@ -24,6 +24,9 @@ Patch113: mkinitrd-6.0.28-kbd.patch
 Patch115: mkinitrd-6.0.28-resume-md.patch
 Patch119: mkinitrd-6.0.28-fstab-auto.patch
 Patch123: mkinitrd-6.0.28-relatime.patch
+# resolve UUID/LABEL with /dev devices, not /sys
+# (so that resolved LVM devices can be used with lvs)
+Patch124: mkinitrd-6.0.28-resolve-uuid-in-dev.patch
 Patch130: mkinitrd-6.0.28-gz-modules.patch
 Requires: /bin/sh, /sbin/insmod.static, /sbin/losetup
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
@@ -98,6 +101,7 @@ nash shell used by initrd
 %patch115 -p1 -b .resume-md
 %patch119 -p1 -b .fstab-auto
 %patch123 -p1 -b .relatime
+%patch124 -p1 -b .resolve-uuid-in-dev
 %patch130 -p1 -b .gz-modules
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
