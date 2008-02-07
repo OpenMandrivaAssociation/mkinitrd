@@ -16,7 +16,7 @@ Patch102: mkinitrd-4.2.17-cdrom.patch
 Patch104: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
 Patch105: mkinitrd-4.2.17-initramfs.patch
 Patch106: mkinitrd-4.2.17-resume.patch
-Patch107: mkinitrd-4.2.17-closedir.patch
+Patch107: mkinitrd-6.0.28-closedir.patch
 Patch108: mkinitrd-4.2.17-dmraid.patch
 Patch109: mkinitrd-4.2.17-evms.patch
 Patch110: mkinitrd-4.2.17-scsidriver.patch
