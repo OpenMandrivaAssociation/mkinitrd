@@ -16,7 +16,7 @@ Patch100: mkinitrd-6.0.28-noselinux.patch
 # no proper dhcp lib package yet
 Patch101: mkinitrd-6.0.28-nonetwork.patch
 Patch102: mkinitrd-6.0.28-etc-blkid.patch
-Patch104: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
+Patch104: mkinitrd-6.0.28-use-both-ahci-ata_piix.patch
 Patch106: mkinitrd-6.0.28-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch111: mkinitrd-6.0.28-dsdt.patch
