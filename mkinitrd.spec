@@ -14,7 +14,6 @@ Patch1: mkinitrd-no-more-rtc.patch
 Patch100: mkinitrd-4.2.17-mdk.patch
 Patch102: mkinitrd-4.2.17-cdrom.patch
 Patch104: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
-Patch105: mkinitrd-4.2.17-initramfs.patch
 Patch106: mkinitrd-4.2.17-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch111: mkinitrd-4.2.17-initramfs-dsdt.patch
@@ -90,7 +89,6 @@ nash shell used by initrd
 %patch100 -p1 -b .mdk
 %patch102 -p1 -b .cdrom
 %patch104 -p1 -b .use-both-ahci-ata_piix
-%patch105 -p1 -b .initramfs
 %patch106 -p1 -b .resume
 %patch107 -p1 -b .closedir
 %patch111 -p1 -b .initramfs-dsdt
