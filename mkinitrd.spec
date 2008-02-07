@@ -17,7 +17,6 @@ Patch104: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
 Patch105: mkinitrd-4.2.17-initramfs.patch
 Patch106: mkinitrd-4.2.17-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
-Patch110: mkinitrd-4.2.17-scsidriver.patch
 Patch111: mkinitrd-4.2.17-initramfs-dsdt.patch
 Patch112: mkinitrd-4.2.17-ide.patch
 Patch113: mkinitrd-4.2.17-atkbd.patch
@@ -110,7 +109,6 @@ nash shell used by initrd
 %patch105 -p1 -b .initramfs
 %patch106 -p1 -b .resume
 %patch107 -p1 -b .closedir
-%patch110 -p1 -b .scsidriver
 %patch111 -p1 -b .initramfs-dsdt
 %patch112 -p1 -b .ide
 %patch113 -p1 -b .atkbd
