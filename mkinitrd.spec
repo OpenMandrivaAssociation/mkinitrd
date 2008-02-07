@@ -60,14 +60,14 @@ Requires: nash = %{version}-%{release}
 %package -n libbdevid-python
 Summary: Python bindings for libbdevid
 Group: System Environment/Libraries
-Requires: glib2, e2fsprogs, device-mapper-libs
+Requires: glib2
 Requires: python, nash = %{version}-%{release}
 
 %package -n nash
 Summary: nash shell
 Group: System Environment/Base
-Requires: parted, device-mapper-libs, e2fsprogs-libs
-Requires: popt, libnl, glib2
+Requires: parted
+Requires: popt, glib2
 Requires: openssl, zlib
 Provides: libbdevid = %{version}-%{release}
 Obsoletes: libbdevid < %{version}-%{release}
