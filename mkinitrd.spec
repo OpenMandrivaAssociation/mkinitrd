@@ -22,7 +22,6 @@ Patch113: mkinitrd-4.2.17-atkbd.patch
 Patch114: mkinitrd-4.2.17-suspend2.patch
 Patch115: mkinitrd-4.2.17-resumemd.patch
 Patch119: mkinitrd-4.2.17-fstabauto.patch
-Patch122: mkinitrd-4.2.17-uuid.patch
 Patch123: mkinitrd-4.2.17-relatime.patch
 Patch124: mkinitrd-4.2.17-scsi_wait_scan.patch
 Patch125: mkinitrd-4.2.17-omit_ide.patch
@@ -109,7 +108,6 @@ nash shell used by initrd
 %patch114 -p1 -b .resume2
 %patch115 -p1 -b .resumemd
 %patch119 -p1 -b .fstab-auto
-%patch122 -p1 -b .uuid
 %patch123 -p1 -b .relatime
 %patch124 -p1 -b .scsi_wait_scan
 %patch125 -p1 -b .omit_ide
