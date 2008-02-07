@@ -46,10 +46,20 @@ Patch131: nash-mount-by-uuid.patch
 # and they don't like device names outside of their namespace either,
 # like /dev/dm-5
 Patch132: mkinitrd-4.2.17-uuid_lvm.patch
-Requires: mktemp >= 1.5-9mdk e2fsprogs /bin/sh coreutils grep mount gzip tar findutils >= 4.1.7-3mdk gawk cpio
+Requires: /bin/sh, /sbin/insmod.static, /sbin/losetup
+Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
+Requires: fileutils, grep, mount, gzip, tar
+Requires: filesystem >= 2.1.0, cpio, initscripts >= 8.63-1
+Requires: e2fsprogs >= 1.38-12, glib2, coreutils
 Requires: module-init-tools >= 3.3-pre11
-BuildRequires: perl-base
-BuildRequires: volume_id-devel
+BuildRequires: popt-devel
+BuildRequires: e2fsprogs-devel parted-devel >= 1.8.5, pkgconfig, glib2-devel
+BuildRequires: device-mapper-devel python-devel
+BuildRequires: python util-linux-ng
+%ifarch ppc
+Requires: ppc64-utils >= 0.3-1
+%endif
+Requires: nash = %{version}-%{release}
 #mkinitrd can work without those, but lesser versions are broken
 #Conflicts: udev <= 0.51-1mdk
 Conflicts: lvm1 < 1.0.8-2mdk
@@ -59,19 +69,39 @@ Conflicts: bootloader-utils < 1.8-1mdk, bootsplash < 3.1.12
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
-Mkinitrd creates filesystem images for use as initial ramdisk (initrd)
-images.  These ramdisk images are often used to preload the block
-device modules (SCSI or RAID) needed to access the root filesystem.
+mkinitrd creates filesystem images for use as initial ram filesystem
+(initramfs) images.  These images are used to find and mount the root
+filesystem.
 
-In other words, generic kernels can be built without drivers for any
-SCSI adapters which load the SCSI driver as a module.  Since the
-kernel needs to read those modules, but in this case it isn't able to
-address the SCSI adapter, an initial ramdisk is used.  The initial
-ramdisk is loaded by the operating system loader (normally LILO) and
-is available to the kernel as soon as the ramdisk is loaded.  The
-ramdisk image loads the proper SCSI adapter and allows the kernel to
-mount the root filesystem.  The mkinitrd program creates such a
-ramdisk using information found in the /etc/modules.conf file.
+%package devel
+Summary: C header files and library for functionality exported by libnash.
+Group: Development/Libraries
+Requires: glibc-devel, pkgconfig, e2fsprogs-devel, mkinitrd, glib2-devel
+Requires: nash = %{version}-%{release}
+
+%package -n libbdevid-python
+Summary: Python bindings for libbdevid
+Group: System Environment/Libraries
+Requires: glib2, e2fsprogs, device-mapper-libs
+Requires: python, nash = %{version}-%{release}
+
+%package -n nash
+Summary: nash shell
+Group: System Environment/Base
+Requires: parted, device-mapper-libs, e2fsprogs-libs
+Requires: popt, libnl, glib2
+Requires: openssl, zlib
+Provides: libbdevid = %{version}-%{release}
+Obsoletes: libbdevid < %{version}-%{release}
+
+%description devel
+C header files and library for functionality exported by libnash.
+
+%description -n libbdevid-python
+Python bindings for libbdevid.
+
+%description -n nash
+nash shell used by initrd
 
 %prep
 %setup -q
@@ -111,22 +141,53 @@ ramdisk using information found in the /etc/modules.conf file.
 %patch132 -p1 -b .uuid_lvm
 
 %build
-make
+make LIB=%{_lib}
+make LIB=%{_lib} test
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make BUILDROOT=$RPM_BUILD_ROOT mandir=%{_mandir} install
+make LIB=%{_lib} DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
+rm -f $RPM_BUILD_ROOT/sbin/bdevid $RPM_BUILD_ROOT/%{_includedir}/blkent.h
 
 # Mandriva
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 
+rm -f $RPM_BUILD_ROOT/sbin/installkernel
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-, root, root)
+%defattr(-,root,root)
+%attr(755,root,root) /sbin/mkinitrd
+%attr(644,root,root) %{_mandir}/man8/mkinitrd.8*
+%attr(755,root,root) /sbin/new-kernel-pkg
+%attr(755,root,root) /sbin/grubby
+%attr(644,root,root) %{_mandir}/man8/grubby.8*
+# Mandriva
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
-/sbin/*
-%{_mandir}/*/*
 
+%files devel
+%defattr(-,root,root)
+%{_libdir}/libnash.so
+%{_libdir}/libbdevid.so
+%{_libdir}/libbdevidprobe.a
+%{_libdir}/pkgconfig/libnash.pc
+%{_libdir}/pkgconfig/libbdevid.pc
+%{_libdir}/pkgconfig/libbdevidprobe.pc
+%{_includedir}/nash.h
+%{_includedir}/nash
+%{_includedir}/bdevid.h
+%{_includedir}/bdevid
+
+%files -n libbdevid-python
+/%{python_sitelib}/bdevid.so
+
+%files -n nash
+%defattr(-,root,root)
+%attr(644,root,root) %{_mandir}/man8/nash.8*
+%attr(755,root,root) /sbin/nash
+/%{_lib}/bdevid
+%{_libdir}/libnash.so.*
+%{_libdir}/libbdevid.so.*
