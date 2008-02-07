@@ -18,7 +18,6 @@ Patch105: mkinitrd-4.2.17-initramfs.patch
 Patch106: mkinitrd-4.2.17-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch111: mkinitrd-4.2.17-initramfs-dsdt.patch
-Patch112: mkinitrd-4.2.17-ide.patch
 Patch113: mkinitrd-4.2.17-atkbd.patch
 Patch114: mkinitrd-4.2.17-suspend2.patch
 Patch115: mkinitrd-4.2.17-resumemd.patch
@@ -32,7 +31,6 @@ Patch124: mkinitrd-4.2.17-scsi_wait_scan.patch
 Patch125: mkinitrd-4.2.17-omit_ide.patch
 Patch126: mkinitrd-4.2.17-rtc.patch
 Patch127: mkinitrd-4.2.17-modinfo_kver.patch
-Patch128: mkinitrd-4.2.17-ide_pata.patch
 Patch129: mkinitrd-4.2.17-modfilename.patch
 Patch130: mkinitrd-4.2.17-tuxonice.patch
 # 31 and 32 for bug #36457
@@ -110,7 +108,6 @@ nash shell used by initrd
 %patch106 -p1 -b .resume
 %patch107 -p1 -b .closedir
 %patch111 -p1 -b .initramfs-dsdt
-%patch112 -p1 -b .ide
 %patch113 -p1 -b .atkbd
 %patch114 -p1 -b .resume2
 %patch115 -p1 -b .resumemd
@@ -124,7 +121,6 @@ nash shell used by initrd
 %patch125 -p1 -b .omit_ide
 %patch126 -p1 -b .rtc
 %patch127 -p1 -b .modinfo_kver
-%patch128 -p1 -b .ide_pata
 %patch129 -p1 -b .modfilename
 %patch130 -p1 -b .tuxonice
 %patch131 -p0 -b .mount-by-uuid
