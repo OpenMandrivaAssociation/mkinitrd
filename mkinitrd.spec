@@ -24,7 +24,6 @@ Patch113: mkinitrd-6.0.28-kbd.patch
 Patch115: mkinitrd-4.2.17-resumemd.patch
 Patch119: mkinitrd-4.2.17-fstabauto.patch
 Patch123: mkinitrd-6.0.28-relatime.patch
-Patch125: mkinitrd-4.2.17-omit_ide.patch
 Requires: /bin/sh, /sbin/insmod.static, /sbin/losetup
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: fileutils, grep, mount, gzip, tar
@@ -98,7 +97,6 @@ nash shell used by initrd
 %patch115 -p1 -b .resumemd
 %patch119 -p1 -b .fstab-auto
 %patch123 -p1 -b .relatime
-%patch125 -p1 -b .omit_ide
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
