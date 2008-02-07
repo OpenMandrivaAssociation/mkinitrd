@@ -23,7 +23,6 @@ Patch114: mkinitrd-4.2.17-suspend2.patch
 Patch115: mkinitrd-4.2.17-resumemd.patch
 Patch119: mkinitrd-4.2.17-fstabauto.patch
 Patch123: mkinitrd-4.2.17-relatime.patch
-Patch124: mkinitrd-4.2.17-scsi_wait_scan.patch
 Patch125: mkinitrd-4.2.17-omit_ide.patch
 Patch126: mkinitrd-4.2.17-rtc.patch
 Patch127: mkinitrd-4.2.17-modinfo_kver.patch
@@ -109,7 +108,6 @@ nash shell used by initrd
 %patch115 -p1 -b .resumemd
 %patch119 -p1 -b .fstab-auto
 %patch123 -p1 -b .relatime
-%patch124 -p1 -b .scsi_wait_scan
 %patch125 -p1 -b .omit_ide
 %patch126 -p1 -b .rtc
 %patch127 -p1 -b .modinfo_kver
