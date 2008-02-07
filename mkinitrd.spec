@@ -23,7 +23,7 @@ Patch111: mkinitrd-6.0.28-dsdt.patch
 Patch113: mkinitrd-6.0.28-kbd.patch
 Patch115: mkinitrd-4.2.17-resumemd.patch
 Patch119: mkinitrd-4.2.17-fstabauto.patch
-Patch123: mkinitrd-4.2.17-relatime.patch
+Patch123: mkinitrd-6.0.28-relatime.patch
 Patch125: mkinitrd-4.2.17-omit_ide.patch
 Requires: /bin/sh, /sbin/insmod.static, /sbin/losetup
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
