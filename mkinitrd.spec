@@ -25,8 +25,6 @@ Patch119: mkinitrd-4.2.17-fstabauto.patch
 Patch123: mkinitrd-4.2.17-relatime.patch
 Patch125: mkinitrd-4.2.17-omit_ide.patch
 Patch130: mkinitrd-4.2.17-tuxonice.patch
-# 31 and 32 for bug #36457
-Patch131: nash-mount-by-uuid.patch
 # lvm tools don't take UUID in place of a real device
 # and they don't like device names outside of their namespace either,
 # like /dev/dm-5
@@ -107,7 +105,6 @@ nash shell used by initrd
 %patch123 -p1 -b .relatime
 %patch125 -p1 -b .omit_ide
 %patch130 -p1 -b .tuxonice
-%patch131 -p0 -b .mount-by-uuid
 %patch132 -p1 -b .uuid_lvm
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
