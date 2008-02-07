@@ -24,8 +24,6 @@ Patch115: mkinitrd-4.2.17-resumemd.patch
 Patch119: mkinitrd-4.2.17-fstabauto.patch
 Patch123: mkinitrd-4.2.17-relatime.patch
 Patch125: mkinitrd-4.2.17-omit_ide.patch
-Patch127: mkinitrd-4.2.17-modinfo_kver.patch
-Patch129: mkinitrd-4.2.17-modfilename.patch
 Patch130: mkinitrd-4.2.17-tuxonice.patch
 # 31 and 32 for bug #36457
 Patch131: nash-mount-by-uuid.patch
@@ -108,8 +106,6 @@ nash shell used by initrd
 %patch119 -p1 -b .fstab-auto
 %patch123 -p1 -b .relatime
 %patch125 -p1 -b .omit_ide
-%patch127 -p1 -b .modinfo_kver
-%patch129 -p1 -b .modfilename
 %patch130 -p1 -b .tuxonice
 %patch131 -p0 -b .mount-by-uuid
 %patch132 -p1 -b .uuid_lvm
