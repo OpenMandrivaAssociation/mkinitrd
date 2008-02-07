@@ -21,7 +21,6 @@ Patch111: mkinitrd-4.2.17-initramfs-dsdt.patch
 Patch113: mkinitrd-4.2.17-atkbd.patch
 Patch114: mkinitrd-4.2.17-suspend2.patch
 Patch115: mkinitrd-4.2.17-resumemd.patch
-Patch116: mkinitrd-4.2.17-usb-1394.patch
 Patch117: mkinitrd-4.2.17-new_raid.patch
 Patch118: mkinitrd-4.2.17-switchroot.patch
 Patch119: mkinitrd-4.2.17-fstabauto.patch
@@ -111,7 +110,6 @@ nash shell used by initrd
 %patch113 -p1 -b .atkbd
 %patch114 -p1 -b .resume2
 %patch115 -p1 -b .resumemd
-%patch116 -p1 -b .usb-1394
 %patch117 -p1 -b .new_raid
 %patch118 -p1 -b .switchroot
 %patch119 -p1 -b .fstab-auto
