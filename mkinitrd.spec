@@ -58,13 +58,13 @@ BuildRequires: dietlibc-devel >= 0.30-2mdk
 %else
 BuildRequires: glibc-static-devel
 %endif
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 #mkinitrd can work without those, but lesser versions are broken
 #Conflicts: udev <= 0.51-1mdk
 Conflicts: lvm1 < 1.0.8-2mdk
 Conflicts: lvm2 < 2.01.09
 Conflicts: mdadm < 2.5.3-3mdv
 Conflicts: bootloader-utils < 1.8-1mdk, bootsplash < 3.1.12
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 Mkinitrd creates filesystem images for use as initial ramdisk (initrd)
