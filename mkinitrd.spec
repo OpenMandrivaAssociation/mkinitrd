@@ -17,7 +17,7 @@ Patch100: mkinitrd-6.0.28-noselinux.patch
 Patch101: mkinitrd-6.0.28-nonetwork.patch
 Patch102: mkinitrd-4.2.17-cdrom.patch
 Patch104: mkinitrd-4.2.17-use-both-ahci-ata_piix.patch
-Patch106: mkinitrd-4.2.17-resume.patch
+Patch106: mkinitrd-6.0.28-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch111: mkinitrd-6.0.28-dsdt.patch
 Patch113: mkinitrd-6.0.28-kbd.patch
