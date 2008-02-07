@@ -139,6 +139,7 @@ nash shell used by initrd
 %patch130 -p1 -b .tuxonice
 %patch131 -p0 -b .mount-by-uuid
 %patch132 -p1 -b .uuid_lvm
+find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
 make LIB=%{_lib}
