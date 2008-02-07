@@ -21,7 +21,7 @@ Patch106: mkinitrd-6.0.28-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch111: mkinitrd-6.0.28-dsdt.patch
 Patch113: mkinitrd-6.0.28-kbd.patch
-Patch115: mkinitrd-4.2.17-resumemd.patch
+Patch115: mkinitrd-6.0.28-resume-md.patch
 Patch119: mkinitrd-6.0.28-fstab-auto.patch
 Patch123: mkinitrd-6.0.28-relatime.patch
 Requires: /bin/sh, /sbin/insmod.static, /sbin/losetup
@@ -94,7 +94,7 @@ nash shell used by initrd
 %patch107 -p1 -b .closedir
 %patch111 -p1 -b .dsdt
 %patch113 -p1 -b .kbd
-%patch115 -p1 -b .resumemd
+%patch115 -p1 -b .resume-md
 %patch119 -p1 -b .fstab-auto
 %patch123 -p1 -b .relatime
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
