@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.28
-Release: %mkrel 2
+Release: %mkrel 3
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -33,7 +33,7 @@ Patch124: mkinitrd-6.0.28-resolve-uuid-in-dev.patch
 Patch130: mkinitrd-6.0.28-gz-modules.patch
 Requires: /bin/sh, /sbin/losetup
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
-Requires: fileutils, grep, mount, gzip, tar
+Requires: grep, mount, gzip, tar
 Requires: filesystem >= 2.1.0, cpio, initscripts >= 8.63-1mdv2008.1
 Requires: e2fsprogs >= 1.38-12, glib2, coreutils
 Requires: module-init-tools >= 3.3-pre11
