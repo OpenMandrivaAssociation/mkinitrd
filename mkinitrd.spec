@@ -60,19 +60,19 @@ filesystem.
 
 %package devel
 Summary: C header files and library for functionality exported by libnash.
-Group: Development/Libraries
+Group: Development/C
 Requires: glibc-devel, pkgconfig, e2fsprogs-devel, mkinitrd, glib2-devel
 Requires: nash = %{version}-%{release}
 
 %package -n libbdevid-python
 Summary: Python bindings for libbdevid
-Group: System Environment/Libraries
+Group: Development/Other
 Requires: glib2
 Requires: python, nash = %{version}-%{release}
 
 %package -n nash
 Summary: nash shell
-Group: System Environment/Base
+Group: System/Kernel and hardware
 Requires: parted
 Requires: popt, glib2
 Requires: openssl, zlib
