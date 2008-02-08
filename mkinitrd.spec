@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.28
-Release: %mkrel 4
+Release: %mkrel 5
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -31,7 +31,7 @@ Patch123: mkinitrd-6.0.28-relatime.patch
 # (so that resolved LVM devices can be used with lvs)
 Patch124: mkinitrd-6.0.28-resolve-uuid-in-dev.patch
 Patch130: mkinitrd-6.0.28-gz-modules.patch
-Requires: /sbin/losetup
+Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
 Requires: filesystem >= 2.1.0, cpio, initscripts >= 8.63-1mdv2008.1
