@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.28
-Release: %mkrel 3
+Release: %mkrel 4
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -78,6 +78,7 @@ Requires: popt, glib2
 Requires: openssl, zlib
 Provides: libbdevid = %{version}-%{release}
 Obsoletes: libbdevid < %{version}-%{release}
+Conflicts: mkinitrd < 6.0.28-2mdv2008.1
 
 %description devel
 C header files and library for functionality exported by libnash.
