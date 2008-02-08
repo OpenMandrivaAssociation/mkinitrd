@@ -151,7 +151,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/bdevid
 
 %files -n libbdevid-python
-/%{python_sitelib}/bdevid.so
+%{python_sitearch}/bdevid.so
 
 %files -n nash
 %defattr(-,root,root)
