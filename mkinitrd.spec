@@ -20,6 +20,7 @@ Patch102: mkinitrd-6.0.28-etc-blkid.patch
 # (similar to initscripts bug: Mdv #32501, RH #220087)
 Patch103: mkinitrd-6.0.28-rmatch.patch
 Patch104: mkinitrd-6.0.28-use-both-ahci-ata_piix.patch
+Patch105: mkinitrd-6.0.28-source-sysconfig-later.patch
 Patch106: mkinitrd-6.0.28-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch111: mkinitrd-6.0.28-dsdt.patch
@@ -99,6 +100,7 @@ nash shell used by initrd
 %patch102 -p1 -b .etc-blkid
 %patch103 -p1 -b .rmatch
 %patch104 -p1 -b .use-both-ahci-ata_piix
+%patch105 -p1 -b .source-sysconfig-later
 %patch106 -p1 -b .resume
 %patch107 -p1 -b .closedir
 %patch111 -p1 -b .dsdt
