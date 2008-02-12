@@ -61,7 +61,7 @@ mkinitrd creates filesystem images for use as initial ram filesystem
 filesystem.
 
 %package devel
-Summary: C header files and library for functionality exported by libnash.
+Summary: C header files and library for functionality exported by libnash
 Group: Development/C
 Requires: glibc-devel, pkgconfig, e2fsprogs-devel, mkinitrd, glib2-devel
 Requires: nash = %{version}-%{release}
@@ -83,7 +83,7 @@ Obsoletes: libbdevid < %{version}-%{release}
 Conflicts: mkinitrd < 6.0.28-2mdv2008.1
 
 %description devel
-C header files and library for functionality exported by libnash.
+C header files and library for functionality exported by libnash
 
 %description -n libbdevid-python
 Python bindings for libbdevid.
