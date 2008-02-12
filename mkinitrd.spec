@@ -73,7 +73,7 @@ Requires: glib2
 Requires: python, nash = %{version}-%{release}
 
 %package -n nash
-Summary: nash shell
+Summary: Nash shell
 Group: System/Kernel and hardware
 Requires: parted
 Requires: popt, glib2
