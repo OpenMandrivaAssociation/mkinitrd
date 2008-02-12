@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.28
-Release: %mkrel 5
+Release: %mkrel 6
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -23,6 +23,7 @@ Patch104: mkinitrd-6.0.28-use-both-ahci-ata_piix.patch
 Patch105: mkinitrd-6.0.28-source-sysconfig-later.patch
 Patch106: mkinitrd-6.0.28-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
+Patch108: mkinitrd-6.0.28-usage-uname-r.patch
 Patch111: mkinitrd-6.0.28-dsdt.patch
 Patch113: mkinitrd-6.0.28-kbd.patch
 Patch115: mkinitrd-6.0.28-resume-md.patch
@@ -103,6 +104,7 @@ nash shell used by initrd
 %patch105 -p1 -b .source-sysconfig-later
 %patch106 -p1 -b .resume
 %patch107 -p1 -b .closedir
+%patch108 -p1 -b .usage-uname-r
 %patch111 -p1 -b .dsdt
 %patch113 -p1 -b .kbd
 %patch115 -p1 -b .resume-md
