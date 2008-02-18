@@ -24,6 +24,7 @@ Patch105: mkinitrd-6.0.28-source-sysconfig-later.patch
 Patch106: mkinitrd-6.0.28-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch108: mkinitrd-6.0.28-usage-uname-r.patch
+Patch109: mkinitrd-6.0.28-fix-modules-check.patch
 Patch111: mkinitrd-6.0.28-dsdt.patch
 Patch113: mkinitrd-6.0.28-kbd.patch
 Patch115: mkinitrd-6.0.28-resume-md.patch
@@ -105,6 +106,7 @@ nash shell used by initrd
 %patch106 -p1 -b .resume
 %patch107 -p1 -b .closedir
 %patch108 -p1 -b .usage-uname-r
+%patch109 -p1 -b .fix-modules-check
 %patch111 -p1 -b .dsdt
 %patch113 -p1 -b .kbd
 %patch115 -p1 -b .resume-md
