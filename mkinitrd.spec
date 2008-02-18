@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
-Version: 6.0.28
-Release: %manbo_mkrel 7
+Version: 6.0.29
+Release: %manbo_mkrel 1
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -9,8 +9,6 @@ Source: mkinitrd-%{version}.tar.bz2
 # Mandriva sources
 Source100: mkinitrd-sysconfig
 # RH patches
-Patch0: mkinitrd-no-more-lvm-static.patch
-Patch1: mkinitrd-no-more-rtc.patch
 # Mandriva patches
 Patch100: mkinitrd-6.0.28-noselinux.patch
 # no proper dhcp lib package yet
@@ -95,8 +93,6 @@ nash shell used by initrd
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
 # Mandriva
 %patch100 -p1 -b .noselinux
 %patch101 -p1 -b .nonetwork
