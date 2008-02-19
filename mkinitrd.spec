@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.29
-Release: %manbo_mkrel 1
+Release: %manbo_mkrel 2
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -25,6 +25,8 @@ Patch108: mkinitrd-6.0.28-usage-uname-r.patch
 Patch109: mkinitrd-6.0.28-fix-modules-check.patch
 Patch110: mkinitrd-6.0.28-ide.patch
 Patch111: mkinitrd-6.0.28-dsdt.patch
+# handle root=<devnum> from lilo
+Patch112: mkinitrd-6.0.29-root-devnum.patch
 Patch113: mkinitrd-6.0.28-kbd.patch
 Patch115: mkinitrd-6.0.28-resume-md.patch
 Patch119: mkinitrd-6.0.28-fstab-auto.patch
@@ -106,6 +108,7 @@ nash shell used by initrd
 %patch109 -p1 -b .fix-modules-check
 %patch110 -p1 -b .ide
 %patch111 -p1 -b .dsdt
+%patch112 -p1 -b .root-devnum
 %patch113 -p1 -b .kbd
 %patch115 -p1 -b .resume-md
 %patch119 -p1 -b .fstab-auto
