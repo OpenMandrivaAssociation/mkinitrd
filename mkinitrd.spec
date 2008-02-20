@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.29
-Release: %manbo_mkrel 2
+Release: %manbo_mkrel 3
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -19,7 +19,7 @@ Patch102: mkinitrd-6.0.28-etc-blkid.patch
 Patch103: mkinitrd-6.0.28-rmatch.patch
 Patch104: mkinitrd-6.0.28-use-both-ahci-ata_piix.patch
 Patch105: mkinitrd-6.0.28-source-sysconfig-later.patch
-Patch106: mkinitrd-6.0.28-resume.patch
+Patch106: mkinitrd-6.0.29-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch108: mkinitrd-6.0.28-usage-uname-r.patch
 Patch109: mkinitrd-6.0.28-fix-modules-check.patch
