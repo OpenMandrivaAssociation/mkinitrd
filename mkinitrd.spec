@@ -76,7 +76,6 @@ Requires: python, nash = %{version}-%{release}
 %package -n nash
 Summary: Nash shell
 Group: System/Kernel and hardware
-Requires: parted
 Provides: libbdevid = %{version}-%{release}
 Obsoletes: libbdevid < %{version}-%{release}
 Conflicts: mkinitrd < 6.0.28-2mdv2008.1
