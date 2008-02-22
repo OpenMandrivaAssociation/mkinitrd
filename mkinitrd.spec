@@ -39,7 +39,7 @@ Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
 Requires: filesystem >= 2.1.0, cpio, initscripts >= 8.63-1mdv2008.1
-Requires: e2fsprogs >= 1.38-12, glib2, coreutils
+Requires: e2fsprogs >= 1.38-12, coreutils
 Requires: module-init-tools >= 3.3-pre11
 BuildRequires: popt-devel
 BuildRequires: e2fsprogs-devel parted-devel >= 1.8.5, pkgconfig, glib2-devel
@@ -71,15 +71,12 @@ Requires: nash = %{version}-%{release}
 %package -n libbdevid-python
 Summary: Python bindings for libbdevid
 Group: Development/Other
-Requires: glib2
 Requires: python, nash = %{version}-%{release}
 
 %package -n nash
 Summary: Nash shell
 Group: System/Kernel and hardware
 Requires: parted
-Requires: popt, glib2
-Requires: openssl, zlib
 Provides: libbdevid = %{version}-%{release}
 Obsoletes: libbdevid < %{version}-%{release}
 Conflicts: mkinitrd < 6.0.28-2mdv2008.1
