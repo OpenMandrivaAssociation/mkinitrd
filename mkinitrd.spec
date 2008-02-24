@@ -28,7 +28,7 @@ Patch111: mkinitrd-6.0.28-dsdt.patch
 # handle root=<devnum> from lilo
 Patch112: mkinitrd-6.0.29-root-devnum.patch
 Patch113: mkinitrd-6.0.28-kbd.patch
-Patch115: mkinitrd-6.0.28-resume-md.patch
+Patch115: mkinitrd-6.0.29-resume-md.patch
 Patch119: mkinitrd-6.0.28-fstab-auto.patch
 Patch123: mkinitrd-6.0.28-relatime.patch
 # resolve UUID/LABEL with /dev devices, not /sys
