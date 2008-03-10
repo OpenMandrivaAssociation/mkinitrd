@@ -127,6 +127,7 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
 install -m 644 %{SOURCE100} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 
 rm -f $RPM_BUILD_ROOT/sbin/installkernel
+rm -f $RPM_BUILD_ROOT/usr/libexec/mkliveinitrd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
