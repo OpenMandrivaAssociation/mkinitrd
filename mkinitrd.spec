@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.34
-Release: %manbo_mkrel 1
+Release: %manbo_mkrel 2
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -35,6 +35,7 @@ Patch123: mkinitrd-6.0.29-relatime.patch
 # (so that resolved LVM devices can be used with lvs)
 Patch124: mkinitrd-6.0.28-resolve-uuid-in-dev.patch
 Patch130: mkinitrd-6.0.28-gz-modules.patch
+Patch131: mkinitrd-6.0.34-nash-dm_task_run.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -111,6 +112,7 @@ nash shell used by initrd
 %patch123 -p1 -b .relatime
 %patch124 -p1 -b .resolve-uuid-in-dev
 %patch130 -p1 -b .gz-modules
+%patch131 -p1 -b .nash-dm_task_run
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
