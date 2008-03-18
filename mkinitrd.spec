@@ -24,7 +24,7 @@ Patch107: mkinitrd-6.0.28-closedir.patch
 Patch108: mkinitrd-6.0.28-usage-uname-r.patch
 Patch109: mkinitrd-6.0.28-fix-modules-check.patch
 Patch110: mkinitrd-6.0.28-ide.patch
-Patch111: mkinitrd-6.0.28-dsdt.patch
+Patch111: mkinitrd-6.0.37-dsdt.patch
 # handle root=<devnum> from lilo
 Patch112: mkinitrd-6.0.29-root-devnum.patch
 Patch113: mkinitrd-6.0.28-kbd.patch
