@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.37
-Release: %manbo_mkrel 1
+Release: %manbo_mkrel 2
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -33,6 +33,7 @@ Patch119: mkinitrd-6.0.28-fstab-auto.patch
 Patch123: mkinitrd-6.0.29-relatime.patch
 Patch130: mkinitrd-6.0.28-gz-modules.patch
 Patch131: mkinitrd-6.0.34-nash-dm_task_run.patch
+Patch132: mkinitrd-6.0.37-fix-awk-syntax-in-handleraid.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -109,6 +110,7 @@ nash shell used by initrd
 %patch123 -p1 -b .relatime
 %patch130 -p1 -b .gz-modules
 %patch131 -p1 -b .nash-dm_task_run
+%patch132 -p1 -b .fix_awk_in_handleraid
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
