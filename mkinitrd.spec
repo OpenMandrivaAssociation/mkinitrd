@@ -132,6 +132,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
+%attr(755,root,root) /sbin/lsinitrd
 %attr(755,root,root) /sbin/mkinitrd
 %attr(644,root,root) %{_mandir}/man8/mkinitrd.8*
 %attr(755,root,root) /sbin/new-kernel-pkg
