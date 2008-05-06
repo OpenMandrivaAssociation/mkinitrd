@@ -10,9 +10,9 @@ Source: mkinitrd-%{version}.tar.bz2
 Source100: mkinitrd-sysconfig
 # RH patches
 # Mandriva patches
-Patch100: mkinitrd-6.0.34-noselinux.patch
+Patch100: mkinitrd-6.0.52-noselinux.patch
 # no proper dhcp lib package yet
-Patch101: mkinitrd-6.0.28-nonetwork.patch
+Patch101: mkinitrd-6.0.52-nonetwork.patch
 Patch102: mkinitrd-6.0.28-etc-blkid.patch
 # fix regexp match with bash-3.2, notably to fix RAID with mdadm
 # (similar to initscripts bug: Mdv #32501, RH #220087)
@@ -24,7 +24,7 @@ Patch107: mkinitrd-6.0.28-closedir.patch
 Patch108: mkinitrd-6.0.28-usage-uname-r.patch
 Patch109: mkinitrd-6.0.28-fix-modules-check.patch
 Patch110: mkinitrd-6.0.28-ide.patch
-Patch111: mkinitrd-6.0.37-dsdt.patch
+Patch111: mkinitrd-6.0.52-dsdt.patch
 # handle root=<devnum> from lilo
 Patch112: mkinitrd-6.0.29-root-devnum.patch
 Patch113: mkinitrd-6.0.28-kbd.patch
