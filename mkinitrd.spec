@@ -43,6 +43,7 @@ BuildRequires: popt-devel
 BuildRequires: e2fsprogs-devel parted-devel >= 1.8.5, pkgconfig, glib2-devel
 BuildRequires: device-mapper-devel python-devel
 BuildRequires: python util-linux-ng
+BuildRequires: libelf-devel
 %ifarch ppc
 Requires: ppc64-utils >= 0.3-1
 %endif
