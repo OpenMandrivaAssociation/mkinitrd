@@ -133,7 +133,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%attr(755,root,root) /sbin/lsinitrd
 %attr(755,root,root) /sbin/mkinitrd
 %attr(644,root,root) %{_mandir}/man8/mkinitrd.8*
 %attr(755,root,root) /sbin/new-kernel-pkg
@@ -162,6 +161,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %attr(644,root,root) %{_mandir}/man8/nash.8*
 %attr(755,root,root) /sbin/nash
+%attr(755,root,root) /sbin/lsinitrd
 /%{_lib}/bdevid
 %{_libdir}/libnash.so.*
 %{_libdir}/libbdevid.so.*
