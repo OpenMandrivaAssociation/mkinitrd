@@ -35,6 +35,7 @@ Patch130: mkinitrd-6.0.28-gz-modules.patch
 Patch131: mkinitrd-6.0.34-nash-dm_task_run.patch
 Patch132: mkinitrd-6.0.52-scsi_alias.patch
 Patch133: mkinitrd-6.0.52-disk_driver.patch
+Patch134: mkinitrd-6.0.52-fb0.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -114,6 +115,7 @@ nash shell used by initrd
 %patch131 -p1 -b .nash-dm_task_run
 %patch132 -p1 -b .scsi_alias
 %patch133 -p1 -b .disk_driver
+%patch134 -p1 -b .fb0
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
