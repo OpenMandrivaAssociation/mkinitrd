@@ -121,6 +121,7 @@ nash shell used by initrd
 %patch133 -p1 -b .disk_driver
 %patch134 -p1 -b .fb0
 %patch135 -p1 -b .splashy
+%patch136 -p1 -b .checkroot
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
