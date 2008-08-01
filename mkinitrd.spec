@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.52
-Release: %manbo_mkrel 4
+Release: %manbo_mkrel 5
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -41,6 +41,7 @@ Patch135: mkinitrd-6.0.52-splashy.patch
 # since we need /dev to stop splashy and show error messages
 Patch136: mkinitrd-6.0.52-checkroot.patch
 Patch137: mkinitrd-6.0.52-fix_usbstorage.patch
+Patch138: mkinitrd-6.0.52-usb_builtin.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -124,6 +125,7 @@ nash shell used by initrd
 %patch135 -p1 -b .splashy
 %patch136 -p1 -b .checkroot
 %patch137 -p1 -b .fix_usbstorage
+%patch138 -p1 -b .usb_builtin
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
