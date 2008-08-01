@@ -40,6 +40,7 @@ Patch135: mkinitrd-6.0.52-splashy.patch
 # check that /dev exists in new root, not to wrongly clean old root
 # since we need /dev to stop splashy and show error messages
 Patch136: mkinitrd-6.0.52-checkroot.patch
+Patch137: mkinitrd-6.0.52-fix_usbstorage.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -122,6 +123,7 @@ nash shell used by initrd
 %patch134 -p1 -b .fb0
 %patch135 -p1 -b .splashy
 %patch136 -p1 -b .checkroot
+%patch137 -p1 -b .fix_usbstorage
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
