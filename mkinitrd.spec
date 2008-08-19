@@ -156,6 +156,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(644,root,root) %{_mandir}/man8/grubby.8*
 # Mandriva
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
+%{_prefix}/libexec/initrd-functions
 
 %files devel
 %defattr(-,root,root)
