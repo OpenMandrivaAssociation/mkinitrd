@@ -30,7 +30,7 @@ Patch112: mkinitrd-6.0.29-root-devnum.patch
 Patch113: mkinitrd-6.0.28-kbd.patch
 Patch115: mkinitrd-6.0.29-resume-md.patch
 Patch119: mkinitrd-6.0.28-fstab-auto.patch
-Patch123: mkinitrd-6.0.29-relatime.patch
+Patch123: mkinitrd-6.0.62-relatime.patch
 Patch130: mkinitrd-6.0.28-gz-modules.patch
 Patch131: mkinitrd-6.0.34-nash-dm_task_run.patch
 Patch132: mkinitrd-6.0.52-scsi_alias.patch
