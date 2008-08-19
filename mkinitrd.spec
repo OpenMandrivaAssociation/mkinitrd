@@ -22,7 +22,7 @@ Patch105: mkinitrd-6.0.62-source-sysconfig-later.patch
 Patch106: mkinitrd-6.0.62-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch108: mkinitrd-6.0.28-usage-uname-r.patch
-Patch109: mkinitrd-6.0.28-fix-modules-check.patch
+Patch109: mkinitrd-6.0.62-fix-modules-check.patch
 Patch110: mkinitrd-6.0.52-ide.patch
 Patch111: mkinitrd-6.0.52-dsdt.patch
 # handle root=<devnum> from lilo
