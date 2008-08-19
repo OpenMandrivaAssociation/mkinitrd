@@ -35,7 +35,7 @@ Patch130: mkinitrd-6.0.62-gz-modules.patch
 Patch131: mkinitrd-6.0.34-nash-dm_task_run.patch
 Patch132: mkinitrd-6.0.52-scsi_alias.patch
 Patch133: mkinitrd-6.0.52-disk_driver.patch
-Patch134: mkinitrd-6.0.52-fb0.patch
+Patch134: mkinitrd-6.0.62-fb0.patch
 Patch135: mkinitrd-6.0.52-splashy.patch
 # check that /dev exists in new root, not to wrongly clean old root
 # since we need /dev to stop splashy and show error messages
