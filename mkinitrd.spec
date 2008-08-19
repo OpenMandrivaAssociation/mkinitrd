@@ -40,7 +40,7 @@ Patch135: mkinitrd-6.0.52-splashy.patch
 # check that /dev exists in new root, not to wrongly clean old root
 # since we need /dev to stop splashy and show error messages
 Patch136: mkinitrd-6.0.52-checkroot.patch
-Patch137: mkinitrd-6.0.52-fix_usbstorage.patch
+Patch137: mkinitrd-6.0.62-fix_usbstorage.patch
 Patch138: mkinitrd-6.0.52-usb_builtin.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
