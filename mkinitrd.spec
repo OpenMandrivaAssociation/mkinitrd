@@ -40,7 +40,7 @@ Patch135: mkinitrd-6.0.62-splashy.patch
 # check that /dev exists in new root, not to wrongly clean old root
 # since we need /dev to stop splashy and show error messages
 Patch136: mkinitrd-6.0.52-checkroot.patch
-Patch137: mkinitrd-6.0.62-fix_usbstorage.patch
+Patch137: mkinitrd-6.0.63-fix_usbstorage.patch
 Patch138: mkinitrd-6.0.52-usb_builtin.patch
 Patch139: mkinitrd-6.0.62-libdeps.patch
 Patch140: mkinitrd-6.0.37-killhotplug.patch
