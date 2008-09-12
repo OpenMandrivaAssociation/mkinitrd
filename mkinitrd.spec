@@ -47,6 +47,7 @@ Patch140: mkinitrd-6.0.37-killhotplug.patch
 # this patch is probably wrong somehow
 # but otherwise, symlinks do not get installed properly
 Patch141: mkinitrd-6.0.63-fix-symlinks.patch
+Patch142: mkinitrd-6.0.62-hooks.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -135,6 +136,7 @@ nash shell used by initrd
 %patch139 -p1 -b .libdeps
 %patch140 -p1 -b .killhotplug
 %patch141 -p1 -b .fix-symlinks
+%patch142 -p1 -b .hooks
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
