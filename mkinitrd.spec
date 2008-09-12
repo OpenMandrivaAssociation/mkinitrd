@@ -16,7 +16,7 @@ Patch101: mkinitrd-6.0.62-nonetwork.patch
 Patch102: mkinitrd-6.0.28-etc-blkid.patch
 # fix regexp match with bash-3.2, notably to fix RAID with mdadm
 # (similar to initscripts bug: Mdv #32501, RH #220087)
-Patch103: mkinitrd-6.0.62-rmatch.patch
+Patch103: mkinitrd-6.0.63-rmatch.patch
 Patch104: mkinitrd-6.0.28-use-both-ahci-ata_piix.patch
 Patch105: mkinitrd-6.0.62-source-sysconfig-later.patch
 Patch106: mkinitrd-6.0.62-resume.patch
