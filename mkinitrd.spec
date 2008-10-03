@@ -1,13 +1,14 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.63
-Release: %manbo_mkrel 1
+Release: %manbo_mkrel 2
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
 Source: mkinitrd-%{version}.tar.bz2
 # Mandriva sources
 Source100: mkinitrd-sysconfig
+Source101: askpass.c
 # RH patches
 # Mandriva patches
 Patch100: mkinitrd-6.0.52-noselinux.patch
@@ -48,6 +49,7 @@ Patch140: mkinitrd-6.0.37-killhotplug.patch
 # but otherwise, symlinks do not get installed properly
 Patch141: mkinitrd-6.0.63-fix-symlinks.patch
 Patch142: mkinitrd-6.0.62-hooks.patch
+Patch143: mkinitrd-6.0.63-askpass.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -137,11 +139,14 @@ nash shell used by initrd
 %patch140 -p1 -b .killhotplug
 %patch141 -p1 -b .fix-symlinks
 %patch142 -p1 -b .hooks
+%patch143 -p1 -b .askpass
+cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
 make LIB=%{_lib}
 make LIB=%{_lib} test
+make askpass LDFLAGS=
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -154,6 +159,7 @@ install -m 644 %{SOURCE100} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 
 rm -f $RPM_BUILD_ROOT/sbin/installkernel
 rm -f $RPM_BUILD_ROOT/usr/libexec/mkliveinitrd
+install askpass $RPM_BUILD_ROOT/usr/libexec/askpass
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -168,6 +174,7 @@ rm -rf $RPM_BUILD_ROOT
 # Mandriva
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
 %{_prefix}/libexec/initrd-functions
+%{_prefix}/libexec/askpass
 
 %files devel
 %defattr(-,root,root)
