@@ -50,6 +50,7 @@ Patch140: mkinitrd-6.0.37-killhotplug.patch
 Patch141: mkinitrd-6.0.63-fix-symlinks.patch
 Patch142: mkinitrd-6.0.62-hooks.patch
 Patch143: mkinitrd-6.0.63-askpass.patch
+Patch144: mkinitrd-6.0.63-noglib.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -57,7 +58,7 @@ Requires: filesystem >= 2.1.0, cpio, initscripts >= 8.63-1mdv2008.1
 Requires: e2fsprogs >= 1.38-12, coreutils
 Requires: module-init-tools >= 3.3-pre11
 BuildRequires: popt-devel
-BuildRequires: e2fsprogs-devel parted-devel >= 1.8.5, pkgconfig, glib2-devel
+BuildRequires: e2fsprogs-devel parted-devel >= 1.8.5, pkgconfig 
 BuildRequires: device-mapper-devel python-devel
 BuildRequires: python util-linux-ng
 BuildRequires: libelf-devel
@@ -81,7 +82,7 @@ filesystem.
 %package devel
 Summary: C header files and library for functionality exported by libnash
 Group: Development/C
-Requires: glibc-devel, pkgconfig, e2fsprogs-devel, mkinitrd, glib2-devel
+Requires: glibc-devel, pkgconfig, e2fsprogs-devel, mkinitrd
 Requires: nash = %{version}-%{release}
 
 %package -n libbdevid-python
@@ -140,6 +141,7 @@ nash shell used by initrd
 %patch141 -p1 -b .fix-symlinks
 %patch142 -p1 -b .hooks
 %patch143 -p1 -b .askpass
+%patch144 -p1 -b .glib
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
