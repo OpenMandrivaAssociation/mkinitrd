@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.63
-Release: %manbo_mkrel 2
+Release: %manbo_mkrel 3
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -51,6 +51,8 @@ Patch141: mkinitrd-6.0.63-fix-symlinks.patch
 Patch142: mkinitrd-6.0.62-hooks.patch
 Patch143: mkinitrd-6.0.63-askpass.patch
 Patch144: mkinitrd-6.0.63-noglib.patch
+# (fc) add support for bootchart (rtp)
+Patch145: mkinitrd-6.0.63-bootchart.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -142,6 +144,7 @@ nash shell used by initrd
 %patch142 -p1 -b .hooks
 %patch143 -p1 -b .askpass
 %patch144 -p1 -b .glib
+%patch145 -p1 -b .bootchart
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
