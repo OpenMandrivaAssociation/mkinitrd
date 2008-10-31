@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.63
-Release: %manbo_mkrel 3
+Release: %manbo_mkrel 4
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -42,7 +42,6 @@ Patch135: mkinitrd-6.0.62-splashy.patch
 # since we need /dev to stop splashy and show error messages
 Patch136: mkinitrd-6.0.52-checkroot.patch
 Patch137: mkinitrd-6.0.63-fix_usbstorage.patch
-Patch138: mkinitrd-6.0.52-usb_builtin.patch
 Patch139: mkinitrd-6.0.62-libdeps.patch
 Patch140: mkinitrd-6.0.37-killhotplug.patch
 # this patch is probably wrong somehow
@@ -53,6 +52,11 @@ Patch143: mkinitrd-6.0.63-askpass.patch
 Patch144: mkinitrd-6.0.63-noglib.patch
 # (fc) add support for bootchart (rtp)
 Patch145: mkinitrd-6.0.63-bootchart.patch
+# (fc) disable usb by default, it is enabled automatically when needed
+Patch146: mkinitrd-6.0.63-disable_usb_by_default.patch
+# (fc) use waitdev to wait for rootfs and resume partition
+Patch147: mkinitrd-6.0.63-waitdev.patch
+
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -137,7 +141,6 @@ nash shell used by initrd
 %patch135 -p1 -b .splashy
 %patch136 -p1 -b .checkroot
 %patch137 -p1 -b .fix_usbstorage
-%patch138 -p1 -b .usb_builtin
 %patch139 -p1 -b .libdeps
 %patch140 -p1 -b .killhotplug
 %patch141 -p1 -b .fix-symlinks
@@ -145,6 +148,9 @@ nash shell used by initrd
 %patch143 -p1 -b .askpass
 %patch144 -p1 -b .glib
 %patch145 -p1 -b .bootchart
+%patch146 -p1 -b .disable_usb_by_default
+%patch147 -p1 -b .waitdev
+
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
