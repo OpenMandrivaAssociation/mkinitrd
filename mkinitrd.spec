@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.63
-Release: %manbo_mkrel 4
+Release: %manbo_mkrel 5
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -56,6 +56,8 @@ Patch145: mkinitrd-6.0.63-bootchart.patch
 Patch146: mkinitrd-6.0.63-disable_usb_by_default.patch
 # (fc) use waitdev to wait for rootfs and resume partition
 Patch147: mkinitrd-6.0.63-waitdev.patch
+# (fc) make sure ppoll won't overflow
+Patch148: mkinitrd-6.0.63-ppoll.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
@@ -150,6 +152,7 @@ nash shell used by initrd
 %patch145 -p1 -b .bootchart
 %patch146 -p1 -b .disable_usb_by_default
 %patch147 -p1 -b .waitdev
+%patch148 -p1 -b .ppoll
 
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
