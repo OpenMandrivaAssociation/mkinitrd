@@ -28,7 +28,7 @@ Patch110: mkinitrd-6.0.62-ide.patch
 Patch111: mkinitrd-6.0.63-dsdt.patch
 # handle root=<devnum> from lilo
 Patch112: mkinitrd-6.0.62-root-devnum.patch
-Patch113: mkinitrd-6.0.28-kbd.patch
+Patch113: mkinitrd-6.0.63-kbd.patch
 Patch115: mkinitrd-6.0.29-resume-md.patch
 Patch119: mkinitrd-6.0.28-fstab-auto.patch
 Patch123: mkinitrd-6.0.62-relatime.patch
