@@ -1,11 +1,12 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.63
-Release: %manbo_mkrel 6
+Release: %manbo_mkrel 7
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
-Source: mkinitrd-%{version}.tar.bz2
+Source0: mkinitrd-%{version}.tar.bz2
+Source1: bash-completion
 # Mandriva sources
 Source100: mkinitrd-sysconfig
 Source101: askpass.c
@@ -175,11 +176,16 @@ rm -f $RPM_BUILD_ROOT/sbin/installkernel
 rm -f $RPM_BUILD_ROOT/usr/libexec/mkliveinitrd
 install askpass $RPM_BUILD_ROOT/usr/libexec/askpass
 
+# bash completion
+install -d -m 755 %{buildroot}%{_sysconfdir}/bash_completion.d
+install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/bash_completion.d/%{name}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
+%{_sysconfdir}/bash_completion.d/%{name}
 %attr(755,root,root) /sbin/mkinitrd
 %attr(644,root,root) %{_mandir}/man8/mkinitrd.8*
 %attr(755,root,root) /sbin/new-kernel-pkg
