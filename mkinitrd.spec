@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.63
-Release: %manbo_mkrel 11
+Release: %manbo_mkrel 12
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
