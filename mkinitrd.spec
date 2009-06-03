@@ -58,6 +58,8 @@ Patch146: mkinitrd-6.0.63-disable_usb_by_default.patch
 Patch147: mkinitrd-6.0.63-waitdev.patch
 # (fc) make sure ppoll won't overflow
 Patch148: mkinitrd-6.0.63-ppoll.patch
+# (upstream) mount options are ignored sometimes
+Patch149: mkinitrd-6.0.63-nashmountopts.patch 
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
@@ -153,6 +155,7 @@ nash shell used by initrd
 %patch146 -p1 -b .disable_usb_by_default
 %patch147 -p1 -b .waitdev
 %patch148 -p1 -b .ppoll
+%patch149 -p1 -b .mountopts
 
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
