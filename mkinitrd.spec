@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
-Version: 6.0.63
-Release: %manbo_mkrel 18
+Version: 6.0.86
+Release: %manbo_mkrel 1
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -23,7 +23,6 @@ Patch105: mkinitrd-6.0.62-source-sysconfig-later.patch
 Patch106: mkinitrd-6.0.62-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch108: mkinitrd-6.0.28-usage-uname-r.patch
-Patch109: mkinitrd-6.0.62-fix-modules-check.patch
 Patch110: mkinitrd-6.0.62-ide.patch
 Patch111: mkinitrd-6.0.63-dsdt.patch
 # handle root=<devnum> from lilo
@@ -31,7 +30,6 @@ Patch112: mkinitrd-6.0.62-root-devnum.patch
 Patch113: mkinitrd-6.0.63-kbd.patch
 Patch115: mkinitrd-6.0.63-resume-md.patch
 Patch119: mkinitrd-6.0.28-fstab-auto.patch
-Patch123: mkinitrd-6.0.62-relatime.patch
 Patch130: mkinitrd-6.0.62-gz-modules.patch
 Patch131: mkinitrd-6.0.34-nash-dm_task_run.patch
 Patch132: mkinitrd-6.0.52-scsi_alias.patch
@@ -43,13 +41,11 @@ Patch135: mkinitrd-6.0.62-splashy.patch
 Patch136: mkinitrd-6.0.63-checkroot.patch
 Patch137: mkinitrd-6.0.63-fix_usbstorage.patch
 Patch139: mkinitrd-6.0.62-libdeps.patch
-Patch140: mkinitrd-6.0.37-killhotplug.patch
 # this patch is probably wrong somehow
 # but otherwise, symlinks do not get installed properly
 Patch141: mkinitrd-6.0.63-fix-symlinks.patch
 Patch142: mkinitrd-6.0.62-hooks.patch
 Patch143: mkinitrd-6.0.63-askpass.patch
-Patch144: mkinitrd-6.0.63-noglib.patch
 # (fc) add support for bootchart (rtp)
 Patch145: mkinitrd-6.0.63-bootchart.patch
 # (fc) disable usb by default, it is enabled automatically when needed
@@ -58,8 +54,6 @@ Patch146: mkinitrd-6.0.63-disable_usb_by_default.patch
 Patch147: mkinitrd-6.0.63-waitdev.patch
 # (fc) make sure ppoll won't overflow
 Patch148: mkinitrd-6.0.63-ppoll.patch
-# (upstream) mount options are ignored sometimes
-Patch149: mkinitrd-6.0.63-nashmountopts.patch 
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
@@ -129,14 +123,12 @@ nash shell used by initrd
 %patch106 -p1 -b .resume
 %patch107 -p1 -b .closedir
 %patch108 -p1 -b .usage-uname-r
-%patch109 -p1 -b .fix-modules-check
 %patch110 -p1 -b .ide
 %patch111 -p1 -b .dsdt
 %patch112 -p1 -b .root-devnum
 %patch113 -p1 -b .kbd
 %patch115 -p1 -b .resume-md
 %patch119 -p1 -b .fstab-auto
-%patch123 -p1 -b .relatime
 %patch130 -p1 -b .gz-modules
 %patch131 -p1 -b .nash-dm_task_run
 %patch132 -p1 -b .scsi_alias
@@ -146,16 +138,13 @@ nash shell used by initrd
 %patch136 -p1 -b .checkroot
 %patch137 -p1 -b .fix_usbstorage
 %patch139 -p1 -b .libdeps
-%patch140 -p1 -b .killhotplug
 %patch141 -p1 -b .fix-symlinks
 %patch142 -p1 -b .hooks
 %patch143 -p1 -b .askpass
-%patch144 -p1 -b .glib
 %patch145 -p1 -b .bootchart
 %patch146 -p1 -b .disable_usb_by_default
 %patch147 -p1 -b .waitdev
 %patch148 -p1 -b .ppoll
-%patch149 -p1 -b .mountopts
 
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
