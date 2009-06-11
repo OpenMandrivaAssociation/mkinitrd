@@ -11,30 +11,30 @@ Source100: mkinitrd-sysconfig
 Source101: askpass.c
 # RH patches
 # Mandriva patches
-Patch100: mkinitrd-6.0.52-noselinux.patch
+Patch100: mkinitrd-6.0.86-noselinux.patch
 # no proper dhcp lib package yet
-Patch101: mkinitrd-6.0.62-nonetwork.patch
+Patch101: mkinitrd-6.0.86-nonetwork.patch
 Patch102: mkinitrd-6.0.28-etc-blkid.patch
 # fix regexp match with bash-3.2, notably to fix RAID with mdadm
 # (similar to initscripts bug: Mdv #32501, RH #220087)
-Patch103: mkinitrd-6.0.63-rmatch.patch
+Patch103: mkinitrd-6.0.86-rmatch.patch
 Patch104: mkinitrd-6.0.28-use-both-ahci-ata_piix.patch
 Patch105: mkinitrd-6.0.62-source-sysconfig-later.patch
 Patch106: mkinitrd-6.0.62-resume.patch
 Patch107: mkinitrd-6.0.28-closedir.patch
 Patch108: mkinitrd-6.0.28-usage-uname-r.patch
 Patch110: mkinitrd-6.0.62-ide.patch
-Patch111: mkinitrd-6.0.63-dsdt.patch
+Patch111: mkinitrd-6.0.86-dsdt.patch
 # handle root=<devnum> from lilo
-Patch112: mkinitrd-6.0.62-root-devnum.patch
+Patch112: mkinitrd-6.0.86-root-devnum.patch
 Patch113: mkinitrd-6.0.63-kbd.patch
 Patch115: mkinitrd-6.0.63-resume-md.patch
 Patch119: mkinitrd-6.0.28-fstab-auto.patch
-Patch130: mkinitrd-6.0.62-gz-modules.patch
+Patch130: mkinitrd-6.0.86-gz-modules.patch
 Patch131: mkinitrd-6.0.34-nash-dm_task_run.patch
 Patch132: mkinitrd-6.0.52-scsi_alias.patch
 Patch133: mkinitrd-6.0.52-disk_driver.patch
-Patch134: mkinitrd-6.0.62-fb0.patch
+Patch134: mkinitrd-6.0.86-fb0.patch
 Patch135: mkinitrd-6.0.62-splashy.patch
 # check that /dev exists in new root, not to wrongly clean old root
 # since we need /dev to stop splashy and show error messages
@@ -45,16 +45,16 @@ Patch139: mkinitrd-6.0.62-libdeps.patch
 # but otherwise, symlinks do not get installed properly
 Patch141: mkinitrd-6.0.63-fix-symlinks.patch
 Patch142: mkinitrd-6.0.62-hooks.patch
-Patch143: mkinitrd-6.0.63-askpass.patch
+Patch143: mkinitrd-6.0.86-askpass.patch
 # (fc) add support for bootchart (rtp)
 Patch145: mkinitrd-6.0.63-bootchart.patch
 # (fc) disable usb by default, it is enabled automatically when needed
 Patch146: mkinitrd-6.0.63-disable_usb_by_default.patch
-# (fc) use waitdev to wait for rootfs and resume partition
-Patch147: mkinitrd-6.0.63-waitdev.patch
 # (fc) make sure ppoll won't overflow
-Patch148: mkinitrd-6.0.63-ppoll.patch
-
+Patch147: mkinitrd-6.0.86-ppoll.patch
+Patch148: mkinitrd-6.0.86-traversal.patch
+# (fc) use waitdev to wait for rootfs and resume partition
+Patch149: mkinitrd-6.0.86-waitdev.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -143,8 +143,9 @@ nash shell used by initrd
 %patch143 -p1 -b .askpass
 %patch145 -p1 -b .bootchart
 %patch146 -p1 -b .disable_usb_by_default
-%patch147 -p1 -b .waitdev
-%patch148 -p1 -b .ppoll
+%patch147 -p1 -b .ppoll
+%patch148 -p1 -b .traversal
+%patch149 -p1 -b .waitdev
 
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
