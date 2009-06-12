@@ -55,6 +55,8 @@ Patch147: mkinitrd-6.0.86-ppoll.patch
 Patch148: mkinitrd-6.0.86-traversal.patch
 # (fc) use waitdev to wait for rootfs and resume partition
 Patch149: mkinitrd-6.0.86-waitdev.patch
+# (pt) we use /usr/lib/kbd, not /lib/kbd
+Patch150: mkinitrd-6.0.86.kbd-is-in-usr.patch
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -146,6 +148,7 @@ nash shell used by initrd
 %patch147 -p1 -b .ppoll
 %patch148 -p1 -b .traversal
 %patch149 -p1 -b .waitdev
+%patch150 -p1 -b .kbd_in_usr
 
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
