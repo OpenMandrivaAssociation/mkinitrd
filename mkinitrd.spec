@@ -57,6 +57,9 @@ Patch148: mkinitrd-6.0.86-traversal.patch
 Patch149: mkinitrd-6.0.86-waitdev.patch
 # (pt) we use /usr/lib/kbd, not /lib/kbd
 Patch150: mkinitrd-6.0.86.kbd-is-in-usr.patch
+# (bor) nash cannot handle udev netlink messages; restrict to kernel only
+Patch151: mkinitrd-6.0.86-uevent_nl_groups.patch
+
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
 Requires: grep, mount, gzip, tar
@@ -149,6 +152,7 @@ nash shell used by initrd
 %patch148 -p1 -b .traversal
 %patch149 -p1 -b .waitdev
 %patch150 -p1 -b .kbd_in_usr
+%patch151 -p1 -b .nl_groups
 
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
