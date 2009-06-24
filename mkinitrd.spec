@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.86
-Release: %manbo_mkrel 1
+Release: %manbo_mkrel 2
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -59,6 +59,8 @@ Patch149: mkinitrd-6.0.86-waitdev.patch
 Patch150: mkinitrd-6.0.86.kbd-is-in-usr.patch
 # (bor) nash cannot handle udev netlink messages; restrict to kernel only
 Patch151: mkinitrd-6.0.86-uevent_nl_groups.patch
+# (pt) fix handling of root=
+Patch152: mkinitrd-Return-the-last-kernel-arg-with-given-name.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
@@ -153,6 +155,7 @@ nash shell used by initrd
 %patch149 -p1 -b .waitdev
 %patch150 -p1 -b .kbd_in_usr
 %patch151 -p1 -b .nl_groups
+%patch152 -p1 -b .kernelarg
 
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
