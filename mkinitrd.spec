@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.86
-Release: %manbo_mkrel 3
+Release: %manbo_mkrel 4
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -63,6 +63,8 @@ Patch151: mkinitrd-6.0.86-uevent_nl_groups.patch
 Patch152: mkinitrd-Return-the-last-kernel-arg-with-given-name.patch
 # (pt) SYSFONTACM does not contain full file name (#51916)
 Patch153: mkinitrd-Handle-SYSFONTACM-8859-15.patch
+# (hk) fixes to mkinitrd-6.0.86-waitdev.patch
+Patch154: mkinitrd-6.0.86-waitdev-fixes.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
@@ -159,6 +161,7 @@ nash shell used by initrd
 %patch151 -p1 -b .nl_groups
 %patch152 -p1 -b .kernelarg
 %patch153 -p1 -b .kbdglob
+%patch154 -p1 -b .waitdev-fixes
 
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
