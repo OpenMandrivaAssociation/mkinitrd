@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.86
-Release: %manbo_mkrel 5
+Release: %manbo_mkrel 6
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -71,6 +71,8 @@ Requires: grep, mount, gzip, tar
 Requires: filesystem >= 2.1.0, cpio, initscripts >= 8.63-1mdv2008.1
 Requires: e2fsprogs >= 1.38-12, coreutils
 Requires: module-init-tools >= 3.3-pre11
+# for kpartx
+Requires: multipath-tools
 BuildRequires: popt-devel
 BuildRequires: libblkid-devel parted-devel >= 1.8.5, pkgconfig 
 BuildRequires: device-mapper-devel python-devel
