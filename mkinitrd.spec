@@ -64,6 +64,10 @@ Patch152: mkinitrd-Return-the-last-kernel-arg-with-given-name.patch
 Patch153: mkinitrd-Handle-SYSFONTACM-8859-15.patch
 # (hk) fixes to mkinitrd-6.0.86-waitdev.patch
 Patch154: mkinitrd-6.0.86-waitdev-fixes.patch
+# (pt) look for file in /usr/lib not libexec
+Patch155: mkinitrd-We-don-t-use-usr-libexec.patch
+# (pt) use readlink -f instead of manually computing directories
+Patch156: mkinitrd-Let-readlink-compute-the-absolute-path-for-us.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
