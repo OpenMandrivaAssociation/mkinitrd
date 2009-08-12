@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
-Version: 6.0.86
-Release: %manbo_mkrel 8
+Version: 6.0.92
+Release: %manbo_mkrel 1
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -9,65 +9,42 @@ Source0: mkinitrd-%{version}.tar.bz2
 # Mandriva sources
 Source100: mkinitrd-sysconfig
 Source101: askpass.c
-# RH patches
-# Mandriva patches
-Patch100: mkinitrd-6.0.86-noselinux.patch
-# no proper dhcp lib package yet
-Patch101: mkinitrd-6.0.86-nonetwork.patch
-Patch102: mkinitrd-6.0.28-etc-blkid.patch
-# fix regexp match with bash-3.2, notably to fix RAID with mdadm
-# (similar to initscripts bug: Mdv #32501, RH #220087)
-Patch103: mkinitrd-6.0.86-rmatch.patch
-Patch104: mkinitrd-6.0.28-use-both-ahci-ata_piix.patch
-Patch105: mkinitrd-6.0.62-source-sysconfig-later.patch
-Patch106: mkinitrd-6.0.62-resume.patch
-Patch107: mkinitrd-6.0.28-closedir.patch
-Patch108: mkinitrd-6.0.28-usage-uname-r.patch
-Patch110: mkinitrd-6.0.62-ide.patch
-Patch111: mkinitrd-6.0.86-dsdt.patch
-# handle root=<devnum> from lilo
-Patch112: mkinitrd-6.0.86-root-devnum.patch
-Patch113: mkinitrd-6.0.63-kbd.patch
-Patch119: mkinitrd-6.0.28-fstab-auto.patch
-Patch130: mkinitrd-6.0.86-gz-modules.patch
-Patch131: mkinitrd-6.0.34-nash-dm_task_run.patch
-Patch132: mkinitrd-6.0.52-scsi_alias.patch
-Patch133: mkinitrd-6.0.52-disk_driver.patch
-Patch134: mkinitrd-6.0.86-fb0.patch
-Patch135: mkinitrd-6.0.62-splashy.patch
-# check that /dev exists in new root, not to wrongly clean old root
-# since we need /dev to stop splashy and show error messages
-Patch136: mkinitrd-6.0.63-checkroot.patch
-Patch137: mkinitrd-6.0.63-fix_usbstorage.patch
-Patch139: mkinitrd-6.0.62-libdeps.patch
-# this patch is probably wrong somehow
-# but otherwise, symlinks do not get installed properly
-Patch141: mkinitrd-6.0.63-fix-symlinks.patch
-Patch142: mkinitrd-6.0.62-hooks.patch
-Patch143: mkinitrd-6.0.86-askpass.patch
-# (fc) add support for bootchart (rtp)
-Patch145: mkinitrd-6.0.63-bootchart.patch
-# (fc) disable usb by default, it is enabled automatically when needed
-Patch146: mkinitrd-6.0.63-disable_usb_by_default.patch
-# (fc) make sure ppoll won't overflow
-Patch147: mkinitrd-6.0.86-ppoll.patch
-Patch148: mkinitrd-6.0.86-traversal.patch
-# (fc) use waitdev to wait for rootfs and resume partition
-Patch149: mkinitrd-6.0.86-waitdev.patch
-# (pt) we use /usr/lib/kbd, not /lib/kbd
-Patch150: mkinitrd-6.0.86.kbd-is-in-usr.patch
-# (bor) nash cannot handle udev netlink messages; restrict to kernel only
-Patch151: mkinitrd-6.0.86-uevent_nl_groups.patch
-# (pt) fix handling of root=
-Patch152: mkinitrd-Return-the-last-kernel-arg-with-given-name.patch
-# (pt) SYSFONTACM does not contain full file name (#51916)
-Patch153: mkinitrd-Handle-SYSFONTACM-8859-15.patch
-# (hk) fixes to mkinitrd-6.0.86-waitdev.patch
-Patch154: mkinitrd-6.0.86-waitdev-fixes.patch
-# (pt) look for file in /usr/lib not libexec
-Patch155: mkinitrd-We-don-t-use-usr-libexec.patch
-# (pt) use readlink -f instead of manually computing directories
-Patch156: mkinitrd-Let-readlink-compute-the-absolute-path-for-us.patch
+
+Patch101: Create-etc-blkid.patch
+Patch102: Fix-regexp-usage-to-work-on-bash-3.2.patch
+Patch103: Add-missing-closedir.patch
+Patch104: Display-current-kernel-version-in-usage.patch
+Patch105: Handle-root-devno-from-lilo.patch
+Patch106: Include-driver-for-current-keyboard.patch
+Patch107: Get-correct-module-when-rootfs-is-auto-in-fstab.patch
+Patch108: Handle-gzip-compressed-modules.patch
+Patch109: Fix-handling-return-value-of-dm_task_run.patch
+Patch110: Enforce-loading-correct-disk-driver.patch
+Patch111: Fix-detection-of-usb_storage-module.patch
+Patch112: Fix-resolving-library-deps.patch
+Patch113: Disable-selinux.patch
+Patch114: Disable-network-support.patch
+Patch115: Add-support-for-bootchartd.patch
+Patch116: Disable-usb-by-default.patch
+Patch117: Don-t-overflow-ppoll.patch
+Patch118: Reset-counter-between-the-tree-traversals.patch
+Patch119: Return-the-last-kernel-arg-with-given-name.patch
+Patch120: Let-readlink-compute-the-absolute-path-for-us.patch
+Patch121: Include-both-ahci-and-ata_piix.patch
+Patch122: Source-sysconfig-later.patch
+Patch123: Resume.patch
+Patch124: Include-ide-modules.patch
+Patch125: Allow-overriding-DSDT.patch
+Patch126: scsi_alias.patch
+Patch127: Support-splashy.patch
+Patch128: Create-dev-fb0.patch
+Patch129: checkroot.patch
+Patch130: hooks.patch
+Patch131: Wait-only-for-needed-devices.patch
+Patch132: kbd-is-in-usr.patch
+Patch133: Handle-SYSFONTACM-8859-15.patch
+Patch134: We-don-t-use-usr-libexec.patch
+Patch135: use-plymouth-instead-of-splashy-if-available.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
@@ -127,44 +104,8 @@ nash shell used by initrd
 
 %prep
 %setup -q
-# RH
-# Mandriva
-%patch100 -p1 -b .noselinux
-%patch101 -p1 -b .nonetwork
-%patch102 -p1 -b .etc-blkid
-%patch103 -p1 -b .rmatch
-%patch104 -p1 -b .use-both-ahci-ata_piix
-%patch105 -p1 -b .source-sysconfig-later
-%patch106 -p1 -b .resume
-%patch107 -p1 -b .closedir
-%patch108 -p1 -b .usage-uname-r
-%patch110 -p1 -b .ide
-%patch111 -p1 -b .dsdt
-%patch112 -p1 -b .root-devnum
-%patch113 -p1 -b .kbd
-%patch119 -p1 -b .fstab-auto
-%patch130 -p1 -b .gz-modules
-%patch131 -p1 -b .nash-dm_task_run
-%patch132 -p1 -b .scsi_alias
-%patch133 -p1 -b .disk_driver
-%patch134 -p1 -b .fb0
-%patch135 -p1 -b .splashy
-%patch136 -p1 -b .checkroot
-%patch137 -p1 -b .fix_usbstorage
-%patch139 -p1 -b .libdeps
-%patch141 -p1 -b .fix-symlinks
-%patch142 -p1 -b .hooks
-%patch143 -p1 -b .askpass
-%patch145 -p1 -b .bootchart
-%patch146 -p1 -b .disable_usb_by_default
-%patch147 -p1 -b .ppoll
-%patch148 -p1 -b .traversal
-%patch149 -p1 -b .waitdev
-%patch150 -p1 -b .kbd_in_usr
-%patch151 -p1 -b .nl_groups
-%patch152 -p1 -b .kernelarg
-%patch153 -p1 -b .kbdglob
-%patch154 -p1 -b .waitdev-fixes
+
+%apply_patches
 
 cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
@@ -194,9 +135,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %attr(755,root,root) /sbin/mkinitrd
 %attr(644,root,root) %{_mandir}/man8/mkinitrd.8*
-%attr(755,root,root) /sbin/new-kernel-pkg
-%attr(755,root,root) /sbin/grubby
-%attr(644,root,root) %{_mandir}/man8/grubby.8*
 # Mandriva
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
 %{_prefix}/libexec/initrd-functions
