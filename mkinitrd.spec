@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.92
-Release: %manbo_mkrel 1
+Release: %manbo_mkrel 2
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -10,6 +10,8 @@ Source0: mkinitrd-%{version}.tar.bz2
 Source100: mkinitrd-sysconfig
 Source101: askpass.c
 
+# These patches come from our git branch
+# Please add the patches there
 Patch101: Create-etc-blkid.patch
 Patch102: Fix-regexp-usage-to-work-on-bash-3.2.patch
 Patch103: Add-missing-closedir.patch
@@ -45,6 +47,7 @@ Patch132: kbd-is-in-usr.patch
 Patch133: Handle-SYSFONTACM-8859-15.patch
 Patch134: We-don-t-use-usr-libexec.patch
 Patch135: use-plymouth-instead-of-splashy-if-available.patch
+Patch136: Restrict-udev-messages-to-handle.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
