@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.92
-Release: %manbo_mkrel 2
+Release: %manbo_mkrel 3
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -48,6 +48,8 @@ Patch133: Handle-SYSFONTACM-8859-15.patch
 Patch134: We-don-t-use-usr-libexec.patch
 Patch135: use-plymouth-instead-of-splashy-if-available.patch
 Patch136: Restrict-udev-messages-to-handle.patch
+Patch137: Fix-waiting-in-devices.patch
+Patch138: Fix-dmraid-to-wait-for-needed-disks.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
