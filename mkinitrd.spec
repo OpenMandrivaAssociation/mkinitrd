@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.92
-Release: %manbo_mkrel 6
+Release: %manbo_mkrel 7
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -52,6 +52,7 @@ Patch137: Fix-waiting-in-devices.patch
 Patch138: Fix-dmraid-to-wait-for-needed-disks.patch
 Patch139: disable-support-for-kms-drm-until-kernel-has-agp-bui.patch 
 Patch140: Revert-plymouth-path-to-upstream.patch
+Patch141: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
@@ -144,6 +145,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(644,root,root) %{_mandir}/man8/mkinitrd.8*
 # Mandriva
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
+%dir %{_prefix}/libexec
 %{_prefix}/libexec/initrd-functions
 %{_prefix}/libexec/askpass
 
