@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.92
-Release: %manbo_mkrel 7
+Release: %manbo_mkrel 8
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -45,11 +45,12 @@ Patch130: hooks.patch
 Patch131: Wait-only-for-needed-devices.patch
 Patch132: kbd-is-in-usr.patch
 Patch133: Handle-SYSFONTACM-8859-15.patch
-Patch134: We-don-t-use-usr-libexec.patch
-Patch135: use-plymouth-instead-of-splashy-if-available.patch
-Patch136: Restrict-udev-messages-to-handle.patch
-Patch137: Fix-waiting-in-devices.patch
-Patch138: Fix-dmraid-to-wait-for-needed-disks.patch
+Patch134: use-plymouth-instead-of-splashy-if-available.patch
+Patch135: Restrict-udev-messages-to-handle.patch
+Patch136: Fix-waiting-in-devices.patch
+Patch137: Fix-dmraid-to-wait-for-needed-disks.patch
+Patch138: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
+Patch139: Add-drm-detection-if-module-is-not-loaded.patch
 Patch139: disable-support-for-kms-drm-until-kernel-has-agp-bui.patch 
 Patch140: Revert-plymouth-path-to-upstream.patch
 Patch141: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
