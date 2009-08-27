@@ -51,9 +51,6 @@ Patch136: Fix-waiting-in-devices.patch
 Patch137: Fix-dmraid-to-wait-for-needed-disks.patch
 Patch138: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
 Patch139: Add-drm-detection-if-module-is-not-loaded.patch
-Patch139: disable-support-for-kms-drm-until-kernel-has-agp-bui.patch 
-Patch140: Revert-plymouth-path-to-upstream.patch
-Patch141: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
