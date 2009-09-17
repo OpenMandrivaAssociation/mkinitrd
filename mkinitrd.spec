@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.92
-Release: %manbo_mkrel 11
+Release: %manbo_mkrel 12
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -52,6 +52,9 @@ Patch137: Fix-dmraid-to-wait-for-needed-disks.patch
 Patch138: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
 Patch139: Add-drm-detection-if-module-is-not-loaded.patch
 Patch140: fix-plymouth-detection.patch
+
+# (tv) backported from 6.0.93:
+Patch200: Move-hotplug-run-to-before-gpu-driver-probing.diff
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
