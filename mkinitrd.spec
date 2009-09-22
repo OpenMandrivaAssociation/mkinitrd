@@ -1,17 +1,20 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
-Version: 6.0.92
-Release: %manbo_mkrel 12
+Version: 6.0.93
+Release: %manbo_mkrel 1
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
 Source0: mkinitrd-%{version}.tar.bz2
 # Mandriva sources
 Source100: mkinitrd-sysconfig
-Source101: askpass.c
 
 # These patches come from our git branch
 # Please add the patches there
+# git checkout mandriva
+# sed -i '/^#BEGINGIT/,/^#ENDGIT/ {/^[^#]/d}' ~/co/mkinitrd/SPECS/mkinitrd.spec
+# git format-patch -N master | while read p; do name=$(echo $p | sed 's/^....-//'); n=$(echo $p | sed 's/^00\(..\)-.*$/\1/'); mv -f $p ~/co/mkinitrd/SOURCES/$name; sed -i "s/^#ENDGIT/Patch1$n: $name\n#ENDGIT/" ~/co/mkinitrd/SPECS/mkinitrd.spec; done
+#BEGINGIT
 Patch101: Create-etc-blkid.patch
 Patch102: Fix-regexp-usage-to-work-on-bash-3.2.patch
 Patch103: Add-missing-closedir.patch
@@ -38,23 +41,18 @@ Patch123: Resume.patch
 Patch124: Include-ide-modules.patch
 Patch125: Allow-overriding-DSDT.patch
 Patch126: scsi_alias.patch
-Patch127: Support-splashy.patch
-Patch128: Create-dev-fb0.patch
-Patch129: checkroot.patch
-Patch130: hooks.patch
-Patch131: Wait-only-for-needed-devices.patch
-Patch132: kbd-is-in-usr.patch
-Patch133: Handle-SYSFONTACM-8859-15.patch
-Patch134: use-plymouth-instead-of-splashy-if-available.patch
-Patch135: Restrict-udev-messages-to-handle.patch
-Patch136: Fix-waiting-in-devices.patch
-Patch137: Fix-dmraid-to-wait-for-needed-disks.patch
-Patch138: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
-Patch139: Add-drm-detection-if-module-is-not-loaded.patch
-Patch140: fix-plymouth-detection.patch
-
-# (tv) backported from 6.0.93:
-Patch200: Move-hotplug-run-to-before-gpu-driver-probing.diff
+Patch127: checkroot.patch
+Patch128: hooks.patch
+Patch129: Wait-only-for-needed-devices.patch
+Patch130: kbd-is-in-usr.patch
+Patch131: Handle-SYSFONTACM-8859-15.patch
+Patch132: Restrict-udev-messages-to-handle.patch
+Patch133: Fix-waiting-in-devices.patch
+Patch134: Fix-dmraid-to-wait-for-needed-disks.patch
+Patch135: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
+Patch136: Add-drm-detection-if-module-is-not-loaded.patch
+Patch137: devtmpfs-support.patch
+#ENDGIT
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
@@ -117,13 +115,11 @@ nash shell used by initrd
 
 %apply_patches
 
-cp %{SOURCE101} .
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
 make LIB=%{_lib}
 make LIB=%{_lib} test
-make askpass LDFLAGS=
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -136,7 +132,6 @@ install -m 644 %{SOURCE100} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 
 rm -f $RPM_BUILD_ROOT/sbin/installkernel
 rm -f $RPM_BUILD_ROOT/usr/libexec/mkliveinitrd
-install askpass $RPM_BUILD_ROOT/usr/libexec/askpass
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -149,7 +144,6 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
 %dir %{_prefix}/libexec
 %{_prefix}/libexec/initrd-functions
-%{_prefix}/libexec/askpass
 
 %files devel
 %defattr(-,root,root)
