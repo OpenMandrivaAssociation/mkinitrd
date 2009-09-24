@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.93
-Release: %manbo_mkrel 1
+Release: %manbo_mkrel 2
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -52,6 +52,7 @@ Patch134: Fix-dmraid-to-wait-for-needed-disks.patch
 Patch135: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
 Patch136: Add-drm-detection-if-module-is-not-loaded.patch
 Patch137: devtmpfs-support.patch
+Patch138: Workaround-issue-on-dmraid-10.patch
 #ENDGIT
 
 Requires: util-linux-ng
