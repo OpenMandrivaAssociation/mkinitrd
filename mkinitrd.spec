@@ -53,6 +53,8 @@ Patch135: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
 Patch136: Add-drm-detection-if-module-is-not-loaded.patch
 Patch137: devtmpfs-support.patch
 Patch138: Workaround-issue-on-dmraid-10.patch
+Patch139: Create-urandom-for-LVM.patch
+Patch140: Detect-devtmpfs-support-at-boot-time.patch
 #ENDGIT
 
 Requires: util-linux-ng
