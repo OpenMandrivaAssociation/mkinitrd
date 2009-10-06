@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.93
-Release: %manbo_mkrel 3
+Release: %manbo_mkrel 4
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -55,6 +55,7 @@ Patch137: devtmpfs-support.patch
 Patch138: Workaround-issue-on-dmraid-10.patch
 Patch139: Create-urandom-for-LVM.patch
 Patch140: Detect-devtmpfs-support-at-boot-time.patch
+Patch141: Improve-keyboard-drivers-detection.patch
 #ENDGIT
 
 Requires: util-linux-ng
