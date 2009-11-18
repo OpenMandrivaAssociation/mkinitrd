@@ -65,7 +65,7 @@ Requires: grep, mount, gzip, tar
 Requires: filesystem >= 2.1.0, cpio, initscripts >= 8.63-1mdv2008.1
 Requires: e2fsprogs >= 1.38-12, coreutils
 Requires: module-init-tools >= 3.3-pre11
-Requires: kpartx
+Requires: kpartx diffutils
 BuildRequires: popt-devel
 BuildRequires: libblkid-devel parted-devel >= 1.8.5, pkgconfig 
 BuildRequires: device-mapper-devel python-devel
