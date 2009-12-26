@@ -57,6 +57,9 @@ Patch139: Create-urandom-for-LVM.patch
 Patch140: Detect-devtmpfs-support-at-boot-time.patch
 Patch141: Improve-keyboard-drivers-detection.patch
 Patch142: Always-emit-plymouth.patch
+Patch143: Revert-Add-drm-detection-if-module-is-not-loaded.patch
+Patch144: Add-drm-whitelist-handling.patch
+Patch145: Add-drm-drivers-for-hardware-with-no-currently-loade.patch
 #ENDGIT
 
 Requires: util-linux-ng
