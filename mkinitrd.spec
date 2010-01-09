@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.93
-Release: %manbo_mkrel 9
+Release: %manbo_mkrel 10
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -85,6 +85,7 @@ Conflicts: lvm2 < 2.01.09
 Conflicts: mdadm < 2.5.3-3mdv
 Conflicts: bootloader-utils < 1.8-1mdk, bootsplash < 3.1.12
 Conflicts: dmraid < 1.0.0-0.rc15
+Requires(post,postun):	update-alternatives
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
@@ -141,13 +142,24 @@ install -m 644 %{SOURCE100} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 
 rm -f $RPM_BUILD_ROOT/sbin/installkernel
 rm -f $RPM_BUILD_ROOT/usr/libexec/mkliveinitrd
+mv -f $RPM_BUILD_ROOT/sbin/mkinitrd $RPM_BUILD_ROOT/sbin/mkinitrd-mkinitrd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 100 || :
+
+%postun
+[[ "$1" = "0" ]] && update-alternatives --remove mkinitrd /sbin/mkinitrd-mkinitrd || :
+
+# this is the version we introduced alternatives
+%triggerpostun -- mkinitrd < 6.0.93-%manbo_mkrel 10
+update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 100 || :
+
 %files
 %defattr(-,root,root)
-%attr(755,root,root) /sbin/mkinitrd
+%attr(755,root,root) /sbin/mkinitrd-mkinitrd
 %attr(644,root,root) %{_mandir}/man8/mkinitrd.8*
 # Mandriva
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
