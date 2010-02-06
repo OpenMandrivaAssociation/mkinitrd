@@ -110,6 +110,7 @@ Group: System/Kernel and hardware
 Provides: libbdevid = %{version}-%{release}
 Obsoletes: libbdevid < %{version}-%{release}
 Conflicts: mkinitrd < 6.0.28-2mdv2008.1
+Requires(post,postun):	update-alternatives
 
 %description devel
 C header files and library for functionality exported by libnash
