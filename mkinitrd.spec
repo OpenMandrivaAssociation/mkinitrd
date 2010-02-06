@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.93
-Release: %manbo_mkrel 10
+Release: %manbo_mkrel 11
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -143,6 +143,7 @@ install -m 644 %{SOURCE100} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 rm -f $RPM_BUILD_ROOT/sbin/installkernel
 rm -f $RPM_BUILD_ROOT/usr/libexec/mkliveinitrd
 mv -f $RPM_BUILD_ROOT/sbin/mkinitrd $RPM_BUILD_ROOT/sbin/mkinitrd-mkinitrd
+mv -f $RPM_BUILD_ROOT/sbin/lsinitrd $RPM_BUILD_ROOT/sbin/lsinitrd-mkinitrd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -156,6 +157,16 @@ update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 10
 # this is the version we introduced alternatives
 %triggerpostun -- mkinitrd < 6.0.93-%manbo_mkrel 10
 update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 100 || :
+
+%post -n nash
+update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 100 || :
+
+%postun -n nash
+[[ "$1" = "0" ]] && update-alternatives --remove lsinitrd /sbin/lsinitrd-mkinitrd || :
+
+# this is the version we introduced alternatives
+%triggerpostun -n nash -- nash < 6.0.93-%manbo_mkrel 11
+update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 100 || :
 
 %files
 %defattr(-,root,root)
@@ -186,7 +197,7 @@ update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 10
 %defattr(-,root,root)
 %attr(644,root,root) %{_mandir}/man8/nash.8*
 %attr(755,root,root) /sbin/nash
-%attr(755,root,root) /sbin/lsinitrd
+%attr(755,root,root) /sbin/lsinitrd-mkinitrd
 /%{_lib}/bdevid
 %{_libdir}/libnash.so.*
 %{_libdir}/libbdevid.so.*
