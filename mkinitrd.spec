@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.93
-Release: %manbo_mkrel 11
+Release: %manbo_mkrel 12
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -153,7 +153,7 @@ rm -rf $RPM_BUILD_ROOT
 update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 100 || :
 
 %postun
-[[ "$1" = "0" ]] && update-alternatives --remove mkinitrd /sbin/mkinitrd-mkinitrd || :
+[[ ! -e /sbin/mkinitrd-mkinitrd ]] && update-alternatives --remove mkinitrd /sbin/mkinitrd-mkinitrd || :
 
 # this is the version we introduced alternatives
 %triggerpostun -- mkinitrd < 6.0.93-%manbo_mkrel 10
@@ -163,7 +163,7 @@ update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 10
 update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 100 || :
 
 %postun -n nash
-[[ "$1" = "0" ]] && update-alternatives --remove lsinitrd /sbin/lsinitrd-mkinitrd || :
+[[ ! -e /sbin/lsinitrd-mkinitrd ]] && update-alternatives --remove lsinitrd /sbin/lsinitrd-mkinitrd || :
 
 # this is the version we introduced alternatives
 %triggerpostun -n nash -- nash < 6.0.93-%manbo_mkrel 11
