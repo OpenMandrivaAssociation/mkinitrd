@@ -60,6 +60,7 @@ Patch142: Always-emit-plymouth.patch
 Patch143: Revert-Add-drm-detection-if-module-is-not-loaded.patch
 Patch144: Add-drm-whitelist-handling.patch
 Patch145: Add-drm-drivers-for-hardware-with-no-currently-loade.patch
+Patch146: change-filelist-for-new-bootchart.patch
 #ENDGIT
 
 Requires: util-linux-ng
