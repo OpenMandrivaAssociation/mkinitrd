@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.93
-Release: %manbo_mkrel 16
+Release: %manbo_mkrel 17
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -63,6 +63,7 @@ Patch145: Add-drm-drivers-for-hardware-with-no-currently-loade.patch
 Patch146: change-filelist-for-new-bootchart.patch
 Patch147: Include-additionnal-hid-keyboard-drivers-57872.patch
 Patch148: Include-crc32c-for-btrfs-51622.patch
+Patch149: Fix-cciss-support-59077.patch
 #ENDGIT
 
 Requires: util-linux-ng
