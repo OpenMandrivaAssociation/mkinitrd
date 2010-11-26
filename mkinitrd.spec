@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.93
-Release: %manbo_mkrel 20
+Release: 21
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -65,6 +65,9 @@ Patch147: Include-additionnal-hid-keyboard-drivers-57872.patch
 Patch148: Include-crc32c-for-btrfs-51622.patch
 Patch149: Fix-cciss-support-59077.patch
 Patch150: Fix-nash-firmware-loading-see-53220.patch
+# (proyvind): /usr/libexec/initrd-functions is located in non-sense directory
+# 	      for when being required by /sbin/mkinitrd,
+Patch151: mkinitrd-6.0.93-required-initrd-functions-cannot-be-on-usr.patch
 #ENDGIT
 
 Requires: util-linux-ng
@@ -147,7 +150,7 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
 install -m 644 %{SOURCE100} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 
 rm -f $RPM_BUILD_ROOT/sbin/installkernel
-rm -f $RPM_BUILD_ROOT/usr/libexec/mkliveinitrd
+rm -f $RPM_BUILD_ROOT/lib/mkinitrd/mkliveinitrd
 mv -f $RPM_BUILD_ROOT/sbin/mkinitrd $RPM_BUILD_ROOT/sbin/mkinitrd-mkinitrd
 mv -f $RPM_BUILD_ROOT/sbin/lsinitrd $RPM_BUILD_ROOT/sbin/lsinitrd-mkinitrd
 
@@ -180,8 +183,8 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 10
 %attr(644,root,root) %{_mandir}/man8/mkinitrd.8*
 # Mandriva
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
-%dir %{_prefix}/libexec
-%{_prefix}/libexec/initrd-functions
+%dir /lib/mkinitrd
+/lib/mkinitrd/functions
 
 %files devel
 %defattr(-,root,root)
