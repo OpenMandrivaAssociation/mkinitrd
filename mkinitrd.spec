@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.93
-Release: 21
+Release: 22
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -65,10 +65,13 @@ Patch147: Include-additionnal-hid-keyboard-drivers-57872.patch
 Patch148: Include-crc32c-for-btrfs-51622.patch
 Patch149: Fix-cciss-support-59077.patch
 Patch150: Fix-nash-firmware-loading-see-53220.patch
+#ENDGIT
 # (proyvind): /usr/libexec/initrd-functions is located in non-sense directory
 # 	      for when being required by /sbin/mkinitrd,
 Patch151: mkinitrd-6.0.93-required-initrd-functions-cannot-be-on-usr.patch
-#ENDGIT
+Patch201: 0001-Do-not-load-KMS-drivers-when-booted-with-nokmsboot-o.patch
+Patch202: 0002-Whitelist-nouveau-and-radeon-drivers.patch
+Patch203: 0003-Fix-build-with-gcc4.6.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
