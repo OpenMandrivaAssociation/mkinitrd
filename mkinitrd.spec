@@ -1,7 +1,7 @@
 Summary: Creates an initial ramdisk image for preloading modules
 Name: mkinitrd
 Version: 6.0.93
-Release: 22
+Release: 23
 License: GPLv2+
 URL: http://www.redhat.com/
 Group: System/Kernel and hardware
@@ -72,6 +72,7 @@ Patch151: mkinitrd-6.0.93-required-initrd-functions-cannot-be-on-usr.patch
 Patch201: 0001-Do-not-load-KMS-drivers-when-booted-with-nokmsboot-o.patch
 Patch202: 0002-Whitelist-nouveau-and-radeon-drivers.patch
 Patch203: 0003-Fix-build-with-gcc4.6.patch
+Patch204: mkinitrd-6.0.93-link.patch
 
 Requires: util-linux-ng
 Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
@@ -140,7 +141,14 @@ nash shell used by initrd
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
+#export LDFLAGS="%ldflags"
+cd bdevid
+make libbdevid.so LIB=%{_lib} LDFLAGS="%ldflags"
+cd ..
+export LDFLAGS="%ldflags"
 make LIB=%{_lib}
+
+%check
 make LIB=%{_lib} test
 
 %install
