@@ -152,21 +152,21 @@ make LIB=%{_lib}
 make LIB=%{_lib} test
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make LIB=%{_lib} DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
-rm -f $RPM_BUILD_ROOT/sbin/bdevid $RPM_BUILD_ROOT/%{_includedir}/blkent.h
+rm -rf %{buildroot}
+make LIB=%{_lib} DESTDIR=%{buildroot} mandir=%{_mandir} install
+rm -f %{buildroot}/sbin/bdevid %{buildroot}/%{_includedir}/blkent.h
 
 # Mandriva
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
-install -m 644 %{SOURCE100} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
+mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
+install -m 644 %{SOURCE100} %{buildroot}%{_sysconfdir}/sysconfig/mkinitrd
 
-rm -f $RPM_BUILD_ROOT/sbin/installkernel
-rm -f $RPM_BUILD_ROOT/lib/mkinitrd/mkliveinitrd
-mv -f $RPM_BUILD_ROOT/sbin/mkinitrd $RPM_BUILD_ROOT/sbin/mkinitrd-mkinitrd
-mv -f $RPM_BUILD_ROOT/sbin/lsinitrd $RPM_BUILD_ROOT/sbin/lsinitrd-mkinitrd
+rm -f %{buildroot}/sbin/installkernel
+rm -f %{buildroot}/lib/mkinitrd/mkliveinitrd
+mv -f %{buildroot}/sbin/mkinitrd %{buildroot}/sbin/mkinitrd-mkinitrd
+mv -f %{buildroot}/sbin/lsinitrd %{buildroot}/sbin/lsinitrd-mkinitrd
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 100 || :
