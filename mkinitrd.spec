@@ -1,13 +1,13 @@
-Summary: Creates an initial ramdisk image for preloading modules
-Name: mkinitrd
-Version: 6.0.93
-Release: 23
-License: GPLv2+
-URL: http://www.redhat.com/
-Group: System/Kernel and hardware
-Source0: mkinitrd-%{version}.tar.bz2
+Summary:	Creates an initial ramdisk image for preloading modules
+Name:		mkinitrd
+Version:	6.0.93
+Release:	24
+License:	GPLv2+
+URL:		http://www.redhat.com/
+Group: 		System/Kernel and hardware
+Source0: 	mkinitrd-%{version}.tar.bz2
 # Mandriva sources
-Source100: mkinitrd-sysconfig
+Source100:	mkinitrd-sysconfig
 
 # These patches come from our git branch
 # Please add the patches there
@@ -73,32 +73,40 @@ Patch201: 0001-Do-not-load-KMS-drivers-when-booted-with-nokmsboot-o.patch
 Patch202: 0002-Whitelist-nouveau-and-radeon-drivers.patch
 Patch203: 0003-Fix-build-with-gcc4.6.patch
 Patch204: mkinitrd-6.0.93-link.patch
+# found at MGA
+Patch205: mkinitrd-usb-input-usbhid-only.patch
+Patch206: mkinitrd-6.0.93-use-oom_score_adj.patch
+Patch207: mkinitrd-6.0.93-xz-support.patch
 
-Requires: util-linux-ng
-Requires: mktemp >= 1.5-9mdk findutils >= 4.1.7-3mdk
-Requires: grep, mount, gzip, tar
-Requires: filesystem >= 2.1.0, cpio, initscripts >= 8.63-1mdv2008.1
-Requires: e2fsprogs >= 1.38-12, coreutils
-Requires: module-init-tools >= 3.3-pre11
-Requires: kpartx diffutils
-BuildRequires: popt-devel
-BuildRequires: libblkid-devel parted-devel >= 1.8.5, pkgconfig 
-BuildRequires: device-mapper-devel python-devel
-BuildRequires: python util-linux-ng
-BuildRequires: libelf-devel
-%ifarch ppc
-Requires: ppc64-utils >= 0.3-1
-%endif
-Requires: nash = %{version}-%{release}
-#mkinitrd can work without those, but lesser versions are broken
-#Conflicts: udev <= 0.51-1mdk
-Conflicts: lvm1 < 1.0.8-2mdk
-Conflicts: lvm2 < 2.01.09
-Conflicts: mdadm < 2.5.3-3mdv
-Conflicts: bootloader-utils < 1.8-1mdk, bootsplash < 3.1.12
-Conflicts: dmraid < 1.0.0-0.rc15
+BuildRequires:	python
+BuildRequires:	util-linux-ng
+BuildRequires:	python-devel
+BuildRequires:	pkgconfig(blkid)
+BuildRequires:	pkgconfig(devmapper)
+BuildRequires:	pkgconfig(libelf)
+BuildRequires:	pkgconfig(libparted)
+BuildRequires:	pkgconfig(popt)
+
+Requires:	coreutils
+Requires:	cpio
+Requires:	diffutils
+Requires:	e2fsprogs
+Requires:	filesystem
+Requires:	findutils
+Requires:	grep
+Requires:	gzip
+Requires:	initscripts
+Requires:	kpartx
+Requires:	mktemp
+Requires:	mount
+Requires:	module-init-tools >= 3.3-pre11
+Requires:	nash = %{version}-%{release}
+Requires:	tar
 Requires(post,postun):	update-alternatives
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+Requires:	util-linux-ng
+%ifarch ppc
+Requires:	ppc64-utils >= 0.3-1
+%endif
 
 %description
 mkinitrd creates filesystem images for use as initial ram filesystem
@@ -108,20 +116,18 @@ filesystem.
 %package devel
 Summary: C header files and library for functionality exported by libnash
 Group: Development/C
-Requires: glibc-devel, pkgconfig, e2fsprogs-devel, mkinitrd
+Requires: mkinitrd
 Requires: nash = %{version}-%{release}
 
 %package -n libbdevid-python
 Summary: Python bindings for libbdevid
 Group: Development/Other
-Requires: python, nash = %{version}-%{release}
+Requires: python
+Requires: nash = %{version}-%{release}
 
 %package -n nash
 Summary: Nash shell
 Group: System/Kernel and hardware
-Provides: libbdevid = %{version}-%{release}
-Obsoletes: libbdevid < %{version}-%{release}
-Conflicts: mkinitrd < 6.0.28-2mdv2008.1
 Requires(post,postun):	update-alternatives
 
 %description devel
@@ -135,7 +141,6 @@ nash shell used by initrd
 
 %prep
 %setup -q
-
 %apply_patches
 
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
@@ -152,7 +157,6 @@ make LIB=%{_lib}
 make LIB=%{_lib} test
 
 %install
-rm -rf %{buildroot}
 make LIB=%{_lib} DESTDIR=%{buildroot} mandir=%{_mandir} install
 rm -f %{buildroot}/sbin/bdevid %{buildroot}/%{_includedir}/blkent.h
 
@@ -164,9 +168,6 @@ rm -f %{buildroot}/sbin/installkernel
 rm -f %{buildroot}/lib/mkinitrd/mkliveinitrd
 mv -f %{buildroot}/sbin/mkinitrd %{buildroot}/sbin/mkinitrd-mkinitrd
 mv -f %{buildroot}/sbin/lsinitrd %{buildroot}/sbin/lsinitrd-mkinitrd
-
-%clean
-rm -rf %{buildroot}
 
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 100 || :
@@ -189,7 +190,6 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 10
 update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 100 || :
 
 %files
-%defattr(-,root,root)
 %attr(755,root,root) /sbin/mkinitrd-mkinitrd
 %attr(644,root,root) %{_mandir}/man8/mkinitrd.8*
 # Mandriva
@@ -198,7 +198,6 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 10
 /lib/mkinitrd/functions
 
 %files devel
-%defattr(-,root,root)
 %{_libdir}/libnash.so
 %{_libdir}/libbdevid.so
 %{_libdir}/libbdevidprobe.a
@@ -214,10 +213,10 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 10
 %{python_sitearch}/bdevid.so
 
 %files -n nash
-%defattr(-,root,root)
 %attr(644,root,root) %{_mandir}/man8/nash.8*
 %attr(755,root,root) /sbin/nash
 %attr(755,root,root) /sbin/lsinitrd-mkinitrd
 /%{_lib}/bdevid
 %{_libdir}/libnash.so.*
 %{_libdir}/libbdevid.so.*
+
