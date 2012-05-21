@@ -80,10 +80,10 @@ Patch207: mkinitrd-6.0.93-xz-support.patch
 
 BuildRequires:	python
 BuildRequires:	util-linux-ng
+BuildRequires:	elfutils-devel
 BuildRequires:	python-devel
 BuildRequires:	pkgconfig(blkid)
 BuildRequires:	pkgconfig(devmapper)
-BuildRequires:	pkgconfig(libelf)
 BuildRequires:	pkgconfig(libparted)
 BuildRequires:	pkgconfig(popt)
 
