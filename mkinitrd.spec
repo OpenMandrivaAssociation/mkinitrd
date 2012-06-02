@@ -1,7 +1,7 @@
 Summary:	Creates an initial ramdisk image for preloading modules
 Name:		mkinitrd
 Version:	6.0.93
-Release:	24
+Release:	25
 License:	GPLv2+
 URL:		http://www.redhat.com/
 Group: 		System/Kernel and hardware
@@ -86,6 +86,8 @@ BuildRequires:	pkgconfig(blkid)
 BuildRequires:	pkgconfig(devmapper)
 BuildRequires:	pkgconfig(libparted)
 BuildRequires:	pkgconfig(popt)
+
+Provides:	mkinitrd-command
 
 Requires:	coreutils
 Requires:	cpio
