@@ -1,0 +1,55 @@
+From 9437b08136a8025b8ad134c11b35eb50c0535e6d Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Thu, 11 Jun 2009 00:49:14 +0200
+Subject: [PATCH] Fix regexp usage to work on bash >= 3.2
+
+---
+ mkinitrd |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 76b88a2..6e35e8e 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -328,7 +328,7 @@ findstoragedriverinsys () {
+         sysfs=$(readlink ${sysfs%/*})
+     fi
+ 
+-    if [[ ! "$sysfs" =~ '^/sys/.*block/.*$' ]]; then
++    if [[ ! "$sysfs" =~ ^/sys/.*block/.*$ ]]; then
+         error "WARNING: $sysfs is a not a block sysfs path, skipping"
+         return
+     fi
+@@ -339,12 +339,12 @@ findstoragedriverinsys () {
+         *) handleddevices="$handleddevices $sysfs" ;;
+     esac
+ 
+-    if [[ "$sysfs" =~ '^/sys/.*block/md[0-9]+$' ]]; then
++    if [[ "$sysfs" =~ ^/sys/.*block/md[0-9]+$ ]]; then
+         local raid=${sysfs##*/}
+         vecho "Found MDRAID component $raid"
+         handleraid $raid
+     fi
+-    if [[ "$sysfs" =~ '^/sys/.*block/dm-[0-9]+$' ]]; then
++    if [[ "$sysfs" =~ ^/sys/.*block/dm-[0-9]+$ ]]; then
+         vecho "Found DeviceMapper component ${sysfs##*/}"
+         handledm $(cat $sysfs/dev |cut -d : -f 1) $(cat $sysfs/dev |cut -d : -f 2)
+     fi
+@@ -1339,12 +1339,12 @@ emitmodules() {
+ 
+         # we mount usbfs before the first module *after* the HCDs
+         if [ "$usb_mounted" == "prep" ]; then
+-            if [[ "$module" =~ ".hci[_-]hcd" ]]; then
++            if [[ "$module" =~ .hci[_-]hcd ]]; then
+                 usb_mounted="no"
+                 found_hcd_module="yes"
+             fi
+         elif [ "$usb_mounted" == "no" ]; then
+-            if [[ ! "$module" =~ ".hci[_-]hcd" ]]; then
++            if [[ ! "$module" =~ .hci[_-]hcd ]]; then
+                 usb_mounted=yes
+                 emit "mount -t usbfs /proc/bus/usb /proc/bus/usb"
+             fi
+-- 
+1.7.1
+

@@ -1,0 +1,34 @@
+From b2dbfe892a282a4531b56bf90e6126cb3b52f26e Mon Sep 17 00:00:00 2001
+From: unknown author <cooker@mandrivalinux.org>
+Date: Mon, 15 Jun 2009 16:44:48 +0200
+Subject: [PATCH] Source sysconfig later
+
+---
+ mkinitrd |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 066828d..e97bcaf 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -72,8 +72,6 @@ NET_LIST=""
+ LD_SO_CONF=/etc/ld.so.conf
+ LD_SO_CONF_D=/etc/ld.so.conf.d/
+ 
+-[ -e /etc/sysconfig/mkinitrd ] && . /etc/sysconfig/mkinitrd
+-
+ CONFMODS="$MODULES"
+ MODULES=""
+ ARCH=$(uname -m | sed -e 's/s390x/s390/')
+@@ -98,6 +96,8 @@ fstab="/etc/fstab"
+ vg_list="$VG_LIST"
+ net_list="$NET_LIST"
+ 
++[ -e /etc/sysconfig/mkinitrd ] && . /etc/sysconfig/mkinitrd
++
+ usage () {
+     if [ "$1" == "-n" ]; then
+         cmd=echo
+-- 
+1.7.1
+

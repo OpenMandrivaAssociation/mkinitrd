@@ -1,0 +1,27 @@
+From 97c594e0ad0d791ac581101530d1f3fac884565f Mon Sep 17 00:00:00 2001
+From: Arnaud Patard <apatard@mandriva.com>
+Date: Tue, 17 Mar 2009 13:45:37 +0000
+Subject: [PATCH] Don't overflow ppoll
+
+---
+ nash/util.h |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/nash/util.h b/nash/util.h
+index 8590e95..d580ff6 100644
+--- a/nash/util.h
++++ b/nash/util.h
+@@ -270,8 +270,8 @@ nsectospec(long long nsecs, struct timespec *ts)
+         /* If they really want longer than LONG_MAX seconds, 
+          * they win the best uptime award before even running init.
+          */
+-        ts->tv_sec = LONG_MAX;
+-        ts->tv_nsec = 999999999;
++        ts->tv_sec = -1;
++        ts->tv_nsec = -1;
+         return;
+     }
+     ts->tv_sec = nsecs / NSECS_PER_SEC;
+-- 
+1.7.1
+

@@ -1,0 +1,26 @@
+From f0b21ee658cc7dce6fd87fe91775b78a224df57e Mon Sep 17 00:00:00 2001
+From: Frederic Crozat <fcrozat@mandriva.com>
+Date: Tue, 17 Mar 2009 13:45:37 +0000
+Subject: [PATCH] Disable usb by default
+
+It gets enabled when needed
+---
+ mkinitrd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 1fcb9ee..16073c4 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -86,7 +86,7 @@ force=""
+ img_vers=""
+ builtins=""
+ modulefile=/etc/modules.conf
+-[ "$ARCH" != "s390" ] && withusb=1
++withusb=0
+ rc=0
+ nolvm=""
+ nodmraid=""
+-- 
+1.7.1
+

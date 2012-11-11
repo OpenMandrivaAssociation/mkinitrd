@@ -1,0 +1,85 @@
+From 2607b829ec1073b258f6467543fbe5982a161201 Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Fri, 14 Aug 2009 16:51:13 +0200
+Subject: [PATCH] Fix dmraid to wait for needed disks
+
+---
+ mkinitrd |   25 ++++++++++++++++++++-----
+ 1 files changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 72abba7..1726e81 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -341,11 +341,13 @@ finddevicedriverinsys () {
+ findstoragedriverinsys () {
+     local sysfs=$(readlink "$1")
+     local start=0
++    local final=1
+ 
+     # if its a partition look at the device holding the partition
+     if [ -f "$sysfs/start" ]; then
+         waitblks="$waitblks ${sysfs##*/}"
+         sysfs=$(readlink ${sysfs%/*})
++        final=0
+     fi
+ 
+     if [[ ! "$sysfs" =~ ^/sys/.*block/.*$ ]]; then
+@@ -362,10 +364,13 @@ findstoragedriverinsys () {
+     if [[ "$sysfs" =~ ^/sys/.*block/md[0-9]+$ ]]; then
+         local raid=${sysfs##*/}
+         vecho "Found MDRAID component $raid"
++        final=0
+         handleraid $raid
+     fi
++
+     if [[ "$sysfs" =~ ^/sys/.*block/dm-[0-9]+$ ]]; then
+         vecho "Found DeviceMapper component ${sysfs##*/}"
++        final=0
+         handledm $(cat $sysfs/dev |cut -d : -f 1) $(cat $sysfs/dev |cut -d : -f 2)
+     fi
+ 
+@@ -373,6 +378,10 @@ findstoragedriverinsys () {
+         findstoragedriverinsys "$slave"
+     done
+ 
++    if [ $final == 1 ]; then
++        waitblks="$waitblks ${sysfs##*/}"
++    fi
++
+     if [ -L "$sysfs/device" ]; then
+         qpushd $(readlink "$sysfs/device")
+         finddevicedriverinsys
+@@ -571,6 +580,11 @@ handledm() {
+                 let ncryptodevs++
+                 findstoragedriver "/dev/$slavedev"
+                 ;;
++            *) 
++                for slavedev in /sys/dev/block/$major:$minor/slaves/*; do
++                    findstoragedriverinsys "$slavedev"
++                done
++                ;;
+         esac
+     done << EOF
+         $(dmsetup table -j $major -m $minor 2>/dev/null)
+@@ -1645,11 +1659,12 @@ emit_iscsi
+ 
+ if [ -n "$waitblks" ]; then
+     for dev in $waitblks; do
+-        dev_id=$(blkid -s UUID -o value /dev/$dev)
+-        if [ -n "$dev_id" ]; then
+-            dev_id="UUID=$dev_id"
+-        else
+-            dev_id="/dev/$dev"
++        dev_id="/dev/$dev"
++        dev_uuid=""
++        # Do not lookup UUID on full disks, some have...
++        [ -d "/sys/block/$dev" ] || dev_uuid=$(blkid -s UUID -o value $dev_id)
++        if [ -n "$dev_uuid" ]; then
++            dev_id="UUID=$dev_uuid"
+         fi
+         emit "echo waiting for device $dev to appear (timeout 1min)"
+         emit "waitdev --timeout=60000000 $dev_id"
+-- 
+1.7.1
+

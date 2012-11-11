@@ -1,0 +1,38 @@
+From cc2fa2355c07f489ec726c0a8d7220e6ca02e91c Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Mon, 3 May 2010 19:49:42 +0200
+Subject: [PATCH] Include additionnal hid keyboard drivers (#57872)
+
+---
+ mkinitrd |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 21bedde..628d9f9 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1082,14 +1082,19 @@ kbddrivers="$(awk '
+ 		/Phys=isa/ {ph="ps2";next}
+ 		/Phys=usb/ {ph="usb";next}
+ 		/Phys=/ {ph="UNKNOWN";next}
+-		/Handlers=.*kbd/ {print ph}
++		/Sysfs=/ {sys=$2; next}
++		/Handlers=.*kbd/ {if (ph == "usb") { print sys } else { print ph } }
+ 	' /proc/bus/input/devices)"
+ if [ -z "${kbddrivers##*ps2*}" ]; then
+     findmodule -atkbd
+     findmodule -i8042
+ fi
+-if [ -z "${kbddrivers##*usb*}" ]; then
++if [ -z "${kbddrivers##*/*}" ]; then
+     withusb=1
++    for syspath in $(echo ${kbddrivers} | sed 's/Sysfs=//g'); do
++	    [ -z "${syspath##*/*}" ] && [ -L /sys${syspath}/device/*:*/driver/module ] && \
++            findmodule -$(basename $(readlink /sys${syspath}/device/*:*/driver/module))
++    done
+     findmodule -usbhid
+ fi
+ 
+-- 
+1.7.1
+

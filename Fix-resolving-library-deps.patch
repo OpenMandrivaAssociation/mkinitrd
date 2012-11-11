@@ -1,0 +1,36 @@
+From efd7f472d796c22050de94c77585c1fa3875482c Mon Sep 17 00:00:00 2001
+From: Olivier Blin <blino@mandriva.com>
+Date: Sat, 11 Oct 2008 00:24:49 +0000
+Subject: [PATCH] Fix resolving library deps
+
+IF_RTLD can not be modified when get_dso_deps is called in a subshell...
+---
+ functions |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/functions b/functions
+index f4268f8..906c170 100644
+--- a/functions
++++ b/functions
+@@ -129,7 +129,7 @@ EOF
+         let n++
+     done
+ 
+-    echo "${FILES[@]}"
++    DEPS="${FILES[@]}"
+ }
+ 
+ IF_indent_chars=""
+@@ -199,7 +199,8 @@ function inst() {
+             vecho "${indent}$file -> $root$dest"
+             cp -aL "$file" "$root$dest"
+ 
+-            local DEPS=$(get_dso_deps "$file")
++            local DEPS
++            get_dso_deps "$file"
+             if [ -n "$DEPS" ]; then
+                 IF_dynamic="yes"
+             fi
+-- 
+1.7.1
+

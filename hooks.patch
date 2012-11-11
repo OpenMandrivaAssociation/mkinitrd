@@ -1,0 +1,32 @@
+From 04f6d0c470a02c4289ba2cc8e3669d3b3aa1738d Mon Sep 17 00:00:00 2001
+From: unknown author <cooker@mandrivalinux.org>
+Date: Sat, 11 Oct 2008 00:24:49 +0000
+Subject: [PATCH] hooks
+
+---
+ mkinitrd |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index c183e0d..8747ad6 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1788,6 +1788,15 @@ if [ "$IF_dynamic" == "yes" ]; then
+     fi
+ fi
+ 
++for file in /etc/sysconfig/mkinitrd.d/* ; do
++    if [[ "$file" =~ ^.*(~|\.bak|\.orig|\.rpm(save|orig|new))$ ]] ; then
++        continue
++    fi
++    if [ -r "$file" ]; then
++        source "$file"
++    fi
++done
++
+ (cd $MNTIMAGE; findall . | cpio -H newc --quiet -o) >| $IMAGE || exit 1
+ 
+ if [ -n "$compress" ]; then
+-- 
+1.7.1
+

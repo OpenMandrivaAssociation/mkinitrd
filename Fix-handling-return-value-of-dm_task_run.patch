@@ -1,0 +1,72 @@
+From 79a056186ce9f8e07643c15f4ff79540e459f5c6 Mon Sep 17 00:00:00 2001
+From: Olivier Blin <blino@mandriva.com>
+Date: Mon, 15 Jun 2009 17:19:48 +0200
+Subject: [PATCH] Fix handling return value of dm_task_run
+
+Mandriva bug #38723
+---
+ nash/dm.c |   20 ++++++++------------
+ 1 files changed, 8 insertions(+), 12 deletions(-)
+
+diff --git a/nash/dm.c b/nash/dm.c
+index e64709d..ff9c2b7 100644
+--- a/nash/dm.c
++++ b/nash/dm.c
+@@ -48,7 +48,7 @@ nashDmTaskNew(int type, const char *name, struct dm_task **task)
+         return -1;
+     if (name)
+         dm_task_set_name(*task, name);
+-    ret = dm_task_run(*task);
++    ret = dm_task_run(*task) ? 1 : -1;
+     if (ret < 0) {
+         dm_task_destroy(*task);
+         *task = NULL;
+@@ -144,7 +144,10 @@ nashDmGetDev(const char *name)
+         return 0;
+ 
+     dm_task_set_name(task, name);
+-    dm_task_run(task);
++    if (!dm_task_run(task)) {
++        dm_task_destroy(task);
++        return 0;
++    }
+ 
+     dm_task_get_info(task, &info);
+     if (!info.exists) {
+@@ -216,10 +219,7 @@ nashDmCreate(nashContext *nc, char *name, char *uuid, long long start,
+ 
+     dm_task_update_nodes();
+ 
+-    if (rc < 0)
+-        return 0;
+-
+-    return 1;
++    return rc;
+ }
+ 
+ #if 0
+@@ -267,10 +267,7 @@ nashDmRemove(char *name)
+ 
+     dm_task_update_nodes();
+ 
+-    if (rc < 0)
+-        return 0;
+-
+-    return 1;
++    return rc;
+ }
+ 
+ #if 0
+@@ -504,8 +501,7 @@ out:
+         free(iter);
+         return NULL;
+     }
+-    dm_task_run(task);
+-    if (!(dmnames = dm_task_get_names(task))) {
++    if (!dm_task_run(task) || !(dmnames = dm_task_get_names(task))) {
+         dm_task_destroy(task);
+         goto out;
+     }
+-- 
+1.7.1
+

@@ -1,0 +1,68 @@
+From 926ddbbb335409bfd5dcd0911927aec4812ec745 Mon Sep 17 00:00:00 2001
+From: Frederic Crozat <fcrozat@mandriva.com>
+Date: Thu, 27 Aug 2009 16:30:22 +0200
+Subject: [PATCH] Add drm detection if module is not loaded
+
+---
+ mkinitrd |   38 ++++++++++++++++++++++++++++++++++++--
+ 1 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index c25e8c3..03e50e9 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -59,6 +59,7 @@ VERSION=6.0.93
+ PROBE="yes"
+ MODULES=""
+ GRAPHICSMODS=""
++DRM_WHITELIST="i915"
+ PREMODS=""
+ DMRAIDS=""
+ ncryptodevs=0
+@@ -1598,8 +1599,41 @@ emit "echo Setting up hotplug."
+ emit "hotplug"
+ 
+ # If we have drm loaded, include modesetting drivers
+-if [ "x$PROBE" == "xyes" -a -d /sys/class/drm ]; then
+-    handlegraphics
++if [ "x$PROBE" == "xyes" ]; then
++    if [ -d /sys/class/drm ]; then
++        handlegraphics
++    else # try do detect which driver will be used
++        for device in `grep -l 0x03 /sys/bus/pci/devices/0000\:0*/class`; do
++            case " $handleddevices " in
++                *" $device "*)
++                    continue ;;
++                *) handleddevices="$handleddevices $device" ;;
++            esac
++            vecho "probing for drm modules for pci device $device"
++            if [ -f $(dirname $device)/modalias ]; then
++                modalias=$(cat $(dirname $device)/modalias)
++                moduledep --ignore-install $modalias
++                FOUND_WHITELISTED_DRM=0
++                for driver1 in $DRM_WHITELIST; do
++                    for driver in $deps ; do
++                        if [ "$driver" == "$driver1" ]; then
++                            FOUND_WHITELISTED_DRM=1
++                            break;
++                        fi
++                        done
++                        if [ "$FOUND_WHITELISTED_DRM" = "1" ]; then
++                            break;
++                        fi
++                done
++                if [ "$FOUND_WHITELISTED_DRM" = "1" ]; then
++                    for driver in $deps ; do
++                        findmodule --ignore-install --modlist=GRAPHICSMODS $driver
++                    done
++                fi
++            fi
++        done
++    fi
++
+     emitmodules --modlist=GRAPHICSMODS
+     resdeps GRAPHICSMODS
+     for MODULE in $resolved; do
+-- 
+1.7.1
+

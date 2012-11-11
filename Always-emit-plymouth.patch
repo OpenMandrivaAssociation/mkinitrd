@@ -1,0 +1,28 @@
+From 2e08759e3ad05dee2540f521d164d5ab6d00735d Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Mon, 12 Oct 2009 18:29:58 +0200
+Subject: [PATCH] Always emit plymouth
+
+Signed-off-by: Pascal Terjan <pterjan@mandriva.com>
+---
+ mkinitrd |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index f990ddd..1a27b72 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1591,9 +1591,7 @@ mkdir /dev/mapper
+ /bin/ln -s fb0 /dev/fb
+ EOF
+ 
+-if [ -x /usr/libexec/plymouth/plymouth-populate-initrd ]; then
+-    emit "/bin/plymouthd --attach-to-session"
+-fi
++emit "/bin/plymouthd --attach-to-session"
+ 
+ emit "echo Setting up hotplug."
+ emit "hotplug"
+-- 
+1.7.1
+

@@ -1,0 +1,61 @@
+From dd8fa4aff361dc8e68dbe097a56e6b95e9eb72e2 Mon Sep 17 00:00:00 2001
+From: Anssi Hannula <anssi@mandriva.org>
+Date: Sat, 26 Dec 2009 23:03:13 +0200
+Subject: [PATCH] Add drm drivers for hardware with no currently loaded drm driver
+
+Add drivers for all PCI display class devices, even if they do not have
+a drm driver loaded at the time of mkinitrd being run.
+
+The DRM_WHITELIST patch should be used with this one, in order to avoid
+putting non-KMS drivers into initrd.
+---
+ mkinitrd |   16 +++++++++++-----
+ 1 files changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 909c804..5c02816 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -438,8 +438,8 @@ findgraphicsdriver() {
+                 continue ;;
+             *) handleddevices="$handleddevices $device" ;;
+         esac
+-        if [ -f /sys/class/drm/$device/device/modalias ]; then
+-            modalias=$(cat /sys/class/drm/$device/device/modalias)
++        if [ -f $device/modalias ]; then
++            modalias=$(cat $device/modalias)
+             moduledep --ignore-install $modalias
+             for driver in $DRM_WHITELIST ; do
+                 case " $deps " in *" $driver "*)
+@@ -770,11 +770,17 @@ addgraphicsdev() {
+ }
+ 
+ handlegraphics() {
++    for device in $(grep -l 0x03 /sys/bus/pci/devices/0000\:0*/class); do
++        [ -e "$device" ] || continue
++        device=$(dirname $device)
++        vecho "probing for drm modules for pci device $device"
++        addgraphicsdev $device
++    done
+     qpushd /sys/class/drm || return
+     for device in card? ; do
+-        [ -d "$device" ] || continue
++        [ -d "$device/device" ] || continue
+         vecho "probing for modules for drm device $device"
+-        addgraphicsdev $device
++        addgraphicsdev $(readlink $device/device)
+     done
+     qpopd
+ }
+@@ -1599,7 +1605,7 @@ emit "echo Setting up hotplug."
+ emit "hotplug"
+ 
+ # If we have drm loaded, include modesetting drivers
+-if [ "x$PROBE" == "xyes" -a -d /sys/class/drm ]; then
++if [ "x$PROBE" == "xyes" ]; then
+     handlegraphics
+     emitmodules --modlist=GRAPHICSMODS
+     resdeps GRAPHICSMODS
+-- 
+1.7.1
+

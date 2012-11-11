@@ -1,0 +1,29 @@
+From a2e00eb182c4f7e9bdc4337d265c9751d502318a Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Tue, 30 Jun 2009 17:00:29 +0200
+Subject: [PATCH] Handle SYSFONTACM=8859-15
+
+---
+ mkinitrd |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 1715caa..ccb4928 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1526,10 +1526,10 @@ if [ -f /etc/sysconfig/i18n ]; then
+         esac
+     done
+     if [ -n "$SYSFONTACM" ]; then
+-        inst /usr/lib/kbd/consoletrans/$SYSFONTACM "$MNTIMAGE"
++        inst /usr/lib/kbd/consoletrans/$SYSFONTACM* "$MNTIMAGE"
+     fi
+     if [ -n "$UNIMAP" ]; then
+-        inst /usr/lib/kbd/unimaps/$UNIMAP "$MNTIMAGE"
++        inst /usr/lib/kbd/unimaps/$UNIMAP* "$MNTIMAGE"
+     fi
+ fi
+ 
+-- 
+1.7.1
+

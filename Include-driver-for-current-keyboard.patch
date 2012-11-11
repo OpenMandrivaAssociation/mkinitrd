@@ -1,0 +1,40 @@
+From b67384bbd0fdfd6d4aaab7c82161f260f77fda07 Mon Sep 17 00:00:00 2001
+From: Olivier Blin <blino@mandriva.com>
+Date: Mon, 15 Jun 2009 16:50:17 +0200
+Subject: [PATCH] Include driver for current keyboard
+
+---
+ mkinitrd |   17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 47306f6..6ed8c24 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1020,6 +1020,23 @@ for n in $PREMODS; do
+         findmodule $n
+ done
+ 
++kbddrivers="$(awk '
++		BEGIN {IGNORECASE=1}
++		/Name=.*keyboard/ {k=1;next}
++		/Name=/ {k=0;next}
++		/Phys=isa/ {ph="ps2";next}
++		/Phys=usb/ {ph="usb";next}
++		/Phys=/ {ph="UNKNOWN";next}
++		/Handlers=.*kbd/ && k == 1 {print ph}
++	' /proc/bus/input/devices)"
++if [ -z "${kbddrivers##*ps2*}" ]; then
++    findmodule -atkbd
++    findmodule -i8042
++elif [ -z "${kbddrivers##*usb*}" ]; then
++    withusb=1
++    findmodule -usbhid
++fi
++
+ if [ "$withusb" == "1" ]; then
+     findmodule -ehci-hcd
+     findmodule -ohci-hcd
+-- 
+1.7.1
+

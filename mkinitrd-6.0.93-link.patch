@@ -1,0 +1,47 @@
+--- mkinitrd-6.0.93/nash/Makefile.link	2011-05-30 23:23:23.000000000 +0200
++++ mkinitrd-6.0.93/nash/Makefile	2011-05-30 23:25:11.000000000 +0200
+@@ -36,7 +36,7 @@
+ LDFLAGS += -Wl,-rpath-link,$(TOPDIR)/bdevid:$(TOPDIR)/nash
+ 
+ nash_LIBPATHS = -L$(TOPDIR)/nash -L$(TOPDIR)/bdevid -L/$(LIB)
+-nash_LIBS += -ldevmapper -lparted -lblkid
++nash_LIBS += -ldevmapper -lparted -lblkid -lbdevid
+ nash_LIBS += -luuid -lpopt -lresolv -ldl -lelf
+ nash_LIBS += -lm
+ # We need to link against libgcc_s directly, or it'll /dlopen() it during
+--- mkinitrd-6.0.93/bdevid/Makefile.link	2011-05-30 23:31:00.000000000 +0200
++++ mkinitrd-6.0.93/bdevid/Makefile	2011-05-30 23:31:20.000000000 +0200
+@@ -52,7 +52,7 @@
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname="$*.so.$(VERSION)" -o $@ $< ../nash/wrap.o -shared $($*_LIBS) -lbdevidprobe
+ 
+ libbdevid.so.$(VERSION) : $(bdevid_OBJECTS)
+-	$(CC) $(CFLAGS) -shared $(LDFLAGS) -Wl,-soname="$(shell basename $@)" -o $@ $^ $(bdevid_LIBS)
++	$(CC) $(CFLAGS) -shared $(LDFLAGS) -Wl,-soname="$(shell basename $@)" -o $@ $^ -lparted -lblkid -luuid -ldevmapper -ldl
+ 
+ libbdevidprobe.a : $(bdevidprobe_OBJECTS)
+ 	$(AR) crs $@ $^
+--- mkinitrd-6.0.93/Makefile.inc.link	2011-05-30 23:39:56.000000000 +0200
++++ mkinitrd-6.0.93/Makefile.inc	2011-05-30 23:40:08.000000000 +0200
+@@ -34,7 +34,7 @@
+ CC = gcc
+ CFLAGS ?= -Wall  -g -D_FORTIFY_SOURCE=2 -Wno-unused-function -fPIC \
+ 	  -std=gnu99 -D_GNU_SOURCE=1
+-LDFLAGS ?= -Wl,--wrap,open,--wrap,fopen,--wrap,opendir,--wrap,socket \
++LDFLAGS += -Wl,--wrap,open,--wrap,fopen,--wrap,opendir,--wrap,socket \
+ 	-Wl,--wrap,pipe,--wrap,mkdir,--wrap,access
+ 
+ mandir = usr/share/man
+--- mkinitrd-6.0.93/bdevid/python/Makefile.link	2011-05-30 23:46:07.000000000 +0200
++++ mkinitrd-6.0.93/bdevid/python/Makefile	2011-05-30 23:46:25.000000000 +0200
+@@ -30,10 +30,9 @@
+ CFLAGS += -I$(TOPDIR)/nash/include -I$(TOPDIR)/bdevid/include
+ LDFLAGS = -shared -L$(TOPDIR)/nash -L$(TOPDIR)/bdevid
+ LDFLAGS += -Wl,-soname="pybdevid.so.$(VERSION)",--as-needed
+-LDFLAGS += -lpython$(PYVER) -ldl
+ 
+ pybdevid_OBJECTS = pybdevid.o
+-pybdevid_LIBS = -lbdevid -lnash -ldevmapper -lparted -lblkid
++pybdevid_LIBS = -lbdevid -lnash -ldevmapper -lparted -lblkid -lpython$(PYVER) -ldl
+ 
+ pybdevid.so :: $(pybdevid_OBJECTS)
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ -lbdevid $(pybdevid_LIBS)

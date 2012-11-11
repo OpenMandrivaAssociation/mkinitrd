@@ -1,0 +1,172 @@
+From e6ba79617db4596219a0909091529ea20563d6f7 Mon Sep 17 00:00:00 2001
+From: unknown author <cooker@mandrivalinux.org>
+Date: Mon, 15 Jun 2009 16:46:10 +0200
+Subject: [PATCH] Resume
+
+---
+ mkinitrd    |   12 +++++--
+ nash/nash.c |  102 ++++++++++++++++++++++++++++++++++++++++++++++------------
+ 2 files changed, 90 insertions(+), 24 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index e97bcaf..db1f3e6 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1668,10 +1668,16 @@ for cryptdev in ${!cryptolv@} ; do
+     emitcrypto `eval echo '$'$cryptdev`
+ done
+ 
+-if [ -z "$noresume" -a -n "$thawdev" ]; then
+-    emit "resume $thawdev"
++if [ -z "$noresume" ]; then
++    if [ -x /usr/sbin/resume ]; then
++	inst /usr/sbin/resume "$MNTIMAGE" /bin/resume
++	if [ -f /etc/suspend.conf ]; then
++            inst /etc/suspend.conf "$MNTIMAGE"
++	fi
++    fi
++    emit "nash-resume"
+ fi
+-
++  
+ if [ -n "$loopfs" ]; then
+     emit "echo Mounting loop backing store."
+     emit "mkdir /tmpmount"
+diff --git a/nash/nash.c b/nash/nash.c
+index e127030..3aab14c 100644
+--- a/nash/nash.c
++++ b/nash/nash.c
+@@ -41,6 +41,7 @@
+ #include <stdlib.h>
+ #include <stdarg.h>
+ #include <string.h>
++#include <limits.h>
+ #include <sys/ioctl.h>
+ #include <sys/mount.h>
+ #include <sys/types.h>
+@@ -1544,14 +1545,12 @@ resumeCommand(char * cmd, char * end)
+ {
+     char * resumedev = NULL;
+     char * resume = NULL;
+-    int fd, n;
++    int fd;
+     struct stat sb;
+     char buf[25];
+-
+-    if (!(cmd = getArg(cmd, end, &resume))) {
+-        eprintf("resume: resume device expected\n");
+-        return 1;
+-    }
++    char uswresume_bin[] = "/bin/resume";
++    char uswconfig[] = "/etc/suspend.conf";
++    char uswresume_key[] = "resume device";
+ 
+     if (access("/sys/power/resume", W_OK)) {
+         /* eprintf("/sys/power/resume doesn't exist, can't resume!\n");*/
+@@ -1563,27 +1562,88 @@ resumeCommand(char * cmd, char * end)
+         return 0;
+     }
+ 
+-    resumedev = getKernelArg("resume");
+-    if (resumedev == NULL) {
+-        resumedev = resume;
+-    }
+-    n = strcspn(resumedev, " \t\r\n");
+-    if (!(resumedev = strndupa(resumedev, n))) {
+-        eprintf("Unable to find resume device: %m\n");
+-        return 1;
++    resume = getKernelArg("resume");
++    if (resume) {
++	char *chptr = resume, c;
++	while (*chptr && !isspace(*chptr)) chptr++;
++        c = *chptr;
++	*chptr = '\0';
++	resumedev = nashGetPathBySpec(_nash_context, resume);
++        if (resumedev == NULL) {
++            eprintf("Could not resolve resume device (%s)\n", resume);
++        } else if (access(resumedev, R_OK)) {
++            eprintf("Unable to access resume device (%s)\n", resumedev);
++            resumedev = NULL;
++        }
++        *chptr = c;
++    } else {
++        qprintf("No resume device specified\n");
+     }
+ 
+-    qprintf("Trying to resume from %s\n", resumedev);
++    do {
++        qprintf("Trying userspace resume from %s\n", resumedev ? resumedev : "suspend.conf file");
+ 
+-    resume = nashGetPathBySpec(_nash_context, resumedev);
+-    if (resume)
+-        resumedev = resume;
++        if (access(uswresume_bin, X_OK)) {
++            eprintf("No resume binary\n");
++            break;
++        }
+ 
+-    if (access(resumedev, R_OK)) {
+-        eprintf("Unable to access resume device (%s)\n", resumedev);
+-        return 1;
++        if (smartmknod("/dev/snapshot", S_IFCHR | 0600, makedev(10, 231))) {
++            eprintf("Failed to create /dev/snapshot\n");
++            break;
++        }
++
++        if (!resumedev) {
++               FILE *conf = fopen(uswconfig, "r");
++               char line[256];
++               int has_resume_key = 0;
++               if (!conf < 0)
++                   break;
++               while (fgets(line, sizeof(line), conf)) {
++                   if (!strncmp(line, uswresume_key, strlen(uswresume_key))) {
++        	       char *conf_resumedev = strchr(line, '/');
++        	       if (conf_resumedev) {
++                           char *end = strchr(conf_resumedev, '\n');
++                           if (end) *end = '\0';
++                           if (!access(conf_resumedev, R_OK)) {
++                               has_resume_key = 1;
++                           } else {
++                               eprintf("Unable to access suspend.conf resume device (%s)\n", conf_resumedev);
++                           }
++                       }
++                       break;
++                   }
++               }
++               fclose(conf);
++               if (!has_resume_key) {
++		   qprintf("No resume device in suspend.conf\n");
++                   break;
++               }
++        }
++        if (resumedev) {
++            otherCommand(uswresume_bin, resumedev, resumedev + strlen(resumedev), 1, 0);
++        } else {
++            otherCommand(uswresume_bin, uswresume_bin, NULL, 1, 0);
++        }
++    } while (0);
++
++#define try_suspend2(NAME) \
++    qprintf("Trying " NAME " resume\n"); \
++    fd = open("/sys/power/" NAME "/do_resume", O_WRONLY); \
++    if (fd != -1) { \
++        write(fd, "1", 1); \
++        close(fd); \
++        eprintf("Unable to resume from " NAME ".\n"); \
+     }
+ 
++    try_suspend2("suspend2");
++    try_suspend2("tuxonice");
++
++    if (!resumedev)
++        return 1;
++
++    qprintf("Trying in-kernel resume from %s\n", resumedev);
++
+     fd = open(resumedev, O_RDONLY);
+     if (fd < 0)
+         return 1;
+-- 
+1.7.1
+

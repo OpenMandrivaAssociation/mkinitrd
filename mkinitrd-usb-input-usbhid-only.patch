@@ -1,0 +1,22 @@
+Index: mkinitrd-6.0.93/mkinitrd
+===================================================================
+--- mkinitrd-6.0.93.orig/mkinitrd
++++ mkinitrd-6.0.93/mkinitrd
+@@ -1096,10 +1096,14 @@ fi
+ if [ -z "${kbddrivers##*/*}" ]; then
+     withusb=1
+     for syspath in $(echo ${kbddrivers} | sed 's/Sysfs=//g'); do
+-	    [ -z "${syspath##*/*}" ] && [ -L /sys${syspath}/device/*:*/driver/module ] && \
+-            findmodule -$(basename $(readlink /sys${syspath}/device/*:*/driver/module))
++        if [ -z "${syspath##*/*}" ]; then
++            d=$(readlink /sys${syspath}/device/driver)
++            [[ "$d" =~ usbhid ]] && \
++            [ -L /sys${syspath}/device/*:*/driver/module ] && \
++                findmodule -$(basename $(readlink /sys${syspath}/device/*:*/driver/module)) &&
++                findmodule -usbhid
++        fi
+     done
+-    findmodule -usbhid
+ fi
+ 
+ if [ "$withusb" == "1" ]; then

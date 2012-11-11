@@ -1,0 +1,57 @@
+From 52cf0376b7607530ac086c1d5f1ed101bc7c7484 Mon Sep 17 00:00:00 2001
+From: Olivier Blin <blino@mandriva.com>
+Date: Thu, 11 Jun 2009 10:58:54 +0200
+Subject: [PATCH] Handle gzip compressed modules
+
+---
+ functions |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/functions b/functions
+index 2fe61da..f4268f8 100644
+--- a/functions
++++ b/functions
+@@ -233,7 +233,7 @@ moduledep() {
+     fi
+     vecho -n "Looking for deps of module $1"
+     deps=""
+-    deps=$(modprobe $MPARGS --set-version $kernel --show-depends $1 2>/dev/null| awk '/^insmod / { print gensub(".*/","","g",$2) }' | while read foo ; do [ "${foo%%.ko}" != "$1" ] && echo -n "${foo%%.ko} " ; done)
++    deps=$(modprobe $MPARGS --set-version $kernel --show-depends $1 2>/dev/null| awk '/^insmod / { print gensub(".*/","","g",$2) }' | while read foo ; do [ "${foo%%.ko*}" != "$1" ] && echo -n "${foo%%.ko*} " ; done)
+     [ -n "$deps" ] && vecho ": $deps" || vecho
+ }
+ 
+@@ -247,7 +247,7 @@ locatemodule() {
+     if [ -n "$fmPath" -a -f "$fmPath" ]; then
+         return 0
+     fi
+-    for modExt in o.gz o ko ; do
++    for modExt in ko.gz o.gz o ko ; do
+         for modDir in /lib/modules/$kernel/updates /lib/modules/$kernel ; do
+             if [ -d $modDir ]; then
+                 fmPath=$(findone $modDir -name $1.$modExt)
+@@ -268,11 +268,11 @@ expandModules() {
+ 	if [ $char = '=' ]; then
+ 	    NAME=$(echo $m | cut -c2-)
+ 	    if [ "$NAME" = "ata" ]; then
+-		MODS="$MODS $(cat /lib/modules/$kernel/modules.block |egrep '(ata|ahci)' |sed -e 's/.ko//')"
++		MODS="$MODS $(cat /lib/modules/$kernel/modules.block |egrep '(ata|ahci)' |sed -e 's/.ko(.gz)?//')"
+ 	    else
+                 # Ignore if group list does not exist
+                 if [ -e /lib/modules/$kernel/modules.$NAME ]; then
+-		    MODS="$MODS $(cat /lib/modules/$kernel/modules.$NAME |sed -e 's/.ko//')"
++		    MODS="$MODS $(cat /lib/modules/$kernel/modules.$NAME |sed -e 's/.ko(.gz)?//')"
+                 fi
+ 	    fi
+ 	else
+@@ -296,7 +296,7 @@ installmodule()
+     if [ -z "$MODULE" ]; then
+         return
+     fi
+-    if [ -x /usr/bin/strip ]; then
++    if ! [[ $MODULE =~ \.gz ]] && [ -x /usr/bin/strip ]; then
+         /usr/bin/strip -g $(get_verbose) $MODULE -o $MNTIMAGE/lib/modules/$kernel/$(basename $MODULE)
+     else
+         inst "$MODULE" "$MNTIMAGE" "/lib/modules/$kernel/$(basename $MODULE)"
+-- 
+1.7.1
+

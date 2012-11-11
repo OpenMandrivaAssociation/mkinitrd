@@ -1,0 +1,39 @@
+From 986d1b87acc98649003051116b77a19493ab34d7 Mon Sep 17 00:00:00 2001
+From: unknown author <cooker@mandrivalinux.org>
+Date: Mon, 15 Jun 2009 17:35:40 +0200
+Subject: [PATCH] checkroot
+
+---
+ nash/nash.c |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
+diff --git a/nash/nash.c b/nash/nash.c
+index 3aab14c..aec04e9 100644
+--- a/nash/nash.c
++++ b/nash/nash.c
+@@ -1205,6 +1205,7 @@ switchrootCommand(char * cmd, char * end)
+                                 "/bin/init", "/bin/sh", NULL };
+     const char *ignoreargs[] = { "console=", "BOOT_IMAGE=", NULL };
+     char *init, **initargs;
++    char *newdev;
+     char *cmdline = NULL;
+     char *new = NULL, *arg;
+     int fd, i = 0, j = 0;
+@@ -1225,6 +1226,14 @@ switchrootCommand(char * cmd, char * end)
+     if (new == NULL)
+         new = "/sysroot";
+ 
++    asprintf(&newdev, "%s/dev", new);
++    if (access(newdev, R_OK)) {
++        free(newdev);
++        eprintf("switchroot: /dev does not exist in new root\n");
++        return 1;
++    }
++    free(newdev);
++
+     /* this has to happen before we unmount /proc */
+     init = getKernelArg("init");
+     if (init == NULL)
+-- 
+1.7.1
+

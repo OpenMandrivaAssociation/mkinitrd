@@ -1,0 +1,33 @@
+From 09e891e2fa485efee723b7f36082c51aa0ecfd21 Mon Sep 17 00:00:00 2001
+From: Buchan Milne <bgmilne@mandriva.org>
+Date: Wed, 30 Sep 2009 14:52:33 +0200
+Subject: [PATCH] Create urandom for LVM
+
+Signed-off-by: Pascal Terjan <pterjan@mandriva.com>
+---
+ mkinitrd |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 32b8d68..f939a24 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1332,6 +1332,7 @@ fi #NODEVTMPFS
+ if [ $NODEVTMPFS -eq 1 ]; then
+ mknod $MNTIMAGE/dev/null c 1 3
+ mknod $MNTIMAGE/dev/zero c 1 5
++mknod $MNTIMAGE/dev/urandom c 1 9
+ mknod $MNTIMAGE/dev/systty c 4 0
+ if ! echo "$(uname -m)" | grep -q "s390"; then 
+   for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 ; do
+@@ -1599,6 +1600,7 @@ cemit << EOF
+ echo Creating initial device nodes
+ mknod /dev/null c 1 3
+ mknod /dev/zero c 1 5
++mknod /dev/urandom c 1 9
+ mknod /dev/systty c 4 0
+ mknod /dev/tty c 5 0
+ mknod /dev/console c 5 1
+-- 
+1.7.1
+

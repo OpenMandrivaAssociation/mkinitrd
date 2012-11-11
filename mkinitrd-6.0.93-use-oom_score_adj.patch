@@ -1,0 +1,36 @@
+
+/proc/<pid>/oom_adj has been deprecated since kernel 2.6.36 (and will
+be removed around 08-2012) due to the rework of the badness heuristics. 
+oom_score_adj is the replacement.
+
+We keep a fallback to the old interface for compatibility with older
+kernels.
+
+Signed-off-by: Thomas Backlund <tmb@mageia.org>
+
+diff -Nurp mkinitrd-6.0.93.orig/nash/hotplug.c mkinitrd-6.0.93/nash/hotplug.c
+--- mkinitrd-6.0.93.orig/nash/hotplug.c	2009-09-02 11:41:45.000000000 +0300
++++ mkinitrd-6.0.93/nash/hotplug.c	2011-08-02 18:50:05.560629881 +0300
+@@ -670,10 +670,20 @@ daemonize(nashContext *nc)
+     signal(SIGINT, SIG_IGN);
+ #endif /* FWDEBUG */
+ 
+-    i = open("/proc/self/oom_adj", O_RDWR);
++    /* new oom-killer interface */
++    i = open("/proc/self/oom_score_adj", O_RDWR);
+     if (i >= 0) {
+-        write(i, "-17", 3);
++	/* OOM_SCORE_ADJ_MIN == -1000 */
++        write(i, "-1000", 5);
+         close(i);
++    } else {
++	/* old oom-killer interface */
++	i = open("/proc/self/oom_adj", O_RDWR);
++	if (i >= 0) {
++	    /* OOM_DISABLE == -17 */
++    	    write(i, "-17", 3);
++    	    close(i);
++	}
+     }
+ 
+     set_timeout(10);

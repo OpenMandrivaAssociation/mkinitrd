@@ -1,0 +1,83 @@
+From 42887366950c937e190ebbe22d159d1ba2dc60c1 Mon Sep 17 00:00:00 2001
+From: Anssi Hannula <anssi@mandriva.org>
+Date: Sat, 16 Apr 2011 22:01:41 +0300
+Subject: [PATCH 1/2] Do not load KMS drivers when booted with nokmsboot or failsafe options.
+
+---
+ mkinitrd    |   23 +++++++++++++++++++++--
+ nash/nash.c |    3 ++-
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 736adf1..247436e 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1388,6 +1388,7 @@ findkeymap () {
+ 
+ emitmodules() {
+     modlist=MODULES
++    not_with=
+ 
+     while [ $# -gt 0 ]; do
+         case $1 in
+@@ -1399,6 +1400,14 @@ emitmodules() {
+                     modlist="$1"
+                 fi
+                 ;;
++            --not-with*)
++	        if [ "$1" != "${1##--not-with=}" ]; then
++		    not_with=${1##--not-with=}
++		elif [ -n "$2" ]; then
++		    shift
++		    not_with="$1"
++		fi
++		;;
+         esac
+         shift
+     done
+@@ -1434,7 +1443,17 @@ emitmodules() {
+             echo "options $module $options" >> $MNTIMAGE/etc/modprobe.conf
+         fi
+ 
+-        emit "echo \"Loading $module module\""
++        emit -n "echo \"Loading $module module"
++        if [ -n "$not_with" ]; then
++            emit -n " unless booted with ${not_with// / or } option"
++        fi
++        emit "\""
++
++        for not_with_opt in $not_with; do
++            emit "kernelopt $not_with_opt"
++            emit -n "cond -ne 0 "
++        done
++
+         emit "modprobe -q $module"
+ 
+         # Firewire likes to change the subsystem name every 3 hours. :/
+@@ -1616,7 +1635,7 @@ emit "hotplug"
+ # If we have drm loaded, include modesetting drivers
+ if [ "x$PROBE" == "xyes" ]; then
+     handlegraphics
+-    emitmodules --modlist=GRAPHICSMODS
++    emitmodules --modlist=GRAPHICSMODS --not-with="failsafe nokmsboot"
+     resdeps GRAPHICSMODS
+     for MODULE in $resolved; do
+         installmodule --ignore-install $MODULE
+diff --git a/nash/nash.c b/nash/nash.c
+index 6952b7c..216dcc1 100644
+--- a/nash/nash.c
++++ b/nash/nash.c
+@@ -306,8 +306,9 @@ printKernelOpt(char * cmd, char * end)
+             printf("1\n");
+         else
+             printf("%s\n", value);
++        return 0;
+     }
+-    return 0;
++    return 1;
+ }
+ 
+ static int
+-- 
+1.7.3
+

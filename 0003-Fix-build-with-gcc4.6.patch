@@ -1,0 +1,43 @@
+From fe99c8f16c0d79dabc9138beab9744a7779e71b0 Mon Sep 17 00:00:00 2001
+From: Anssi Hannula <anssi@mandriva.org>
+Date: Sun, 17 Apr 2011 15:12:28 +0300
+Subject: [PATCH 3/3] Fix build with gcc4.6
+
+---
+ nash/vitals.h |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/nash/vitals.h b/nash/vitals.h
+index db24485..684e7b7 100644
+--- a/nash/vitals.h
++++ b/nash/vitals.h
+@@ -53,22 +53,22 @@ struct nash_bdev_vitals {
+         };
+         /*  DEV_TYPE_LVM2_PV */
+         struct {
+-            char *unique_id;
++            char *unique_id2;
+         };
+         /* nothing for DEV_TYPE_PARTITION */
+         /* DEV_TYPE_LVM2_VG */
+         struct {
+-            char *unique_id;
++            char *unique_id3;
+             char *vg_name;
+         };
+         /* DEV_TYPE_LVM2_LV */
+         struct {
+-            char *unique_id;
++            char *unique_id4;
+             char *lv_name;
+         };
+         /* DEV_TYPE_FS */
+         struct {
+-            char *unique_id;
++            char *unique_id5;
+             char *fs_type;
+             char *fs_label;
+             char *fs_options;
+-- 
+1.7.3
+

@@ -1,0 +1,25 @@
+From 009f6f753bdc7f218c9241e5aa6e15789cda8d2c Mon Sep 17 00:00:00 2001
+From: Arnaud Patard <apatard@mandriva.com>
+Date: Sat, 11 Oct 2008 00:24:49 +0000
+Subject: [PATCH] Fix detection of usb_storage module
+
+---
+ mkinitrd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index ba3e252..c5e0867 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1394,7 +1394,7 @@ emitmodules() {
+ 
+         # Hack - we need a delay after loading usb-storage to give things
+         #        time to settle down before we start looking a block devices
+-        if [ "$module" = "usb-storage" -o "$module" = "ub" ]; then
++        if [[ "$module" =~ usb[_-]storage ]] || [ "$module" = "ub" ]; then 
+             if [ "$found_hcd_module" == "no" -a "$usb_mounted" == "prep" ]; then
+                 usb_mounted=yes
+                 emit "mount -t usbfs /proc/bus/usb /proc/bus/usb"
+-- 
+1.7.1
+

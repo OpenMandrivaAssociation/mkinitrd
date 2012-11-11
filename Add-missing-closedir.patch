@@ -1,0 +1,25 @@
+From 1c374f3a2102601ea1510035bdf62427b1190364 Mon Sep 17 00:00:00 2001
+From: Andrey Borzenkov <arvidjaar@mail.ru>
+Date: Mon, 15 Jun 2009 16:46:48 +0200
+Subject: [PATCH] Add missing closedir
+
+Fix missing closedir preventing umount of /initrd/sys (Mandriva bug #16699)
+---
+ nash/nash.c |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/nash/nash.c b/nash/nash.c
+index d2c5517..0daf281 100644
+--- a/nash/nash.c
++++ b/nash/nash.c
+@@ -734,6 +734,7 @@ static int lsdir(char *thedir, char * prefix)
+             printf("\n");
+         }
+     }
++    closedir(thedir);
+     return 0;
+ }
+ #endif
+-- 
+1.7.1
+

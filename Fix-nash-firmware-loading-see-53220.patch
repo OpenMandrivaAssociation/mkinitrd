@@ -1,0 +1,27 @@
+From e815e6653c73dc920fb823813201799db52279fb Mon Sep 17 00:00:00 2001
+From: Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+Date: Fri, 28 May 2010 23:31:07 -0300
+Subject: [PATCH] Fix nash firmware loading (see #53220)
+
+We can't pass top with tv_sec == -1 and tv_nsec == -1 to ppoll, it's
+invalid. Check for this condition with specinf.
+---
+ nash/uevent.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/nash/uevent.c b/nash/uevent.c
+index cf21975..2c65dc7 100644
+--- a/nash/uevent.c
++++ b/nash/uevent.c
+@@ -204,7 +204,7 @@ nashGetUEventPoll(nashContext *nc, struct timespec *timeout,
+ 
+     speccpy(top, timeout, 1, -1);
+     do {
+-        rc = nash_ppoll(pds, npfds+1, top, NULL, 0);
++        rc = nash_ppoll(pds, npfds+1, specinf(top) ? NULL : top, NULL, 0);
+         speccpy(timeout, top, 0, -1);
+     } while (rc < 0 && errno == EINTR);
+     errnum = errno;
+-- 
+1.7.1
+

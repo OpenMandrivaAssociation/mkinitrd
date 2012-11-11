@@ -1,0 +1,26 @@
+From cb04d72edfeb80c51560bb9f2e59825ff6ac74a1 Mon Sep 17 00:00:00 2001
+From: Olivier Blin <blino@mandriva.com>
+Date: Mon, 15 Jun 2009 16:47:26 +0200
+Subject: [PATCH] Display current kernel version in usage
+
+Use result of "uname -r" in usage
+---
+ mkinitrd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 6e35e8e..47306f6 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -112,7 +112,7 @@ usage () {
+     $cmd "       [--builtin=<module>] [--omit-dmraid] [--net-dev=<interface>]"
+     $cmd "       [--fstab=<fstab>] [--nocompress] <initrd-image> <kernel-version>"
+     $cmd ""
+-    $cmd "       (ex: `basename $0` /boot/initrd-2.2.5-15.img 2.2.5-15)"
++    $cmd "       (ex: `basename $0` /boot/initrd-$(uname -r).img $(uname -r))"
+ 
+     if [ "$1" == "-n" ]; then
+         exit 0
+-- 
+1.7.1
+

@@ -1,0 +1,26 @@
+From d3562d782e1b737b6c0ce1be32c54e15765f8dc0 Mon Sep 17 00:00:00 2001
+From: Olivier Blin <blino@mandriva.com>
+Date: Mon, 15 Jun 2009 16:42:36 +0200
+Subject: [PATCH] Create /etc/blkid
+
+Create /etc/blkid in initrd, so that cdrom mount by label can be
+done after running "showlabels --removable"
+---
+ mkinitrd |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 65fb434..76b88a2 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1191,6 +1191,7 @@ mkdir -p $MNTIMAGE/proc
+ mkdir -p $MNTIMAGE/sys
+ mkdir -p $MNTIMAGE/sysroot
+ ln -s bin $MNTIMAGE/sbin
++mkdir -p $MNTIMAGE/etc/blkid
+ 
+ vecho "Building initrd in $MNTIMAGE"
+ inst /sbin/nash "$MNTIMAGE" /bin/nash
+-- 
+1.7.1
+

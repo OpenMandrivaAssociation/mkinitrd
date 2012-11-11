@@ -1,0 +1,29 @@
+From 58384a0f0706417cabf1d0a37668adea42a71ed3 Mon Sep 17 00:00:00 2001
+From: unknown author <cooker@mandrivalinux.org>
+Date: Mon, 15 Jun 2009 16:43:19 +0200
+Subject: [PATCH] Include both ahci and ata_piix
+
+If you use ahci or ata_piix, include both to ensure you can still boot
+after changing the setting in BIOS
+---
+ mkinitrd |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 16073c4..066828d 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -324,6 +324,10 @@ finddevicedriverinsys () {
+             deps=$(basename $(readlink driver/module))
+         for driver in $deps ; do
+             findmodule $driver
++            # have both ata_piix and ahci so that you can still boot
++            # after changing the config in the BIOS
++            [ "$driver" = "ata_piix" ] && findmodule ahci
++            [ "$driver" = "ahci" ] && findmodule ata_piix
+         done
+         cd ..
+     done
+-- 
+1.7.1
+

@@ -1,0 +1,80 @@
+From ba61bbeb236987c39115cf4b72e236094c1f5d9e Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Sat, 11 Oct 2008 00:24:49 +0000
+Subject: [PATCH] Handle root=<devno> from lilo
+
+---
+ nash/block.c   |   11 ++++++++++-
+ nash/devtree.c |   17 ++++++++++++++++-
+ 2 files changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/nash/block.c b/nash/block.c
+index 209f19e..78e9b1b 100644
+--- a/nash/block.c
++++ b/nash/block.c
+@@ -490,8 +490,10 @@ nashFindFsByName(nashContext *nc, const char *name)
+         bdev = blkid_get_dev(nc->cache, name, BLKID_DEV_NORMAL);
+     }
+ 
++    /* do not return immediately, check device access
++       since blkid now returns cached devices that may not exist */
+     if (bdev)
+-        return strdup(blkid_dev_devname(bdev));
++        name = blkid_dev_devname(bdev);
+ 
+     if (!access(name, F_OK))
+         return strdup(name);
+@@ -521,6 +523,13 @@ nashMkPathBySpec(nashContext *nc, const char *spec, const char *path)
+     char *existing = nashGetPathBySpec(nc, spec);
+     struct stat sb;
+ 
++    if (!existing) {
++        char *p;
++        dev_t devNum = strtoul(spec, &p, 16);
++        if (!*p && devNum > 0)
++            return smartmknod(path, S_IFBLK | 0700, devNum);
++    }
++
+     if (!existing || stat(existing, &sb) < 0 || !S_ISBLK(sb.st_mode))
+         return -1;
+ 
+diff --git a/nash/devtree.c b/nash/devtree.c
+index 1aaad44..1695bff 100644
+--- a/nash/devtree.c
++++ b/nash/devtree.c
+@@ -1520,6 +1520,7 @@ struct nash_dev_node *nash_dev_tree_find_device(nashContext *nc, char *device,
+         LABEL,
+         UUID,
+         PATH,
++        DEVNO,
+     } type = PATH;
+ 
+     i = -1;
+@@ -1541,9 +1542,23 @@ struct nash_dev_node *nash_dev_tree_find_device(nashContext *nc, char *device,
+         } else if (!strncasecmp(device, "uuid=", 5)) {
+             type = UUID;
+             target += 5;
++        } else if (device[0] != '/') {
++            type = DEVNO;
+         }
+ 
+-        if (type != PATH) {
++        if (type == DEVNO) {
++            int devno;
++            int n = sscanf(device, "%x", &devno);
++            if (n) {
++                dev_t ndev = makedev(-1,-1);
++                while (!adult && (child = nash_list_get(nc->devices->devs, ++i))) {
++                    if (devno != ndev && devno == child->bdev->devno) {
++                        adult = child;
++                        break;
++                    }
++                }
++            }
++        } else if (type != PATH) {
+             while (!adult &&
+                     (child = nash_list_get(nc->devices->fs_devs, ++i))) {
+                 if (nash_dev_node_vitals_has(nc, child,
+-- 
+1.7.1
+

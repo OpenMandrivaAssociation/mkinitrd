@@ -1,0 +1,50 @@
+From 3efc13dc25a6e217c32f3812388129d7af804aff Mon Sep 17 00:00:00 2001
+From: unknown author <cooker@mandrivalinux.org>
+Date: Mon, 15 Jun 2009 16:48:35 +0200
+Subject: [PATCH] Include ide modules
+
+---
+ mkinitrd |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index db1f3e6..5cf9179 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -107,6 +107,7 @@ usage () {
+ 
+     $cmd "usage: `basename $0` [--version] [--help] [-v] [-f] [--preload <module>]"
+     $cmd "       [--force-scsi-probe | --omit-scsi-modules]"
++    $cmd "       [--omit-ide-modules]"
+     $cmd "       [--image-version] [--force-raid-probe | --omit-raid-modules]"
+     $cmd "       [--with=<module>] [--force-lvm-probe | --omit-lvm-modules]"
+     $cmd "       [--builtin=<module>] [--omit-dmraid] [--net-dev=<interface>]"
+@@ -857,6 +858,9 @@ while [ $# -gt 0 ]; do
+             PRESCSIMODS=""
+             noscsi=1
+             ;;
++        --omit-ide-modules)
++            noide=1
++            ;;
+         --omit-raid-modules)
+             noraid=1
+             ;;
+@@ -1143,6 +1147,15 @@ if [ -z "$noscsi" -a "x$PROBE" == "xyes" ]; then
+     fi
+ fi
+ 
++if [ -z "$noide" -a "x$PROBE" == "xyes" ]; then
++    if [ -f $modulefile ]; then
++	idemodules=$(grep -E '^[[:space:]]*(alias|probeall|install)[[:space:]]+ide-controller[0-9]*[[:space:]]' $modulefile | sed 's/^.*ide-controller[0-9]*//;s/\/sbin\/modprobe//g;s/;//g;s/\/bin\/true//;s/||//')
++	for n in $idemodules; do
++	    findmodule -$n
++	done
++    fi
++fi
++
+ # If we have dasd devices, include the necessary modules (S/390)
+ if [ "x$PROBE" == "xyes" -a -d /proc/dasd ]; then
+     findmodule -dasd_mod
+-- 
+1.7.1
+

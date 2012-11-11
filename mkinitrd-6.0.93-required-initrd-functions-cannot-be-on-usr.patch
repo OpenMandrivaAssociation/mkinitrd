@@ -1,0 +1,59 @@
+diff --git a/Makefile b/Makefile
+index d5c8382..261a4cd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -28,7 +28,7 @@ test: all
+ 
+ install:
+ 	for n in $(SUBDIRS); do make -C $$n install DESTDIR=$(DESTDIR); done
+-	for i in usr/libexec sbin $(mandir)/man8 etc/kernel/postinst.d \
++	for i in lib/mkinitrd sbin $(mandir)/man8 etc/kernel/postinst.d \
+ 			/etc/kernel/prerm.d ; do \
+ 		if [ ! -d $(DESTDIR)/$$i ]; then \
+ 			mkdir -p $(DESTDIR)/$$i; \
+@@ -37,8 +37,8 @@ install:
+ 	sed 's/%VERSIONTAG%/$(VERSION)/' < mkinitrd > $(DESTDIR)/sbin/mkinitrd
+ 	chmod 755 $(DESTDIR)/sbin/mkinitrd
+ 	install -m755 lsinitrd $(DESTDIR)/sbin/lsinitrd
+-	install -m755 mkliveinitrd $(DESTDIR)/usr/libexec/mkliveinitrd
+-	install -m755 functions $(DESTDIR)/usr/libexec/initrd-functions
++	install -m755 mkliveinitrd -D $(DESTDIR)/lib/mkinitrd/mkliveinitrd
++	install -m755 functions -D $(DESTDIR)/lib/mkinitrd/functions
+ 	install -m644 mkinitrd.8 $(DESTDIR)/$(mandir)/man8/mkinitrd.8
+ 
+ test-archive:
+diff --git a/mkinitrd b/mkinitrd
+index 9186c83..51c7ed4 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -36,7 +36,7 @@
+ #            Peter Jones <pjones@redhat.com>
+ #
+ 
+-. /usr/libexec/initrd-functions
++. /lib/mkinitrd/functions
+ 
+ if [ $UID != 0 ]; then
+     error "mkinitrd must be run as root."
+@@ -1039,7 +1039,7 @@ fi
+ 
+ if [ "$LIVEOS" = "yes" ]; then
+    # this is a live system, we need to fork off to mkliveinitrd for now
+-   exec /usr/libexec/mkliveinitrd $savedargs
++   exec /lib/mkinitrd/mkliveinitrd $savedargs
+ fi
+ 
+ vecho "Creating initramfs"
+diff --git a/mkliveinitrd b/mkliveinitrd
+index 943daf2..e9f8bd6 100755
+--- a/mkliveinitrd
++++ b/mkliveinitrd
+@@ -20,7 +20,7 @@ usage() {
+     echo "example: $0 /boot/myinitramfs.img \`uname -r\`"
+ }
+ 
+-. /usr/libexec/initrd-functions
++. /lib/mkinitrd/initrd-functions
+ 
+ opt_allow_overwrite=0
+ INITRAMFS_TARGET=""

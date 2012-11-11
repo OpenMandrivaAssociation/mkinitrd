@@ -1,0 +1,39 @@
+From b422e578d8d323abaf8acb1f28ab560c193bfaeb Mon Sep 17 00:00:00 2001
+From: Anssi Hannula <anssi@mandriva.org>
+Date: Sat, 26 Dec 2009 22:58:07 +0200
+Subject: [PATCH] Add drm whitelist handling
+
+Add a DRM_WHITELIST variable. Only DRM drivers present in DRM_WHITELIST
+and their dependencies will be automatically added in initrd.
+---
+ mkinitrd |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 2ee5dd5..909c804 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -59,6 +59,7 @@ VERSION=6.0.93
+ PROBE="yes"
+ MODULES=""
+ GRAPHICSMODS=""
++DRM_WHITELIST="i915"
+ PREMODS=""
+ DMRAIDS=""
+ ncryptodevs=0
+@@ -440,8 +441,10 @@ findgraphicsdriver() {
+         if [ -f /sys/class/drm/$device/device/modalias ]; then
+             modalias=$(cat /sys/class/drm/$device/device/modalias)
+             moduledep --ignore-install $modalias
+-            for driver in $deps ; do
+-                findmodule --ignore-install --modlist=GRAPHICSMODS $driver
++            for driver in $DRM_WHITELIST ; do
++                case " $deps " in *" $driver "*)
++                    findmodule --ignore-install --modlist=GRAPHICSMODS $driver
++                esac
+             done
+         fi
+     done
+-- 
+1.7.1
+

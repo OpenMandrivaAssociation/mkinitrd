@@ -1,0 +1,27 @@
+From 9e5d1020a3b612e65cb434d67bdddb10a7bf6193 Mon Sep 17 00:00:00 2001
+From: Anssi Hannula <anssi@mandriva.org>
+Date: Sat, 16 Apr 2011 22:02:37 +0300
+Subject: [PATCH 2/2] Whitelist nouveau and radeon drivers
+
+Conflicts with proprietary drivers are now handled by
+display_driver_helper.
+---
+ mkinitrd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 247436e..07edf29 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -59,7 +59,7 @@ VERSION=6.0.93
+ PROBE="yes"
+ MODULES=""
+ GRAPHICSMODS=""
+-DRM_WHITELIST="i915"
++DRM_WHITELIST="i915 nouveau radeon"
+ PREMODS=""
+ DMRAIDS=""
+ ncryptodevs=0
+-- 
+1.7.3
+

@@ -1,0 +1,44 @@
+From fb2ce6311b905dde0c572c66b79ecf1f9de08eff Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Mon, 3 Aug 2009 15:50:22 +0200
+Subject: [PATCH] Let readlink compute the absolute path for us
+
+---
+ functions |   14 ++------------
+ 1 files changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/functions b/functions
+index 3592ad8..2eceba3 100644
+--- a/functions
++++ b/functions
+@@ -151,7 +151,7 @@ function inst() {
+ 
+     local RET=0
+     local target=""
+-    [ -L "$file" ] && target=$(readlink "$file")
++    [ -L "$file" ] && target=$(/usr/bin/readlink -f "$file")
+     if [ -n "$target" -a "$dest" != "$target" ]; then
+         if [ -e "$root$dest" ]; then
+             #vecho "${indent}$root/$dest already exists"
+@@ -160,17 +160,7 @@ function inst() {
+ 
+             vecho "${indent}$file -> $root$dest"
+             ln -sf "$target" "$root$dest"
+-            #inst "$target" "$root"
+-            local BASE=`basename "$target"`
+-            local TLIBDIR=`echo "$target" | sed -e 's,\(^/lib[^/]*\)/.*$,\1/,' \
+-                                                -e 's,\(\(.*\)/\)[^/]\+$,\1,'`
+-            if [ "$TLIBDIR" = "$BASE" ]; then
+-                local TLIBDIR=`echo "/$dest" | sed \
+-                                                -e 's,\(^/lib[^/]*\)/.*$,\1/,' \
+-                                                -e 's,\(\(.*\)/\)[^/]\+$,\1,'`
+-            fi
+-
+-            inst "$TLIBDIR/$BASE" "$root" "$TLIBDIR/$BASE"
++            inst "$target" "$root"
+             RET=$?
+             IF_indent_chars=${old_indent_chars}
+             return $RET
+-- 
+1.7.1
+

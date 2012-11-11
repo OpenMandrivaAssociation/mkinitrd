@@ -1,0 +1,27 @@
+From f3a28af26ad5bd4b597b7f3618088b2781b9142e Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Tue, 4 May 2010 00:16:17 +0200
+Subject: [PATCH] Include crc32c for btrfs (#51622)
+
+---
+ mkinitrd |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 628d9f9..74a22e2 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -212,6 +212,10 @@ findmodule() {
+     elif [ "$modName" = "gfs2" ]; then
+         eval $subcmd lock_nolock
+         modName="gfs2"
++    elif [ "$modName" = "btrfs" ]; then
++        eval $subcmd crc32c
++        eval $subcmd -crc32c-intel
++        modName="btrfs"
+     elif [ "$modName" = "nfs" ]; then
+         eval $subcmd sunrpc
+         modName="nfs"
+-- 
+1.7.1
+

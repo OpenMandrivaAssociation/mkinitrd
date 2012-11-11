@@ -1,0 +1,38 @@
+From 473e57ff175f5fc091fb6d1e7d4e9b5977c4fd50 Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Fri, 12 Jun 2009 15:43:26 +0200
+Subject: [PATCH] kbd is in /usr
+
+---
+ mkinitrd |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index bd8a630..1715caa 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1514,7 +1514,7 @@ if [ -f /etc/sysconfig/i18n ]; then
+     [ -z "$SYSFONT" ] && SYSFONT=latarcyrheb-sun16
+     inst /bin/setfont "$MNTIMAGE"
+ 
+-    for FN in /lib/kbd/consolefonts/$SYSFONT.* ; do
++    for FN in /usr/lib/kbd/consolefonts/$SYSFONT.* ; do
+         inst $FN "$MNTIMAGE"
+         case "$FN" in
+             *.gz)
+@@ -1526,10 +1526,10 @@ if [ -f /etc/sysconfig/i18n ]; then
+         esac
+     done
+     if [ -n "$SYSFONTACM" ]; then
+-        inst /lib/kbd/consoletrans/$SYSFONTACM "$MNTIMAGE"
++        inst /usr/lib/kbd/consoletrans/$SYSFONTACM "$MNTIMAGE"
+     fi
+     if [ -n "$UNIMAP" ]; then
+-        inst /lib/kbd/unimaps/$UNIMAP "$MNTIMAGE"
++        inst /usr/lib/kbd/unimaps/$UNIMAP "$MNTIMAGE"
+     fi
+ fi
+ 
+-- 
+1.7.1
+

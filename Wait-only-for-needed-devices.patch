@@ -1,0 +1,313 @@
+From 45096aa5414323d8a229712c569343dd2577ef95 Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Thu, 11 Jun 2009 15:13:06 +0200
+Subject: [PATCH] Wait only for needed devices
+
+---
+ Makefile.inc   |    2 +-
+ mkinitrd       |   42 +++++++++++++++++-----------------
+ nash/nash.c    |   36 +++++++++++++++++++++++++++---
+ nash/vitals.c  |   66 +++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ nash/waitdev.c |    2 -
+ 5 files changed, 119 insertions(+), 29 deletions(-)
+
+diff --git a/Makefile.inc b/Makefile.inc
+index b305ae9..019cc4d 100644
+--- a/Makefile.inc
++++ b/Makefile.inc
+@@ -32,7 +32,7 @@ ARCH := $(patsubst sparc%,sparc,$(ARCH))
+ ARCH := $(patsubst ppc%,ppc,$(ARCH))
+ 
+ CC = gcc
+-CFLAGS ?= -Wall -Werror -g -D_FORTIFY_SOURCE=2 -Wno-unused-function -fPIC \
++CFLAGS ?= -Wall  -g -D_FORTIFY_SOURCE=2 -Wno-unused-function -fPIC \
+ 	  -std=gnu99 -D_GNU_SOURCE=1
+ LDFLAGS ?= -Wl,--wrap,open,--wrap,fopen,--wrap,opendir,--wrap,socket \
+ 	-Wl,--wrap,pipe,--wrap,mkdir,--wrap,access
+diff --git a/mkinitrd b/mkinitrd
+index 8747ad6..bd8a630 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -65,6 +65,7 @@ ncryptodevs=0
+ ncryptoparts=0
+ ncryptolvs=0
+ ncryptoraids=0
++slaves=""
+ root=""
+ scsi_wait_scan="no"
+ 
+@@ -339,6 +340,7 @@ finddevicedriverinsys () {
+ 
+ findstoragedriverinsys () {
+     local sysfs=$(readlink "$1")
++    local start=0
+ 
+     # if its a partition look at the device holding the partition
+     if [ -f "$sysfs/start" ]; then
+@@ -1424,16 +1426,6 @@ emitmodules() {
+         emit "echo \"Loading $module module\""
+         emit "modprobe -q $module"
+ 
+-        # Hack - we need a delay after loading usb-storage to give things
+-        #        time to settle down before we start looking a block devices
+-        if [[ "$module" =~ usb[_-]storage ]] || [ "$module" = "ub" ]; then 
+-            if [ "$found_hcd_module" == "no" -a "$usb_mounted" == "prep" ]; then
+-                usb_mounted=yes
+-                emit "mount -t usbfs /proc/bus/usb /proc/bus/usb"
+-            fi
+-            emit "echo Waiting for driver initialization."
+-            emit "stabilized /proc/bus/usb/devices"
+-        fi
+         # Firewire likes to change the subsystem name every 3 hours. :/
+         if [ "$module" = "sbp2" ]; then
+             emit "echo Waiting for driver initialization."
+@@ -1619,10 +1611,10 @@ emit "mkblkdevs"
+ emit "echo Creating character device nodes."
+ emit "mkchardevs"
+ 
+-if [ "$scsi_wait_scan" == "yes" ]; then
+-    vecho "Adding module scsi_wait_scan"
+-    installmodule scsi_wait_scan
+-fi
++#if [ "$scsi_wait_scan" == "yes" ]; then
++#    vecho "Adding module scsi_wait_scan"
++#    installmodule scsi_wait_scan
++#fi
+ 
+ /sbin/depmod -a -b $MNTIMAGE $kernel
+ if [ $? -ne 0 ]; then
+@@ -1650,9 +1642,15 @@ fi
+ 
+ emit_iscsi
+ 
+-if [ "$scsi_wait_scan" == "yes" ]; then
+-    emit "modprobe scsi_wait_scan"
+-    emit "rmmod scsi_wait_scan"
++if [ -n "$slaves" ]; then
++    for dev in $slaves; do
++        emit "echo waiting for device $dev to appear (timeout 1min)"
++        emit "waitdev --timeout=60000000 /dev/${dev}"
++    done
++else if [ $ncryptodevs -eq 0 ]; then
++    emit "echo waiting for root device $rootdev to appear (timeout 1min)"
++    emit "waitdev --timeout=60000000 --rootdev $rootdev"
++fi
+ fi
+ 
+ # HACK: module loading + device creation isn't necessarily synchronous...
+@@ -1671,6 +1669,9 @@ emitcrypto()
+     emit "setDeviceEnv LUKSUUID $luksuuid"
+     emit "echo Setting up disk encryption: \$LUKSUUID"
+     emit "buildEnv LUKSUUID cryptsetup luksOpen \$LUKSUUID $2"
++    emit "echo waiting for encrypted device $1 to appear (timeout 1min)"
++    emit "waitdev --timeout=60000000 $1"
++    emit "mkblkdevs"
+     emit "plymouth ask-for-password --command \$LUKSUUID"
+ }
+ 
+@@ -1693,12 +1694,11 @@ if [ -z "$nolvm" -a -n "$vg_list" ]; then
+     emit "lvm vgscan --ignorelockingfailure"
+     emit "echo Activating logical volumes"
+     emit "lvm vgchange -ay --ignorelockingfailure $vg_list"
++    for cryptdev in ${!cryptolv@} ; do
++        emitcrypto `eval echo '$'$cryptdev`
++    done
+ fi
+ 
+-for cryptdev in ${!cryptolv@} ; do
+-    emitcrypto `eval echo '$'$cryptdev`
+-done
+-
+ if [ -z "$noresume" ]; then
+     if [ -x /usr/sbin/resume ]; then
+ 	inst /usr/sbin/resume "$MNTIMAGE" /bin/resume
+diff --git a/nash/nash.c b/nash/nash.c
+index aec04e9..6952b7c 100644
+--- a/nash/nash.c
++++ b/nash/nash.c
+@@ -1577,12 +1577,18 @@ resumeCommand(char * cmd, char * end)
+ 	while (*chptr && !isspace(*chptr)) chptr++;
+         c = *chptr;
+ 	*chptr = '\0';
++        if (nashWaitForDevice(_nash_context, resume, 10000000) < 1) {
++            eprintf("Could not find resume device (%s)\n",resume);
++        }
++
+ 	resumedev = nashGetPathBySpec(_nash_context, resume);
+         if (resumedev == NULL) {
+             eprintf("Could not resolve resume device (%s)\n", resume);
+-        } else if (access(resumedev, R_OK)) {
+-            eprintf("Unable to access resume device (%s)\n", resumedev);
+-            resumedev = NULL;
++        } else {
++            if (access(resumedev, R_OK)) {
++                eprintf("Unable to access resume device (%s)\n", resumedev);
++                resumedev = NULL;
++            }
+         }
+         *chptr = c;
+     } else {
+@@ -3247,10 +3253,14 @@ static int
+ waitdevCommand(char *cmd, char *end)
+ {
+     char *device = NULL;
++    char *root = NULL;
+     long long timeout = -2;
+     int rc = 0;
++    int use_rootdev = 0;
++
+ 
+     while (1) {
++
+         if (!(cmd = getArg(cmd, end, &device))) {
+             eprintf("waitdev: block device name expected\n");
+             return 1;
+@@ -3272,6 +3282,8 @@ waitdevCommand(char *cmd, char *end)
+                 eprintf("waitdev: \"%s\": %m\n", to_str);
+                 return 1;
+             }
++        } else if (!strncmp(device, "--rootdev", 9)) {
++            use_rootdev = 1;
+         } else {
+             break;
+         }
+@@ -3285,8 +3297,24 @@ waitdevCommand(char *cmd, char *end)
+         return 1;
+     }
+ 
++    if (use_rootdev) {
++        root = getKernelArg("root");
++        if (root) {
++            char c;
++            char *chptr;
++            chptr = root;
++            while (*chptr && !isspace(*chptr))
++                chptr++;
++            c = *chptr;
++            *chptr = '\0';
++            root = strdupa(root);
++            *chptr = c;
++            chptr = NULL;
++        }
++    }
++
+     rc = 1;
+-    if (nashWaitForDevice(_nash_context, device, timeout) > 0)
++    if (nashWaitForDevice(_nash_context, use_rootdev && root ? root : device, timeout) > 0)
+         rc = 0;
+ 
+     return rc;
+diff --git a/nash/vitals.c b/nash/vitals.c
+index 1198750..0011348 100644
+--- a/nash/vitals.c
++++ b/nash/vitals.c
+@@ -547,6 +547,58 @@ int probe_bdevid(nashContext *nc, struct probe_info *pi,
+ /* end DEV_TYPE_DM_MPATH probe */
+ 
+ /* begin DEV_TYPE_PARTITION probe */
++int probe_partitions(nashContext *nc, struct probe_info *pi,
++        struct nash_list *nodes, struct nash_bdev_vitals **vitalsp)
++{
++    struct bdevid_probe_priv priv = { .nc = nc };
++    blkid_dev bdev = NULL;
++    blkid_tag_iterate titer;
++    struct nash_bdev_vitals *vitals;
++    struct nash_dev_node *node;
++    const char *type, *data;
++
++    if (!(node = priv.node = nash_list_get(nodes, 0)))
++        return -1;
++
++    if (!(vitals = priv.vitals = nash_bdev_vitals_alloc()))
++        return -1;
++
++    bdev = blkid_get_dev(nc->cache, node->bdev->dev_path, BLKID_DEV_NORMAL);
++    if (!bdev)
++        return -1;
++
++    titer = blkid_tag_iterate_begin(bdev);
++    while (blkid_tag_next(titer, &type, &data) >= 0) {
++        if (!strcmp(type, "LABEL")) {
++            vitals->type = DEV_TYPE_FS;
++            vitals->fs_label = strdup(data);
++        }
++        if (!strcmp(type, "UUID")) {
++            vitals->type = DEV_TYPE_FS;
++            vitals->unique_id = strdup(data);
++        }
++        if (!strcmp(type, "TYPE")) {
++            vitals->type = DEV_TYPE_FS;
++            vitals->fs_type = strdup(data);
++        }
++    }
++    blkid_tag_iterate_end(titer);
++
++    if (vitals->fs_type == NULL) {
++        nash_vitals_decref(nc, vitals);
++        return -1;
++    }
++
++    *vitalsp = nash_vitals_cache_insert(nc, vitals);
++    if (*vitalsp != vitals) {
++        if (*vitalsp)
++            nash_vitals_incref(*vitalsp);
++        nash_vitals_decref(nc, vitals);
++        priv.vitals = *vitalsp;
++    }
++
++    return 0;
++}
+ /* end DEV_TYPE_PARTITION probe */
+ 
+ /*
+@@ -592,12 +644,13 @@ static struct probe_info probe_info[] = {
+         .free_priv = probe_bdevid_destroy,
+         .do_probe = probe_bdevid,
+     },
+-#if 0
++
+     {
+         .id = PROBE_PARTITION,
+         .name = "partition",
+         .do_probe = probe_partitions,
+     },
++#if 0
+     /* XXX add probes for DM_MPATH, DM_RAID, MD_RAID,
+      * LVM2_PV, LVM2_VG, and LVM2_LV
+      */
+@@ -767,6 +820,17 @@ struct nash_list *nash_vitals_probe(nashContext *nc,
+                 }
+             }
+             break;
++        case DEV_TYPE_PARTITION:
++            nash_list_add(nodes, node);
++            pi = get_probe_info(PROBE_PARTITION);
++            vitals = NULL;
++            if (pi->do_probe(nc, pi, nodes, &vitals) >= 0) {
++                if (vitals) {
++                    nash_list_add(ret, vitals);
++                    print_vitals(vitals);
++                }
++            }
++            break; 
+         default:
+         case DEV_TYPE_NONE:
+             /* this is here just for gcc's benefit. */
+diff --git a/nash/waitdev.c b/nash/waitdev.c
+index 0262816..73f61e1 100644
+--- a/nash/waitdev.c
++++ b/nash/waitdev.c
+@@ -80,10 +80,8 @@ nashWaitForDevice(nashContext *nc, char *device, long long wait_usecs)
+             rc = 0;
+             if (node || 
+                     (node = nash_dev_tree_find_device(nc, device, blktab))) {
+-                if (nash_dev_tree_check_node_complete(nc, node) > 0) {
+                     rc = 1;
+                     break;
+-                }
+             }
+             if (ret == 0)
+                 break;
+-- 
+1.7.1
+

@@ -1,0 +1,27 @@
+From aeed50c8766df49f4c7922ed0cbdb840e892188c Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Thu, 24 Sep 2009 21:02:32 +0200
+Subject: [PATCH] Workaround issue on dmraid 10
+
+dmsetup info -o name will report isw_xxx_System-0
+dmraid -s -craidname will list isw_xxx_System
+---
+ mkinitrd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index f8b60b8..32b8d68 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -610,7 +610,7 @@ EOF
+         esac
+     fi
+     for raid in $raids ; do
+-        if [ "$raid" == "$name" ]; then
++        if [[ "$name" =~ $raid(-[0-9]*)? ]]; then
+             case " $DMRAIDS " in
+                 *" $raid "*) ;;
+                 *)  DMRAIDS="$DMRAIDS $raid"
+-- 
+1.7.1
+

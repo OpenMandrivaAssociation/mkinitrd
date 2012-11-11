@@ -1,0 +1,88 @@
+From eccba287a7427da8e5a1015346517ca1a5f93fb3 Mon Sep 17 00:00:00 2001
+From: unknown author <cooker@mandrivalinux.org>
+Date: Thu, 11 Jun 2009 00:53:48 +0200
+Subject: [PATCH] Allow overriding DSDT
+
+---
+ mkinitrd   |   20 +++++++++++++++++++-
+ mkinitrd.8 |    5 +++++
+ 2 files changed, 24 insertions(+), 1 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 5cf9179..4b422b2 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -96,6 +96,9 @@ fstab="/etc/fstab"
+ vg_list="$VG_LIST"
+ net_list="$NET_LIST"
+ 
++DEFAULT_DSDT_FILES="/boot/dsdt.aml /boot/DSDT.aml"
++dsdt_files=""
++
+ [ -e /etc/sysconfig/mkinitrd ] && . /etc/sysconfig/mkinitrd
+ 
+ usage () {
+@@ -112,7 +115,7 @@ usage () {
+     $cmd "       [--with=<module>] [--force-lvm-probe | --omit-lvm-modules]"
+     $cmd "       [--builtin=<module>] [--omit-dmraid] [--net-dev=<interface>]"
+     $cmd "       [--fstab=<fstab>] [--nocompress] <initrd-image> <kernel-version>"
+-    $cmd "       [--bootchart]]"
++    $cmd "       [--dsdt[=<dsdt.aml>]] [--bootchart]]"
+     $cmd ""
+     $cmd "       (ex: `basename $0` /boot/initrd-$(uname -r).img $(uname -r))"
+ 
+@@ -959,6 +962,13 @@ while [ $# -gt 0 ]; do
+                 shift
+             fi
+ 	    ;;
++	--dsdt*)
++	    if echo $1 | grep '=' >/dev/null ; then
++	    	dsdt_files=`echo $1 | sed 's/^--dsdt=//'`
++	    else
++		dsdt_files=$DEFAULT_DSDT_FILES
++	    fi		    
++	    ;;
+         --help)
+             usage -n
+             ;;
+@@ -1456,6 +1466,14 @@ EOF
+     unset found_hcd_module
+ }
+ 
++if [ -n "$dsdt_files" ]; then
++    for dsdt_file in $dsdt_files; do
++      if [ -f $dsdt_file ]; then
++          cp -aL $dsdt_file $MNTIMAGE/DSDT.aml
++      fi
++    done
++fi 
++
+ if [ $ncryptodevs -ne 0 ]; then
+     inst /sbin/cryptsetup "$MNTIMAGE"
+ fi
+diff --git a/mkinitrd.8 b/mkinitrd.8
+index 8e64e1c..29ec30d 100644
+--- a/mkinitrd.8
++++ b/mkinitrd.8
+@@ -8,6 +8,7 @@ mkinitrd \- creates initial ramdisk images for preloading modules
+          [--with=\fImodule\fR] [--image-version]
+          [--fstab=\fIfstab\fR] [--nocompress]
+          [--builtin=\fImodule\fR] \fIimage\fR \fIkernel-version\fR
++         [--dsdt[=\fIdsdt.aml\fR]]
+ 
+ .SH DESCRIPTION
+ \fBmkinitrd\fR creates an initial image used by the kernel for
+@@ -35,6 +36,10 @@ will not look for this module, and will not emit an error if it does not
+ exist. This option may be used multiple times.
+ 
+ .TP
++\fB-\-dsdt\fR[=\fIdsdt.aml\fR]
++Adds a custom acpi DSDT in the initrd image.
++
++.TP
+ \fB-f\fR
+ Allows \fBmkinitrd\fR to overwrite an existing image file.
+ 
+-- 
+1.7.1
+

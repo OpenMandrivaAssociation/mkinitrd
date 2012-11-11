@@ -1,0 +1,59 @@
+From 5ad23b4326921dd710f4817331f77c8b85671665 Mon Sep 17 00:00:00 2001
+From: Herton Ronaldo Krzesinski <herton@mandriva.com.br>
+Date: Mon, 3 Aug 2009 16:04:10 +0200
+Subject: [PATCH] Fix waiting in devices
+
+Signed-off-by: Pascal Terjan <pterjan@mandriva.com>
+---
+ mkinitrd |   19 +++++++++++--------
+ 1 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index ccb4928..72abba7 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -65,7 +65,7 @@ ncryptodevs=0
+ ncryptoparts=0
+ ncryptolvs=0
+ ncryptoraids=0
+-slaves=""
++waitblks=""
+ root=""
+ scsi_wait_scan="no"
+ 
+@@ -344,6 +344,7 @@ findstoragedriverinsys () {
+ 
+     # if its a partition look at the device holding the partition
+     if [ -f "$sysfs/start" ]; then
++        waitblks="$waitblks ${sysfs##*/}"
+         sysfs=$(readlink ${sysfs%/*})
+     fi
+ 
+@@ -1642,15 +1643,17 @@ fi
+ 
+ emit_iscsi
+ 
+-if [ -n "$slaves" ]; then
+-    for dev in $slaves; do
++if [ -n "$waitblks" ]; then
++    for dev in $waitblks; do
++        dev_id=$(blkid -s UUID -o value /dev/$dev)
++        if [ -n "$dev_id" ]; then
++            dev_id="UUID=$dev_id"
++        else
++            dev_id="/dev/$dev"
++        fi
+         emit "echo waiting for device $dev to appear (timeout 1min)"
+-        emit "waitdev --timeout=60000000 /dev/${dev}"
++        emit "waitdev --timeout=60000000 $dev_id"
+     done
+-else if [ $ncryptodevs -eq 0 ]; then
+-    emit "echo waiting for root device $rootdev to appear (timeout 1min)"
+-    emit "waitdev --timeout=60000000 --rootdev $rootdev"
+-fi
+ fi
+ 
+ # HACK: module loading + device creation isn't necessarily synchronous...
+-- 
+1.7.1
+

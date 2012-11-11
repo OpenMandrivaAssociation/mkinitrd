@@ -1,0 +1,43 @@
+From dce88ad0df2a8d2a84181e0947932cb7137368e3 Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Tue, 6 Oct 2009 22:57:20 +0200
+Subject: [PATCH] Improve keyboard drivers detection
+
+- Some keyboards don't have "keyboard" in their name (#54267)
+- Some people can have both ps2 and usb keyboard, and want to be able to
+  use both in initrd
+
+Signed-off-by: Pascal Terjan <pterjan@mandriva.com>
+---
+ mkinitrd |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 287570f..f990ddd 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1070,17 +1070,17 @@ done
+ 
+ kbddrivers="$(awk '
+ 		BEGIN {IGNORECASE=1}
+-		/Name=.*keyboard/ {k=1;next}
+-		/Name=/ {k=0;next}
++		/Name=/ {ph="";next}
+ 		/Phys=isa/ {ph="ps2";next}
+ 		/Phys=usb/ {ph="usb";next}
+ 		/Phys=/ {ph="UNKNOWN";next}
+-		/Handlers=.*kbd/ && k == 1 {print ph}
++		/Handlers=.*kbd/ {print ph}
+ 	' /proc/bus/input/devices)"
+ if [ -z "${kbddrivers##*ps2*}" ]; then
+     findmodule -atkbd
+     findmodule -i8042
+-elif [ -z "${kbddrivers##*usb*}" ]; then
++fi
++if [ -z "${kbddrivers##*usb*}" ]; then
+     withusb=1
+     findmodule -usbhid
+ fi
+-- 
+1.7.1
+

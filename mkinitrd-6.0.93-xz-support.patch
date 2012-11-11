@@ -1,0 +1,88 @@
+
+This adds xz support wich is needed for xz compressed modules.
+
+Signed-off-by: Thomas Backlund <tmb@mageia.org>
+
+ functions |    8 ++++----
+ mkinitrd  |   13 +++++++++++--
+ 2 files changed, 15 insertions(+), 6 deletions(-)
+
+diff -Nurp mkinitrd-6.0.93.orig/functions mkinitrd-6.0.93/functions
+--- mkinitrd-6.0.93.orig/functions	2012-03-24 18:24:30.000000000 +0200
++++ mkinitrd-6.0.93/functions	2012-03-24 18:26:49.232781954 +0200
+@@ -240,7 +240,7 @@ locatemodule() {
+     if [ -n "$fmPath" -a -f "$fmPath" ]; then
+         return 0
+     fi
+-    for modExt in ko.gz o.gz o ko ; do
++    for modExt in ko.xz ko.gz o.gz o ko ; do
+         for modDir in /lib/modules/$kernel/updates /lib/modules/$kernel ; do
+             if [ -d $modDir ]; then
+                 fmPath=$(findone $modDir -name $1.$modExt)
+@@ -261,11 +261,11 @@ expandModules() {
+ 	if [ $char = '=' ]; then
+ 	    NAME=$(echo $m | cut -c2-)
+ 	    if [ "$NAME" = "ata" ]; then
+-		MODS="$MODS $(cat /lib/modules/$kernel/modules.block |egrep '(ata|ahci)' |sed -e 's/.ko(.gz)?//')"
++		MODS="$MODS $(cat /lib/modules/$kernel/modules.block |egrep '(ata|ahci)' |sed -e 's/.ko(.gz)?//' -e 's/.ko(.xz)?//')"
+ 	    else
+                 # Ignore if group list does not exist
+                 if [ -e /lib/modules/$kernel/modules.$NAME ]; then
+-		    MODS="$MODS $(cat /lib/modules/$kernel/modules.$NAME |sed -e 's/.ko(.gz)?//')"
++		    MODS="$MODS $(cat /lib/modules/$kernel/modules.$NAME |sed -e 's/.ko(.gz)?//' -e 's/.ko(.xz)?//')"
+                 fi
+ 	    fi
+ 	else
+@@ -289,7 +289,7 @@ installmodule()
+     if [ -z "$MODULE" ]; then
+         return
+     fi
+-    if ! [[ $MODULE =~ \.gz ]] && [ -x /usr/bin/strip ]; then
++    if ! [[ $MODULE =~ \.gz ]] && ! [[ $MODULE =~ \.xz ]] && [ -x /usr/bin/strip ]; then
+         /usr/bin/strip -g $(get_verbose) $MODULE -o $MNTIMAGE/lib/modules/$kernel/$(basename $MODULE)
+     else
+         inst "$MODULE" "$MNTIMAGE" "/lib/modules/$kernel/$(basename $MODULE)"
+diff -Nurp mkinitrd-6.0.93.orig/mkinitrd mkinitrd-6.0.93/mkinitrd
+--- mkinitrd-6.0.93.orig/mkinitrd	2012-03-24 18:24:30.000000000 +0200
++++ mkinitrd-6.0.93/mkinitrd	2012-03-24 18:26:36.134688799 +0200
+@@ -1372,6 +1372,9 @@ findkeymap () {
+     KEYMAPS="$KEYMAPS $MAP"
+ 
+     case $MAP in
++        *.xz)
++            cmd=xzgrep
++            ;;
+         *.gz)
+             cmd=zgrep
+             ;;
+@@ -1522,8 +1525,8 @@ if [ -f /etc/sysconfig/keyboard ] || [ -
+         for FN in $KEYMAPS; do
+             if [ -L $FN ]; then
+                 TARGET=$(readlink $FN)
+-                TG=$(echo $TARGET | sed -e 's/\.gz$//' -e 's/\.bz2$//')
+-                LN=$(echo $FN | sed -e 's/\.gz$//' -e 's/\.bz2$//')
++                TG=$(echo $TARGET | sed -e 's/\.gz$//' -e 's/\.bz2$//' -e 's/\.xz$//')
++                LN=$(echo $FN | sed -e 's/\.gz$//' -e 's/\.bz2$//' -e 's/\.xz$//')
+                 mkdir -p "$MNTIMAGE/$(dirname $LN)"
+                 ln -s "$TG" "$MNTIMAGE/$LN"
+                 FN=$TARGET
+@@ -1536,6 +1539,9 @@ if [ -f /etc/sysconfig/keyboard ] || [ -
+                 *.bz2)
+                     bzip2 -d "$MNTIMAGE$FN"
+                     ;;
++                *.xz)
++                    xz -d "$MNTIMAGE$FN"
++                    ;;
+             esac
+         done
+     fi
+@@ -1557,6 +1563,9 @@ if [ -f /etc/sysconfig/i18n ]; then
+             *.bz2)
+                 bzip2 -d "$MNTIMAGE$FN"
+                 ;;
++            *.xz)
++                xz -d "$MNTIMAGE$FN"
++                ;;
+         esac
+     done
+     if [ -n "$SYSFONTACM" ]; then

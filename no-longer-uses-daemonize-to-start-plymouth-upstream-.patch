@@ -1,0 +1,27 @@
+From 1aec84b46adfc7b3a562f39657ab00acda66a1e9 Mon Sep 17 00:00:00 2001
+From: Frederic Crozat <fcrozat@mandriva.com>
+Date: Mon, 24 Aug 2009 18:48:55 +0200
+Subject: [PATCH] no longer uses daemonize to start plymouth, upstream suggests to drop it
+
+---
+ mkinitrd |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 1726e81..c25e8c3 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1590,7 +1590,9 @@ fi
+ for i in 0 1 2 3 ; do
+     emit "mknod /dev/ttyS$i c 4 $(($i + 64))"
+ done
+-emit "daemonize --ignore-missing /bin/plymouthd"
++if [ -x /usr/libexec/plymouth/plymouth-populate-initrd ]; then
++    emit "/bin/plymouthd --attach-to-session"
++fi
+ 
+ emit "echo Setting up hotplug."
+ emit "hotplug"
+-- 
+1.7.1
+

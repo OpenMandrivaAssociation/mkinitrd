@@ -1,0 +1,25 @@
+From c1547fd1365ec720aa8185e93eca0257a1239932 Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Tue, 4 May 2010 11:58:31 +0200
+Subject: [PATCH] Fix cciss support (#59077)
+
+---
+ mkinitrd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 74a22e2..9186c83 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1677,7 +1677,7 @@ emit_iscsi
+ 
+ if [ -n "$waitblks" ]; then
+     for dev in $waitblks; do
+-        dev_id="/dev/$dev"
++        dev_id=$(echo "/dev/$dev" | tr '!' '/')
+         dev_uuid=""
+         # Do not lookup UUID on full disks, some have...
+         [ -d "/sys/block/$dev" ] || dev_uuid=$(blkid -s UUID -o value $dev_id)
+-- 
+1.7.1
+

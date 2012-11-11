@@ -1,0 +1,53 @@
+From 7113018536a702b8f76ca27abd80720a1cdf6e55 Mon Sep 17 00:00:00 2001
+From: Frederic Crozat <fcrozat@mandriva.com>
+Date: Tue, 9 Mar 2010 18:40:45 +0100
+Subject: [PATCH] change filelist for new bootchart
+
+---
+ mkinitrd |   19 +++++++++++--------
+ 1 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 5c02816..21bedde 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1771,25 +1771,28 @@ emit "echo Switching to new root and running init."
+ 
+ if [ ! -z "$BOOTCHART" ]; then
+     inst /sbin/bootchartd "$MNTIMAGE"
++    inst /bin/bash "$MNTIMAGE"
++    ln -s /init "$MNTIMAGE"/bin/init
++    mkdir -p /lib/bootchart/
++    inst /lib/bootchart/bootchart-collector "$MNTIMAGE"
+     inst /etc/bootchartd.conf "$MNTIMAGE"
+-    inst /bin/cat "$MNTIMAGE"
+     inst /sbin/accton "$MNTIMAGE" /sbin/accton
+-    inst /usr/bin/killall "$MNTIMAGE" /bin/killall
++    inst /usr/bin/pkill "$MNTIMAGE" /bin/pkill
+     inst /bin/mount "$MNTIMAGE"
+     inst /bin/umount "$MNTIMAGE"
+-    inst /bin/mv "$MNTIMAGE"
+     inst /bin/sleep "$MNTIMAGE"
+     inst /bin/echo "$MNTIMAGE"
+     inst /usr/sbin/chroot "$MNTIMAGE" /sbin/chroot
+     inst /sbin/pidof "$MNTIMAGE" /sbin/pidof
+     inst /bin/grep "$MNTIMAGE" 
+     inst /bin/sed "$MNTIMAGE" 
++    inst /bin/cp "$MNTIMAGE"
++    inst /bin/mkdir "$MNTIMAGE"
++    inst /bin/mknod "$MNTIMAGE"
++    inst /bin/usleep "$MNTIMAGE"
++    inst /bin/uname "$MNTIMAGE"
+     inst /usr/bin/[ "$MNTIMAGE" /bin/[
+-
+-    emit "/bin/killall -USR2 bootchartd"
+-    # give some time to bootchart to start the
+-    # new instance.
+-    emit "/bin/sleep 1s"
++    mknod -m 0666 "$MNTIMAGE"/dev/null c 1 3
+ fi
+ 
+ emit "switchroot"
+-- 
+1.7.1
+

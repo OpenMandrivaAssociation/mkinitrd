@@ -1,0 +1,28 @@
+From a4b78001c0606c83d0ec8221d5ecb0d38963f536 Mon Sep 17 00:00:00 2001
+From: Andrey Borzenkov <arvidjaar@mail.ru>
+Date: Thu, 13 Aug 2009 12:29:35 +0200
+Subject: [PATCH] Restrict udev messages to handle
+
+Nash cannot hande udev netlink messages; restrict received groups to
+kernel messages ony to avoid false error message
+---
+ nash/uevent.c |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/nash/uevent.c b/nash/uevent.c
+index a05bd98..cf21975 100644
+--- a/nash/uevent.c
++++ b/nash/uevent.c
+@@ -87,7 +87,8 @@ nashUEventHandlerNew(nashContext *nc)
+     memset(&sa, '\0', sizeof (sa));
+     sa.nl_family = AF_NETLINK;
+     sa.nl_pid = getpid();
+-    sa.nl_groups = -1;
++    /* The following corresponds to UDEV_MONITOR_KERNEL in libudev-monitor.c */
++    sa.nl_groups = 1;
+ 
+     if (bind(handler->socket, (struct sockaddr *)&sa, sizeof (sa)) < 0) {
+         nashLogger(nc, NASH_ERROR, "could not bind to netlink socket: %m\n");
+-- 
+1.7.1
+

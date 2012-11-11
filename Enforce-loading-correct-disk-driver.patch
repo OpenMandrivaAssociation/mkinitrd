@@ -1,0 +1,33 @@
+From bb9a55e44a5ad6e8cab41fc36d4f6b42475b718c Mon Sep 17 00:00:00 2001
+From: Olivier Blin <blino@mandriva.com>
+Date: Mon, 15 Jun 2009 17:34:37 +0200
+Subject: [PATCH] Enforce loading correct disk driver
+
+Force sd_mod and ide-disk loading when needed (not to depend on current
+kernel, Mandriva bug #38825)
+---
+ mkinitrd |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 8965725..ba3e252 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -267,6 +267,14 @@ findmodule() {
+             scsi_wait_scan="yes"
+         fi
+     fi
++
++    # load matching disk driver
++    # needed if the target kernel uses a different sub-system from the running kernel
++    if [ "$modName" = "scsi_mod" ]; then
++        findmodule -sd_mod
++    elif [ "$modName" = "ide-core" ]; then
++        findmodule -ide-disk
++    fi
+ }
+ 
+ readlink() {
+-- 
+1.7.1
+

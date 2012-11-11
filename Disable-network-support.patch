@@ -1,0 +1,83 @@
+From 526bafd4dac474955d220ecb0c6a141d889a0dbe Mon Sep 17 00:00:00 2001
+From: Pascal Terjan <pterjan@mandriva.com>
+Date: Thu, 11 Jun 2009 00:36:05 +0200
+Subject: [PATCH] Disable network support
+
+---
+ nash/Makefile |    5 ++---
+ nash/nash.c   |    6 ++++++
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/nash/Makefile b/nash/Makefile
+index 03a77a7..6178cf4 100644
+--- a/nash/Makefile
++++ b/nash/Makefile
+@@ -22,7 +22,7 @@ export TOPDIR
+ 
+ LIBS	= libnash.so
+ TARGETS = nash libnash.pc
+-OBJECTS = util.o linkdetect.o nash.o network.o nfsmount.o \
++OBJECTS = util.o linkdetect.o nash.o nfsmount.o \
+ 	  nfsmount_clnt.o nfsmount_xdr.o dns.o block_priv.o \
+ 	  waitdev.o
+ 
+@@ -32,14 +32,13 @@ libnash_OBJECTS = lib.o hotplug.o wrap.o list.o dict.o block.o uevent.o dm.o \
+ include ../Makefile.inc
+ 
+ CFLAGS += -I$(TOPDIR)/nash/include -I$(TOPDIR)/bdevid/include
+-CFLAGS += $(shell pkg-config --cflags libnl-1)
+ 
+ LDFLAGS += -Wl,-rpath-link,$(TOPDIR)/bdevid:$(TOPDIR)/nash
+ 
+ nash_LIBPATHS = -L$(TOPDIR)/nash -L$(TOPDIR)/bdevid -L/$(LIB)
+ nash_LIBS += -ldevmapper -lparted -lblkid
+ nash_LIBS += -luuid -lpopt -lresolv -ldl -lelf
+-nash_LIBS += $(shell pkg-config --libs libnl-1) -lm
++nash_LIBS += -lm
+ # We need to link against libgcc_s directly, or it'll /dlopen() it during
+ # backtrace()!  This is not teh way!!!1!!!one!!!.
+ nash_LIBS += -lgcc_s
+diff --git a/nash/nash.c b/nash/nash.c
+index 12fe6cc..823e21c 100644
+--- a/nash/nash.c
++++ b/nash/nash.c
+@@ -2960,6 +2960,7 @@ condCommand(char *cmd, char *end)
+     return rc;
+ }
+ 
++/*
+ static int
+ netnameCommand(char *cmd, char *end)
+ {
+@@ -3000,7 +3001,9 @@ networkCommand(char *cmd, char *end)
+     char *value = NULL;
+     int rc;
+ 
++*/
+     /* popt expects to get network --args here */
++/*
+     if (!cmd || cmd >= end)
+         return 1;
+ 
+@@ -3022,6 +3025,7 @@ networkCommand(char *cmd, char *end)
+ 
+     return rc;
+ }
++*/
+ 
+ static int
+ nullCommand(char *cmd, char *end)
+@@ -3280,8 +3284,10 @@ static const struct commandHandler handlers[] = {
+     { "mknod", mknodCommand },
+     { "mkrootdev", mkrootdevCommand },
+     { "mount", mountCommand },
++    /*
+     { "netname", netnameCommand },
+     { "network", networkCommand },
++    */
+     { "null", nullCommand },
+     { "plymouth", nullCommand },
+     { "hotplug", hotplugCommand },
+-- 
+1.7.1
+

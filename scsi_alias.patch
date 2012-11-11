@@ -1,0 +1,25 @@
+From ccd760885232df882cfd57bc6887231deadb4bae Mon Sep 17 00:00:00 2001
+From: unknown author <cooker@mandrivalinux.org>
+Date: Mon, 15 Jun 2009 17:33:16 +0200
+Subject: [PATCH] scsi_alias
+
+---
+ mkinitrd |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/mkinitrd b/mkinitrd
+index 4b422b2..c183e0d 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -1145,7 +1145,7 @@ if [ -z "$noscsi" -a "x$PROBE" == "xyes" ]; then
+     fi
+ 
+     if [ -f $modulefile ]; then
+-        scsimodules=`grep "alias[[:space:]]\+scsi_hostadapter" $modulefile | grep -v '^[ 	]*#' | LC_ALL=C sort -u | awk '{ print $3 }'`
++        scsimodules=$(grep -E '^[[:space:]]*(alias|probeall|install)[[:space:]]+scsi_hostadapter' $modulefile | sed 's/^.*scsi_hostadapter//;s/\/sbin\/modprobe//g;s/;//g;s/\/bin\/true//;s/||//')
+ 
+         if [ -n "$scsimodules" ]; then
+             for n in $scsimodules; do
+-- 
+1.7.1
+

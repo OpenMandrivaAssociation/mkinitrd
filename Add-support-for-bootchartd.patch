@@ -1,0 +1,89 @@
+From 15b72037367dca334efa8276fb80ec79b17cbefa Mon Sep 17 00:00:00 2001
+From: Arnaud Patard <apatard@mandriva.com>
+Date: Tue, 17 Mar 2009 13:45:37 +0000
+Subject: [PATCH] Add support for bootchartd
+
+---
+ functions |    4 +++-
+ mkinitrd  |   29 +++++++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+), 1 deletions(-)
+
+diff --git a/functions b/functions
+index 906c170..3592ad8 100644
+--- a/functions
++++ b/functions
+@@ -185,7 +185,9 @@ function inst() {
+         inst "$interp" "$root"
+         RET=$?
+         IF_indent_chars=${old_indent_chars}
+-        return $RET
++        if [ $RET -ne 0 ]; then
++            return $RET
++        fi
+     fi
+ 
+     if [ -e "$root$dest" ]; then
+diff --git a/mkinitrd b/mkinitrd
+index c5e0867..1fcb9ee 100755
+--- a/mkinitrd
++++ b/mkinitrd
+@@ -111,6 +111,7 @@ usage () {
+     $cmd "       [--with=<module>] [--force-lvm-probe | --omit-lvm-modules]"
+     $cmd "       [--builtin=<module>] [--omit-dmraid] [--net-dev=<interface>]"
+     $cmd "       [--fstab=<fstab>] [--nocompress] <initrd-image> <kernel-version>"
++    $cmd "       [--bootchart]]"
+     $cmd ""
+     $cmd "       (ex: `basename $0` /boot/initrd-$(uname -r).img $(uname -r))"
+ 
+@@ -953,6 +954,9 @@ while [ $# -gt 0 ]; do
+         --help)
+             usage -n
+             ;;
++        --bootchart)
++            BOOTCHART=1
++            ;;
+         *)
+             if [ -z "$target" ]; then
+                 target=$1
+@@ -1227,6 +1231,7 @@ mkdir -p $MNTIMAGE/sys
+ mkdir -p $MNTIMAGE/sysroot
+ ln -s bin $MNTIMAGE/sbin
+ mkdir -p $MNTIMAGE/etc/blkid
++mkdir -p $MNTIMAGE/mnt
+ 
+ vecho "Building initrd in $MNTIMAGE"
+ inst /sbin/nash "$MNTIMAGE" /bin/nash
+@@ -1695,6 +1700,30 @@ fi
+ emit "loadpolicy"
+ emit "plymouth --newroot=/sysroot"
+ emit "echo Switching to new root and running init."
++
++if [ ! -z "$BOOTCHART" ]; then
++    inst /sbin/bootchartd "$MNTIMAGE"
++    inst /etc/bootchartd.conf "$MNTIMAGE"
++    inst /bin/cat "$MNTIMAGE"
++    inst /sbin/accton "$MNTIMAGE" /sbin/accton
++    inst /usr/bin/killall "$MNTIMAGE" /bin/killall
++    inst /bin/mount "$MNTIMAGE"
++    inst /bin/umount "$MNTIMAGE"
++    inst /bin/mv "$MNTIMAGE"
++    inst /bin/sleep "$MNTIMAGE"
++    inst /bin/echo "$MNTIMAGE"
++    inst /usr/sbin/chroot "$MNTIMAGE" /sbin/chroot
++    inst /sbin/pidof "$MNTIMAGE" /sbin/pidof
++    inst /bin/grep "$MNTIMAGE" 
++    inst /bin/sed "$MNTIMAGE" 
++    inst /usr/bin/[ "$MNTIMAGE" /bin/[
++
++    emit "/bin/killall -USR2 bootchartd"
++    # give some time to bootchart to start the
++    # new instance.
++    emit "/bin/sleep 1s"
++fi
++
+ emit "switchroot"
+ emit "echo Booting has failed."
+ emit "sleep -1"
+-- 
+1.7.1
+

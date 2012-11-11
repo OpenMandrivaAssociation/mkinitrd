@@ -1,0 +1,24 @@
+From 4d87561aee248a496802d1ed46c390c0d1f65ca2 Mon Sep 17 00:00:00 2001
+From: Arnaud Patard <apatard@mandriva.com>
+Date: Thu, 11 Jun 2009 15:11:40 +0200
+Subject: [PATCH] Reset counter between the tree traversals
+
+---
+ nash/devtree.c |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/nash/devtree.c b/nash/devtree.c
+index 1695bff..1a8a03c 100644
+--- a/nash/devtree.c
++++ b/nash/devtree.c
+@@ -1565,6 +1565,7 @@ struct nash_dev_node *nash_dev_tree_find_device(nashContext *nc, char *device,
+                         type == LABEL ? "label" : "unique_id", target))
+                     adult = child;
+             }
++            i = -1;
+             while (!adult &&
+                     (child = nash_list_get(nc->devices->devs, ++i))) {
+                 if (nash_dev_node_vitals_has(nc, child,
+-- 
+1.7.1
+
