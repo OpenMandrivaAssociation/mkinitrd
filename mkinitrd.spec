@@ -1,17 +1,21 @@
-Summary:	Creates an initial ramdisk image for preloading modules
-Name:		mkinitrd
-Version:	6.0.93
-Release:	25
-License:	GPLv2+
-URL:		http://www.redhat.com/
-Group: 		System/Kernel and hardware
-Source0: 	mkinitrd-%{version}.tar.bz2
-# Mandriva sources
-Source100:	mkinitrd-sysconfig
+%define 	_enable_debug_packages %{nil}
+%define 	debug_package          %{nil}
+#
+#
+Summary: Creates an initial ramdisk image for preloading modules
+Name: mkinitrd
+Version: 6.0.93
+Release: 30
+License: GPLv2+
+URL: http://www.redhat.com/
+Group: System/Kernel and hardware
+Source0: mkinitrd-%{version}.tar.bz2
+# Mageia sources
+Source100: mkinitrd-sysconfig
 
 # These patches come from our git branch
 # Please add the patches there
-# git checkout mandriva
+# git checkout
 # sed -i '/^#BEGINGIT/,/^#ENDGIT/ {/^[^#]/d}' ~/co/mkinitrd/SPECS/mkinitrd.spec
 # git format-patch -N master | while read p; do name=$(echo $p | sed 's/^....-//'); n=$(echo $p | sed 's/^00\(..\)-.*$/\1/'); mv -f $p ~/co/mkinitrd/SOURCES/$name; sed -i "s/^#ENDGIT/Patch1$n: $name\n#ENDGIT/" ~/co/mkinitrd/SPECS/mkinitrd.spec; done
 #BEGINGIT
@@ -66,49 +70,38 @@ Patch148: Include-crc32c-for-btrfs-51622.patch
 Patch149: Fix-cciss-support-59077.patch
 Patch150: Fix-nash-firmware-loading-see-53220.patch
 #ENDGIT
-# (proyvind): /usr/libexec/initrd-functions is located in non-sense directory
-# 	      for when being required by /sbin/mkinitrd,
-Patch151: mkinitrd-6.0.93-required-initrd-functions-cannot-be-on-usr.patch
 Patch201: 0001-Do-not-load-KMS-drivers-when-booted-with-nokmsboot-o.patch
 Patch202: 0002-Whitelist-nouveau-and-radeon-drivers.patch
 Patch203: 0003-Fix-build-with-gcc4.6.patch
-Patch204: mkinitrd-6.0.93-link.patch
-# found at MGA
-Patch205: mkinitrd-usb-input-usbhid-only.patch
-Patch206: mkinitrd-6.0.93-use-oom_score_adj.patch
-Patch207: mkinitrd-6.0.93-xz-support.patch
+Patch204: mkinitrd-usb-input-usbhid-only.patch
+Patch205: mkinitrd-6.0.93-use-oom_score_adj.patch
+Patch206: mkinitrd-6.0.93-xz-support.patch
 
-BuildRequires:	python
-BuildRequires:	util-linux-ng
-BuildRequires:	elfutils-devel
-BuildRequires:	python-devel
-BuildRequires:	pkgconfig(blkid)
-BuildRequires:	pkgconfig(devmapper)
-BuildRequires:	pkgconfig(libparted)
-BuildRequires:	pkgconfig(popt)
+Requires: util-linux-ng
+Requires: mktemp >= 1.5-9 findutils >= 4.1.7-3
+Requires: grep, mount, gzip, tar
+Requires: filesystem >= 2.1.0, cpio, initscripts >= 8.63-1
+Requires: e2fsprogs >= 1.38-12, coreutils
+Requires: module-init-tools >= 3.3-pre11
+Requires: kpartx diffutils
+BuildRequires: popt-devel
+BuildRequires: libblkid-devel parted-devel >= 1.8.5, pkgconfig 
+BuildRequires: device-mapper-devel python-devel
+BuildRequires: python util-linux-ng
+BuildRequires: elfutils-devel
 
-Provides:	mkinitrd-command
-
-Requires:	coreutils
-Requires:	cpio
-Requires:	diffutils
-Requires:	e2fsprogs
-Requires:	filesystem
-Requires:	findutils
-Requires:	grep
-Requires:	gzip
-Requires:	initscripts
-Requires:	kpartx
-Requires:	mktemp
-Requires:	mount
-Requires:	module-init-tools >= 3.3-pre11
-Requires:	nash = %{version}-%{release}
-Requires:	tar
-Requires(post,postun):	update-alternatives
-Requires:	util-linux-ng
 %ifarch ppc
-Requires:	ppc64-utils >= 0.3-1
+Requires: ppc64-utils >= 0.3-1
 %endif
+Requires: nash = %{version}-%{release}
+#mkinitrd can work without those, but lesser versions are broken
+#Conflicts: udev <= 0.51-1
+Conflicts: lvm1 < 1.0.8-2
+Conflicts: lvm2 < 2.01.09
+Conflicts: mdadm < 2.5.3-3
+Conflicts: bootloader-utils < 1.8-1, bootsplash < 3.1.12
+Conflicts: dmraid < 1.0.0-0.rc15
+Requires(post,postun):	update-alternatives
 
 %description
 mkinitrd creates filesystem images for use as initial ram filesystem
@@ -118,18 +111,20 @@ filesystem.
 %package devel
 Summary: C header files and library for functionality exported by libnash
 Group: Development/C
-Requires: mkinitrd
+Requires: glibc-devel, pkgconfig, pkgconfig(ext2fs), mkinitrd
 Requires: nash = %{version}-%{release}
 
 %package -n libbdevid-python
 Summary: Python bindings for libbdevid
 Group: Development/Other
-Requires: python
-Requires: nash = %{version}-%{release}
+Requires: python, nash = %{version}-%{release}
 
 %package -n nash
 Summary: Nash shell
 Group: System/Kernel and hardware
+Provides: libbdevid = %{version}-%{release}
+Obsoletes: libbdevid < %{version}-%{release}
+Conflicts: mkinitrd < 6.0.28-2
 Requires(post,postun):	update-alternatives
 
 %description devel
@@ -143,33 +138,31 @@ nash shell used by initrd
 
 %prep
 %setup -q
+
 %apply_patches
 
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
-#export LDFLAGS="%ldflags"
-cd bdevid
-make libbdevid.so LIB=%{_lib} LDFLAGS="%ldflags"
-cd ..
-export LDFLAGS="%ldflags"
 make LIB=%{_lib}
-
-%check
 make LIB=%{_lib} test
 
 %install
-make LIB=%{_lib} DESTDIR=%{buildroot} mandir=%{_mandir} install
-rm -f %{buildroot}/sbin/bdevid %{buildroot}/%{_includedir}/blkent.h
+rm -rf $RPM_BUILD_ROOT
+make LIB=%{_lib} DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
+rm -f $RPM_BUILD_ROOT/sbin/bdevid $RPM_BUILD_ROOT/%{_includedir}/blkent.h
 
-# Mandriva
-mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
-install -m 644 %{SOURCE100} %{buildroot}%{_sysconfdir}/sysconfig/mkinitrd
+# Mageia
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
+install -m 644 %{SOURCE100} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 
-rm -f %{buildroot}/sbin/installkernel
-rm -f %{buildroot}/lib/mkinitrd/mkliveinitrd
-mv -f %{buildroot}/sbin/mkinitrd %{buildroot}/sbin/mkinitrd-mkinitrd
-mv -f %{buildroot}/sbin/lsinitrd %{buildroot}/sbin/lsinitrd-mkinitrd
+rm -f $RPM_BUILD_ROOT/sbin/installkernel
+rm -f $RPM_BUILD_ROOT/usr/libexec/mkliveinitrd
+mv -f $RPM_BUILD_ROOT/sbin/mkinitrd $RPM_BUILD_ROOT/sbin/mkinitrd-mkinitrd
+mv -f $RPM_BUILD_ROOT/sbin/lsinitrd $RPM_BUILD_ROOT/sbin/lsinitrd-mkinitrd
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 100 || :
@@ -178,7 +171,7 @@ update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 10
 [[ ! -e /sbin/mkinitrd-mkinitrd ]] && update-alternatives --remove mkinitrd /sbin/mkinitrd-mkinitrd || :
 
 # this is the version we introduced alternatives
-%triggerpostun -- mkinitrd < 6.0.93-%manbo_mkrel 10
+%triggerpostun -- mkinitrd < 6.0.93-10
 update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 100 || :
 
 %post -n nash
@@ -188,16 +181,16 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 10
 [[ ! -e /sbin/lsinitrd-mkinitrd ]] && update-alternatives --remove lsinitrd /sbin/lsinitrd-mkinitrd || :
 
 # this is the version we introduced alternatives
-%triggerpostun -n nash -- nash < 6.0.93-%manbo_mkrel 11
+%triggerpostun -n nash -- nash < 6.0.93-11
 update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 100 || :
 
 %files
 %attr(755,root,root) /sbin/mkinitrd-mkinitrd
 %attr(644,root,root) %{_mandir}/man8/mkinitrd.8*
-# Mandriva
+# Mageia
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
-%dir /lib/mkinitrd
-/lib/mkinitrd/functions
+%dir %{_prefix}/libexec
+%{_prefix}/libexec/initrd-functions
 
 %files devel
 %{_libdir}/libnash.so
@@ -221,4 +214,42 @@ update-alternatives --install /sbin/lsinitrd lsinitrd /sbin/lsinitrd-mkinitrd 10
 /%{_lib}/bdevid
 %{_libdir}/libnash.so.*
 %{_libdir}/libbdevid.so.*
+
+
+%changelog
+
+* Sat Mar 24 2012 Nicolo' Costanza <abitrules@yahoo.it> 6.0.93-28.mib1
+- Imported new version to support new kernel like 3.2 or greater 
+- MIB (Mandriva International Backports) - http://mib.pianetalinux.org/mib
+
+* Sat Mar 24 2012 tmb <tmb> 6.0.93-28.mga2
++ Revision: 226070
+- add support for xz compressed modules
+
+* Sun Jan 15 2012 tmb <tmb> 6.0.93-27.mga2
++ Revision: 196540
+- restore mkinitrd as it will be supported in Mageia 2 as a fallback
+
+* Mon Jan 09 2012 tmb <tmb> 6.0.93-26.mga2
++ Revision: 194096
+- restore for alpha3 livecds
+- make nash-hotplug use new /proc/<pid>/oom_score_adj (mga #482)
+
+* Tue Jul 19 2011 fwang <fwang> 6.0.93-24.mga2
++ Revision: 126190
+- rebuild for new parted
+
+* Tue May 17 2011 rtp <rtp> 6.0.93-23.mga1
++ Revision: 99583
+- ignore non-usbhid input devices when adding kbd drivers (bug #148)
+
+* Sun Apr 17 2011 anssi <anssi> 6.0.93-22.mga1
++ Revision: 87259
+- do not load kms drivers when booted with nokmsboot or failsafe options
+- whitelist nouveau and radeon drivers for putting into initrd
+- fix build with gcc4.6
+
+* Sat Jan 15 2011 tmb <tmb> 6.0.93-21.mga1
++ Revision: 19412
+- imported package mkinitrd
 

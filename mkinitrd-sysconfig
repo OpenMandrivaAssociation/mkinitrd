@@ -1,0 +1,7 @@
+# This file can be used to alter the default behaviour of mkinitrd.
+# It is a bash shell script that is sourced by mkinitrd before option parsing
+# so variables set there will be used by mkinitrd instead of defaults.
+# Be aware that modifying this file is not supported and should be done only
+# as a workaround to specific problems.
+# To see what can be set here check the mkinitrd script (hint: look at the
+# beginning of the script and at lines following 'while [ $# -gt 0 ]; do')
