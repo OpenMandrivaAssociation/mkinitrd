@@ -2,16 +2,16 @@
 %define 	debug_package          %{nil}
 #
 #
-Summary: Creates an initial ramdisk image for preloading modules
-Name: mkinitrd
-Version: 6.0.93
-Release: 30
-License: GPLv2+
-URL: http://www.redhat.com/
-Group: System/Kernel and hardware
-Source0: mkinitrd-%{version}.tar.bz2
+Summary:	Creates an initial ramdisk image for preloading modules
+Name:		mkinitrd
+Version:	6.0.93
+Release:	31
+License:	GPLv2+
+URL:		http://www.redhat.com/
+Group:		System/Kernel and hardware
+Source0:	mkinitrd-%{version}.tar.bz2
 # Mageia sources
-Source100: mkinitrd-sysconfig
+Source100:	mkinitrd-sysconfig
 
 # These patches come from our git branch
 # Please add the patches there
@@ -19,88 +19,88 @@ Source100: mkinitrd-sysconfig
 # sed -i '/^#BEGINGIT/,/^#ENDGIT/ {/^[^#]/d}' ~/co/mkinitrd/SPECS/mkinitrd.spec
 # git format-patch -N master | while read p; do name=$(echo $p | sed 's/^....-//'); n=$(echo $p | sed 's/^00\(..\)-.*$/\1/'); mv -f $p ~/co/mkinitrd/SOURCES/$name; sed -i "s/^#ENDGIT/Patch1$n: $name\n#ENDGIT/" ~/co/mkinitrd/SPECS/mkinitrd.spec; done
 #BEGINGIT
-Patch101: Create-etc-blkid.patch
-Patch102: Fix-regexp-usage-to-work-on-bash-3.2.patch
-Patch103: Add-missing-closedir.patch
-Patch104: Display-current-kernel-version-in-usage.patch
-Patch105: Handle-root-devno-from-lilo.patch
-Patch106: Include-driver-for-current-keyboard.patch
-Patch107: Get-correct-module-when-rootfs-is-auto-in-fstab.patch
-Patch108: Handle-gzip-compressed-modules.patch
-Patch109: Fix-handling-return-value-of-dm_task_run.patch
-Patch110: Enforce-loading-correct-disk-driver.patch
-Patch111: Fix-detection-of-usb_storage-module.patch
-Patch112: Fix-resolving-library-deps.patch
-Patch113: Disable-selinux.patch
-Patch114: Disable-network-support.patch
-Patch115: Add-support-for-bootchartd.patch
-Patch116: Disable-usb-by-default.patch
-Patch117: Don-t-overflow-ppoll.patch
-Patch118: Reset-counter-between-the-tree-traversals.patch
-Patch119: Return-the-last-kernel-arg-with-given-name.patch
-Patch120: Let-readlink-compute-the-absolute-path-for-us.patch
-Patch121: Include-both-ahci-and-ata_piix.patch
-Patch122: Source-sysconfig-later.patch
-Patch123: Resume.patch
-Patch124: Include-ide-modules.patch
-Patch125: Allow-overriding-DSDT.patch
-Patch126: scsi_alias.patch
-Patch127: checkroot.patch
-Patch128: hooks.patch
-Patch129: Wait-only-for-needed-devices.patch
-Patch130: kbd-is-in-usr.patch
-Patch131: Handle-SYSFONTACM-8859-15.patch
-Patch132: Restrict-udev-messages-to-handle.patch
-Patch133: Fix-waiting-in-devices.patch
-Patch134: Fix-dmraid-to-wait-for-needed-disks.patch
-Patch135: no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
-Patch136: Add-drm-detection-if-module-is-not-loaded.patch
-Patch137: devtmpfs-support.patch
-Patch138: Workaround-issue-on-dmraid-10.patch
-Patch139: Create-urandom-for-LVM.patch
-Patch140: Detect-devtmpfs-support-at-boot-time.patch
-Patch141: Improve-keyboard-drivers-detection.patch
-Patch142: Always-emit-plymouth.patch
-Patch143: Revert-Add-drm-detection-if-module-is-not-loaded.patch
-Patch144: Add-drm-whitelist-handling.patch
-Patch145: Add-drm-drivers-for-hardware-with-no-currently-loade.patch
-Patch146: change-filelist-for-new-bootchart.patch
-Patch147: Include-additionnal-hid-keyboard-drivers-57872.patch
-Patch148: Include-crc32c-for-btrfs-51622.patch
-Patch149: Fix-cciss-support-59077.patch
-Patch150: Fix-nash-firmware-loading-see-53220.patch
+Patch101:	Create-etc-blkid.patch
+Patch102:	Fix-regexp-usage-to-work-on-bash-3.2.patch
+Patch103:	Add-missing-closedir.patch
+Patch104:	Display-current-kernel-version-in-usage.patch
+Patch105:	Handle-root-devno-from-lilo.patch
+Patch106:	Include-driver-for-current-keyboard.patch
+Patch107:	Get-correct-module-when-rootfs-is-auto-in-fstab.patch
+Patch108:	Handle-gzip-compressed-modules.patch
+Patch109:	Fix-handling-return-value-of-dm_task_run.patch
+Patch110:	Enforce-loading-correct-disk-driver.patch
+Patch111:	Fix-detection-of-usb_storage-module.patch
+Patch112:	Fix-resolving-library-deps.patch
+Patch113:	Disable-selinux.patch
+Patch114:	Disable-network-support.patch
+Patch115:	Add-support-for-bootchartd.patch
+Patch116:	Disable-usb-by-default.patch
+Patch117:	Don-t-overflow-ppoll.patch
+Patch118:	Reset-counter-between-the-tree-traversals.patch
+Patch119:	Return-the-last-kernel-arg-with-given-name.patch
+Patch120:	Let-readlink-compute-the-absolute-path-for-us.patch
+Patch121:	Include-both-ahci-and-ata_piix.patch
+Patch122:	Source-sysconfig-later.patch
+Patch123:	Resume.patch
+Patch124:	Include-ide-modules.patch
+Patch125:	Allow-overriding-DSDT.patch
+Patch126:	scsi_alias.patch
+Patch127:	checkroot.patch
+Patch128:	hooks.patch
+Patch129:	Wait-only-for-needed-devices.patch
+Patch130:	kbd-is-in-usr.patch
+Patch131:	Handle-SYSFONTACM-8859-15.patch
+Patch132:	Restrict-udev-messages-to-handle.patch
+Patch133:	Fix-waiting-in-devices.patch
+Patch134:	Fix-dmraid-to-wait-for-needed-disks.patch
+Patch135:	no-longer-uses-daemonize-to-start-plymouth-upstream-.patch
+Patch136:	Add-drm-detection-if-module-is-not-loaded.patch
+Patch137:	devtmpfs-support.patch
+Patch138:	Workaround-issue-on-dmraid-10.patch
+Patch139:	Create-urandom-for-LVM.patch
+Patch140:	Detect-devtmpfs-support-at-boot-time.patch
+Patch141:	Improve-keyboard-drivers-detection.patch
+Patch142:	Always-emit-plymouth.patch
+Patch143:	Revert-Add-drm-detection-if-module-is-not-loaded.patch
+Patch144:	Add-drm-whitelist-handling.patch
+Patch145:	Add-drm-drivers-for-hardware-with-no-currently-loade.patch
+Patch146:	change-filelist-for-new-bootchart.patch
+Patch147:	Include-additionnal-hid-keyboard-drivers-57872.patch
+Patch148:	Include-crc32c-for-btrfs-51622.patch
+Patch149:	Fix-cciss-support-59077.patch
+Patch150:	Fix-nash-firmware-loading-see-53220.patch
 #ENDGIT
-Patch201: 0001-Do-not-load-KMS-drivers-when-booted-with-nokmsboot-o.patch
-Patch202: 0002-Whitelist-nouveau-and-radeon-drivers.patch
-Patch203: 0003-Fix-build-with-gcc4.6.patch
-Patch204: mkinitrd-usb-input-usbhid-only.patch
-Patch205: mkinitrd-6.0.93-use-oom_score_adj.patch
-Patch206: mkinitrd-6.0.93-xz-support.patch
+Patch201:	0001-Do-not-load-KMS-drivers-when-booted-with-nokmsboot-o.patch
+Patch202:	0002-Whitelist-nouveau-and-radeon-drivers.patch
+Patch203:	0003-Fix-build-with-gcc4.6.patch
+Patch204:	mkinitrd-usb-input-usbhid-only.patch
+Patch205:	mkinitrd-6.0.93-use-oom_score_adj.patch
+Patch206:	mkinitrd-6.0.93-xz-support.patch
 
-Requires: util-linux-ng
-Requires: mktemp >= 1.5-9 findutils >= 4.1.7-3
-Requires: grep, mount, gzip, tar
-Requires: filesystem >= 2.1.0, cpio, initscripts >= 8.63-1
-Requires: e2fsprogs >= 1.38-12, coreutils
-Requires: module-init-tools >= 3.3-pre11
-Requires: kpartx diffutils
-BuildRequires: popt-devel
-BuildRequires: libblkid-devel parted-devel >= 1.8.5, pkgconfig 
-BuildRequires: device-mapper-devel python-devel
-BuildRequires: python util-linux-ng
-BuildRequires: elfutils-devel
+Requires:	util-linux-ng
+Requires:	mktemp >= 1.5-9 findutils >= 4.1.7-3
+Requires:	grep, mount, gzip, tar
+Requires:	filesystem >= 2.1.0, cpio, initscripts >= 8.63-1
+Requires:	e2fsprogs >= 1.38-12, coreutils
+Requires:	module-init-tools >= 3.3-pre11
+Requires:	kpartx diffutils
+BuildRequires:	popt-devel
+BuildRequires:	libblkid-devel parted-devel >= 1.8.5, pkgconfig 
+BuildRequires:	device-mapper-devel python-devel
+BuildRequires:	python util-linux-ng
+BuildRequires:	elfutils-devel
 
 %ifarch ppc
-Requires: ppc64-utils >= 0.3-1
+Requires:	ppc64-utils >= 0.3-1
 %endif
-Requires: nash = %{version}-%{release}
+Requires:	nash = %{version}-%{release}
 #mkinitrd can work without those, but lesser versions are broken
 #Conflicts: udev <= 0.51-1
-Conflicts: lvm1 < 1.0.8-2
-Conflicts: lvm2 < 2.01.09
-Conflicts: mdadm < 2.5.3-3
-Conflicts: bootloader-utils < 1.8-1, bootsplash < 3.1.12
-Conflicts: dmraid < 1.0.0-0.rc15
+Conflicts:	lvm1 < 1.0.8-2
+Conflicts:	lvm2 < 2.01.09
+Conflicts:	mdadm < 2.5.3-3
+Conflicts:	bootloader-utils < 1.8-1, bootsplash < 3.1.12
+Conflicts:	dmraid < 1.0.0-0.rc15
 Requires(post,postun):	update-alternatives
 
 %description
@@ -109,22 +109,22 @@ mkinitrd creates filesystem images for use as initial ram filesystem
 filesystem.
 
 %package devel
-Summary: C header files and library for functionality exported by libnash
-Group: Development/C
-Requires: glibc-devel, pkgconfig, pkgconfig(ext2fs), mkinitrd
-Requires: nash = %{version}-%{release}
+Summary:	C header files and library for functionality exported by libnash
+Group:		Development/C
+Requires:	glibc-devel, pkgconfig, pkgconfig(ext2fs), mkinitrd
+Requires:	nash = %{version}-%{release}
 
 %package -n libbdevid-python
-Summary: Python bindings for libbdevid
-Group: Development/Other
-Requires: python, nash = %{version}-%{release}
+Summary:	Python bindings for libbdevid
+Group:		Development/Other
+Requires:	python, nash = %{version}-%{release}
 
 %package -n nash
-Summary: Nash shell
-Group: System/Kernel and hardware
-Provides: libbdevid = %{version}-%{release}
-Obsoletes: libbdevid < %{version}-%{release}
-Conflicts: mkinitrd < 6.0.28-2
+Summary:	Nash shell
+Group:		System/Kernel and hardware
+Provides:	libbdevid = %{version}-%{release}
+Obsoletes:	libbdevid < %{version}-%{release}
+Conflicts:	mkinitrd < 6.0.28-2
 Requires(post,postun):	update-alternatives
 
 %description devel
@@ -148,21 +148,18 @@ make LIB=%{_lib}
 make LIB=%{_lib} test
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make LIB=%{_lib} DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
-rm -f $RPM_BUILD_ROOT/sbin/bdevid $RPM_BUILD_ROOT/%{_includedir}/blkent.h
+make LIB=%{_lib} DESTDIR=%{buildroot} mandir=%{_mandir} install
+rm -f %{buildroot}/sbin/bdevid %{buildroot}/%{_includedir}/blkent.h
 
 # Mageia
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
-install -m 644 %{SOURCE100} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
+mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
+install -m 644 %{SOURCE100} %{buildroot}%{_sysconfdir}/sysconfig/mkinitrd
 
-rm -f $RPM_BUILD_ROOT/sbin/installkernel
-rm -f $RPM_BUILD_ROOT/usr/libexec/mkliveinitrd
-mv -f $RPM_BUILD_ROOT/sbin/mkinitrd $RPM_BUILD_ROOT/sbin/mkinitrd-mkinitrd
-mv -f $RPM_BUILD_ROOT/sbin/lsinitrd $RPM_BUILD_ROOT/sbin/lsinitrd-mkinitrd
+rm -f %{buildroot}/sbin/installkernel
+rm -f %{buildroot}/usr/libexec/mkliveinitrd
+mv -f %{buildroot}/sbin/mkinitrd %{buildroot}/sbin/mkinitrd-mkinitrd
+mv -f %{buildroot}/sbin/lsinitrd %{buildroot}/sbin/lsinitrd-mkinitrd
 
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %post
 update-alternatives --install /sbin/mkinitrd mkinitrd /sbin/mkinitrd-mkinitrd 100 || :
