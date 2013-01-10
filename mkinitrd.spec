@@ -89,6 +89,7 @@ BuildRequires:	libblkid-devel parted-devel >= 1.8.5, pkgconfig
 BuildRequires:	device-mapper-devel python-devel
 BuildRequires:	python util-linux-ng
 BuildRequires:	elfutils-devel
+BuildRequires:	libtirpc-devel
 
 %ifarch ppc
 Requires:	ppc64-utils >= 0.3-1
