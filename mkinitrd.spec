@@ -12,7 +12,7 @@ Group:		System/Kernel and hardware
 Source0:	mkinitrd-%{version}.tar.bz2
 # Mageia sources
 Source100:	mkinitrd-sysconfig
-Soruce101:	mkinitrd.rpmlintrc
+Source101:	mkinitrd.rpmlintrc
 
 # These patches come from our git branch
 # Please add the patches there
