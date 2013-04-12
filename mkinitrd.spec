@@ -89,7 +89,7 @@ BuildRequires:	libblkid-devel parted-devel >= 1.8.5, pkgconfig
 BuildRequires:	device-mapper-devel python-devel
 BuildRequires:	python util-linux-ng
 BuildRequires:	elfutils-devel
-BuildRequires:	libtirpc-devel
+BuildRequires:	tirpc-devel
 
 %ifarch ppc
 Requires:	ppc64-utils >= 0.3-1
@@ -145,7 +145,7 @@ nash shell used by initrd
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
-make LIB=%{_lib}
+make LIB=%{_lib} nash_LIBS="-ltirpc "
 make LIB=%{_lib} test
 
 %install
