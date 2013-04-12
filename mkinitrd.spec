@@ -145,7 +145,7 @@ nash shell used by initrd
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
-make LIB=%{_lib} nash_LIBS="-ltirpc "
+make LIB=%{_lib} nash_LIBS+="-ltirpc "
 make LIB=%{_lib} test
 
 %install
