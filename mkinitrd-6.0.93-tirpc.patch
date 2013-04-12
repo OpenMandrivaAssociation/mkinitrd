@@ -1,0 +1,11 @@
+--- mkinitrd-6.0.93/nash/Makefile.orig	2013-04-12 16:16:16.945662921 +0100
++++ mkinitrd-6.0.93/nash/Makefile	2013-04-12 16:16:26.462662365 +0100
+@@ -42,7 +42,7 @@
+ nash_LIBS += -lm
+ # We need to link against libgcc_s directly, or it'll /dlopen() it during
+ # backtrace()!  This is not teh way!!!1!!!one!!!.
+-nash_LIBS += -lgcc_s
++nash_LIBS += -lgcc_s -ltirpc
+ 
+ nash :: version.h $(OBJECTS) libnash.so
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(nash_LIBPATHS) -lnash -lbdevid $(nash_LIBS)

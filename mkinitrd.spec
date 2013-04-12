@@ -76,6 +76,7 @@ Patch203:	0003-Fix-build-with-gcc4.6.patch
 Patch204:	mkinitrd-usb-input-usbhid-only.patch
 Patch205:	mkinitrd-6.0.93-use-oom_score_adj.patch
 Patch206:	mkinitrd-6.0.93-xz-support.patch
+Patch207:	mkinitrd-6.0.93-tirpc.patch
 
 Requires:	util-linux-ng
 Requires:	mktemp >= 1.5-9 findutils >= 4.1.7-3
@@ -145,7 +146,7 @@ nash shell used by initrd
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
 %build
-make LIB=%{_lib} nash_LIBS+="-ltirpc "
+make LIB=%{_lib} 
 make LIB=%{_lib} test
 
 %install
