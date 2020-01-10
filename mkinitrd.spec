@@ -142,7 +142,7 @@ nash shell used by initrd
 %prep
 %setup -q
 
-%apply_patches
+%autopatch -p1
 
 find . -name "Makefile*" -exec sed -i 's|-Werror||g' {} \;
 
