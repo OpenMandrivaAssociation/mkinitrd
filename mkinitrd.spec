@@ -7,7 +7,7 @@ Name:		mkinitrd
 Version:	6.0.93
 Release:	31
 License:	GPLv2+
-URL:		http://www.redhat.com/
+URL:		https://www.redhat.com/
 Group:		System/Kernel and hardware
 Source0:	mkinitrd-%{version}.tar.bz2
 # Mageia sources
